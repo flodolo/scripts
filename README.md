@@ -1,4 +1,4 @@
-scripts
+Scripts
 =======
 
-Assorted useful scripts
+Assorted useful scripts, mainly for Mozilla's stuff.
