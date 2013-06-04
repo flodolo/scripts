@@ -34,6 +34,7 @@ if [ ! -d "$scriptfolder/r2d2b2g" ]
     # If the "r2d2b2g" folder does not exists I run the first setup
     # Using --recursive instead of git submodule init; git submodule update
     git clone --recursive git://github.com/mozilla/r2d2b2g.git
+    cd r2d2b2g
   else
     # Folder exists: I need to pull everything after stashing pending changes
     # in ./gaia. I don't need any change available there, and sometimes the
