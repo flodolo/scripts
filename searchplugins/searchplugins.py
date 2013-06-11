@@ -60,8 +60,8 @@ def extract_sp_product(path, product, locale, channel, jsondata):
             sp_file = path + sp + ".xml"
             if (os.path.isfile(sp_file)):
                 try:
-                    xmldoc = minidom.parse(sp_file)
                     searchplugin_info = "(" + locale + ", " + product + ", " + channel + ", " + sp + ".xml)"
+                    xmldoc = minidom.parse(sp_file)
 
                     # Some searchplugins use the form <tag>, others <os:tag>
                     try:
