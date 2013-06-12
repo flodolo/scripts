@@ -23,6 +23,8 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
         if locale != "en-US":
             # Read the list of searchplugins from list.txt
             sp_list = open(path + "list.txt", "r").read().splitlines()
+            # Remove empty lines
+            sp_list = filter(bool, sp_list)
         else:
             # en-US is different: I must analyze all xml files in the folder,
             # since some searchplugins are not used in en-US but from other
@@ -87,6 +89,8 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                     try:
                         # I can have more than one url element, for example one
                         # for searches and one for suggestions
+                        secure = 0
+
                         nodes = xmldoc.getElementsByTagName("Url")
                         if (len(nodes) == 0):
                             nodes = xmldoc.getElementsByTagName("os:Url")
@@ -94,10 +98,9 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                             if node.attributes["type"].nodeValue == "text/html":
                                 url = node.attributes["template"].nodeValue
                         p = re.compile("^https://")
+
                         if p.match(url):
                             secure = 1
-                        else:
-                            secure = 0
                     except Exception as e:
                         print "   Error extracting url from searchplugin " + searchplugin_info
                         url = "not available"
@@ -133,21 +136,29 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
             else:
                 # File does not exists, locale is using the same plugin of en-
                 # US, I have to retrieve it from the dictionary
-                searchplugin_enUS = jsondata["en-US_" + product + "_" + channel + "_" + sp]
-                searchplugin = {
-                    "file": sp + ".xml",
-                    "name": searchplugin_enUS["name"],
-                    "description": "(en-US) " + searchplugin_enUS["description"],
-                    "url": searchplugin_enUS["url"],
-                    "secure": searchplugin_enUS["secure"],
-                    "image": searchplugin_enUS["image"],
-                    "locale": locale,
-                    "product": product,
-                    "channel": channel
-                }
-                # Example: id_record = it_browser_release_amazon-it
-                id_record = locale + "_" + product + "_" + channel + "_" + sp
-                jsondata[id_record] = searchplugin
+                try:
+                    searchplugin_enUS = jsondata["en-US_" + product + "_" + channel + "_" + sp]
+                    searchplugin = {
+                        "file": sp + ".xml",
+                        "name": searchplugin_enUS["name"],
+                        "description": "(en-US) " + searchplugin_enUS["description"],
+                        "url": searchplugin_enUS["url"],
+                        "secure": searchplugin_enUS["secure"],
+                        "image": searchplugin_enUS["image"],
+                        "locale": locale,
+                        "product": product,
+                        "channel": channel
+                    }
+                    # Example: id_record = it_browser_release_amazon-it
+                    id_record = locale + "_" + product + "_" + channel + "_" + sp
+                    jsondata[id_record] = searchplugin
+                except Exception as e:
+                    # File does not exist but we don't have the en-US either.
+                    # This means that list.txt references a non existing
+                    # plugin, which will cause the build to fail
+                    print "   Error: file referenced in list.txt but not available (" + locale + ", " + product + ", " + channel + ", " + sp + ".xml)"
+                    if (outputlevel > 0):
+                        print e
 
     except Exception as e:
         if (outputlevel > 0):
