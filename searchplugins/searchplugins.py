@@ -47,10 +47,10 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
             existingfile=os.path.isfile(sp_file)
 
             if (locale != "en-US") & (sp in splist_enUS) & (existingfile):
-                # We have a problem: file exists but has the same name of an
-                # en-US searchplugin This file will be never picked, so we
-                # analyze en-US and print, act like the file doesn't exist and
-                # print an error
+                # There's a problem: file exists but has the same name of an
+                # en-US searchplugin. This file will never be picked at build
+                # time, so let's analyze en-US and use it for json, acting
+                # like the file doesn't exist, and print an error
                 print "   Error: file " + sp + ".xml should not exist in the locale folder, same name of en-US searchplugin (" + locale + ", " + product + ", " + channel + ")."
                 existingfile = False
 
