@@ -11,39 +11,24 @@ from xml.dom import minidom
 from optparse import OptionParser
 from ConfigParser import SafeConfigParser
 
-# Read configuration file
-parser = SafeConfigParser()
-parser.read("web/inc/config.ini")
-local_hg = parser.get("config", "local_hg")
-install_folder = parser.get("config", "install")
-
-# Set Transvision"s folders and locale files
-release_l10n = local_hg + "/RELEASE_L10N/"
-beta_l10n = local_hg + "/BETA_L10N/"
-aurora_l10n = local_hg + "/AURORA_L10N/"
-trunk_l10n = local_hg + "/TRUNK_L10N/"
-
-release_source = local_hg + "/RELEASE_EN-US/"
-beta_source = local_hg + "/BETA_EN-US/"
-aurora_source = local_hg + "/AURORA_EN-US/"
-trunk_source = local_hg + "/TRUNK_EN-US/"
-
-trunk_locales = install_folder + "/central.txt"
-aurora_locales = install_folder + "/aurora.txt"
-beta_locales = install_folder + "/beta.txt"
-release_locales = install_folder + "/release.txt"
-
 # Output detail level
 # 0: print only actions performed and errors extracting data from searchplugins
 # 1: print errors about missing list.txt and the complete Python's error message
 outputlevel = 0
 
-# Functions
 
-def extract_sp_product(path, product, locale, channel, jsondata):
+def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
     try:
-        # Read the list of searchplugins from list.txt
-        sp_list = open(path + "list.txt", "r").read().splitlines()
+
+        if locale != "en-US":
+            # Read the list of searchplugins from list.txt
+            sp_list = open(path + "list.txt", "r").read().splitlines()
+        else:
+            # en-US is different: I must analyze all xml files in the folder,
+            # since some searchplugins are not used in en-US but from other
+            # locales
+            sp_list = splist_enUS;
+
         output = ""
 
         # Get a list of all files inside path
@@ -52,16 +37,33 @@ def extract_sp_product(path, product, locale, channel, jsondata):
             filename = os.path.basename(singlefile)
             filename_noext = os.path.splitext(filename)[0]
             if (filename_noext not in sp_list) & (filename != "list.txt"):
-                print "    File " + filename + " not in list.txt (" + locale + ", " + product + ", " + channel + ")"
+                print "  File " + filename + " not in list.txt (" + locale + ", " + product + ", " + channel + ")"
 
         # For each searchplugin check if the file exists (localized version) or
         # not (using en-US version)
         for sp in sp_list:
             sp_file = path + sp + ".xml"
-            if (os.path.isfile(sp_file)):
+
+            existingfile=os.path.isfile(sp_file)
+
+            if (locale != "en-US") & (sp in splist_enUS) & (existingfile):
+                # We have a problem: file exists but has the same name of an
+                # en-US searchplugin This file will be never picked, so we
+                # analyze en-US and print, act like the file doesn't exist and
+                # print an error
+                print "   Error: file " + sp + ".xml should not exist in the locale folder, same name of en-US searchplugin (" + locale + ", " + product + ", " + channel + ")."
+                existingfile = False
+
+            if (existingfile):
                 try:
                     searchplugin_info = "(" + locale + ", " + product + ", " + channel + ", " + sp + ".xml)"
-                    xmldoc = minidom.parse(sp_file)
+
+                    try:
+                        xmldoc = minidom.parse(sp_file)
+                    except Exception as e:
+                        print "   Error parsing XML for searchplugin " + searchplugin_info
+                        if (outputlevel > 0):
+                            print e
 
                     # Some searchplugins use the form <tag>, others <os:tag>
                     try:
@@ -70,7 +72,7 @@ def extract_sp_product(path, product, locale, channel, jsondata):
                             node = xmldoc.getElementsByTagName("os:ShortName")
                         name = node[0].childNodes[0].nodeValue
                     except Exception as e:
-                        print "    Error extracting name from searchplugin " + searchplugin_info
+                        print "   Error extracting name from searchplugin " + searchplugin_info
                         name = "not available"
 
                     try:
@@ -79,9 +81,7 @@ def extract_sp_product(path, product, locale, channel, jsondata):
                             node = xmldoc.getElementsByTagName("os:Description")
                         description = node[0].childNodes[0].nodeValue
                     except Exception as e:
-                        # Searchplugins on mobile don't have a description, so don't print an error if the product is mobile
-                        if (product != "mobile"):
-                            print "    Error extracting description from searchplugin " + searchplugin_info
+                        # We don't really use description anywhere, so I don't print errors
                         description = "not available"
 
                     try:
@@ -99,7 +99,7 @@ def extract_sp_product(path, product, locale, channel, jsondata):
                         else:
                             secure = 0
                     except Exception as e:
-                        print "    Error extracting url from searchplugin " + searchplugin_info
+                        print "   Error extracting url from searchplugin " + searchplugin_info
                         url = "not available"
 
                     try:
@@ -108,7 +108,7 @@ def extract_sp_product(path, product, locale, channel, jsondata):
                             node = xmldoc.getElementsByTagName("os:Image")
                         image = node[0].childNodes[0].nodeValue
                     except Exception as e:
-                        print "    Error extracting image from searchplugin " + searchplugin_info
+                        print "   Error extracting image from searchplugin " + searchplugin_info
                         image = "data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC/0lEQVR4XoWSbUiTexjG7x6d0OZW4FD3IigqaFEfJHRMt7WVGLQ9CZpR8pSiHwIZHHGdzbmzovl2tjnb8WjzBe2NCCnMFzycJ578kktwUZRDkCKhVDgouJdEn9n+/Sssy+Rc8Ptwc3FxX/z/NzQBwIBMxpsZHBx51d9fheddNeVwwHRLywV/b+/Yzfz8eMAixDicRVEPuBsbun1crkfR1FT5q/BTHI4EApQwPr53P0Inc8vLh27I5fHwyGKx+Lu60OvubuTF+Pr6WK/V+kOTKacTJs3mCn9rKzvndKL3PT1o0eOJ+qzWK8R/U1Pu8OLio/lgEDbX1mBvKMSJSUz05DU0fGkyabfD+srK+b0cTg8KhzkxsbHwMRRCywsLE3NerwuwwC2VcseNRtpnsyGmuRn9g/E6HCxjNFZjKp+YTOxkTQ2awb6/sTH6rL6e6UxP58F23dJo+KN1dfT9+npEWyzoMYax2SK0wcCOURSa0OvRc7M56jUYmNsajWArtwe26ZpYzE0rKXm4trpayBEKgWBZWF9aAi72eCkpKAowMTc8TOrn5z/AbhpQqfjXjh9/UScUotYjR9BfhYXoXnEx+levfzmgVAp+DhDbh/GGBoCEhNJ3s7MHgsvL8Mbng7fT0xAJhyGyuZklyM4+veudjJpM4CkpOX9RImGrANBn9ASBfo+JQUbM1YMH0ShFRUaqq3feyZDBAF0kWfGbWMwW4+AZTGVsbNSlVjN/HztGV3E46A8A1B4Xh9qzs9nbOt33O3lQWwsdJEmViURsKQ5SmDKCiLaqVEy3TCbokcv5nWo1fRm3qMWeFXNDJIrcJcmvTdpJsqwGh09iQ405jTe3KJWMSyr99s9tSUlcl0pFX8JNnADIjvkzOZm9c+rUWXBrtYpzaWmBMmxo8WazQsFcz83d8dqevDy+R6mkrbiJAQB1pKYGbmq1R7+YHTqdojwzc/VKfj7TJpHwYBc5ExO5bQUFtCMjI9i/Fd7CXVR0yJ6TI4D/kSMnh3/9xInDW/MnJPlM3rrfgeYAAAAASUVORK5CYII="
 
                     searchplugin = {
@@ -127,7 +127,7 @@ def extract_sp_product(path, product, locale, channel, jsondata):
                     id_record = locale + "_" + product + "_" + channel + "_" + sp
                     jsondata[id_record] = searchplugin
                 except Exception as e:
-                    print "    Error analyzing searchplugin " + searchplugin_info
+                    print "   Error analyzing searchplugin " + searchplugin_info
                     if (outputlevel > 0):
                         print e
             else:
@@ -152,34 +152,90 @@ def extract_sp_product(path, product, locale, channel, jsondata):
     except Exception as e:
         if (outputlevel > 0):
             print "  Error reading  (" + locale + ")" + path + "list.txt"
+
+
+
+
+def extract_splist_enUS (pathsource, splist_enUS):
+    # Create a list of en-US searchplugins in pathsource, store this data in
+    # splist
+    try:
+        for singlefile in glob.glob(pathsource+'*.xml'):
+            filename = os.path.basename(singlefile)
+            filename_noext = os.path.splitext(filename)[0]
+            splist_enUS.append(filename_noext)
+
+    except Exception as e:
+        print " Error reading list of en-US searchplugins from " + pathsource
+        if (outputlevel > 0):
             print e
+
+
 
 
 def extract_sp_channel(pathsource, pathl10n, localeslist, channel, jsondata):
     try:
         # Analyze en-US searchplugins
-        print "Analyzing en-US searchplugins on " + channel.upper()
+        print "Locale: en-US (" + channel.upper() + ")"
         path = pathsource + "COMMUN/"
-        extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "browser", "en-US", channel, jsondata)
-        extract_sp_product(path + "mobile/locales/en-US/en-US/searchplugins/", "mobile", "en-US", channel, jsondata)
-        extract_sp_product(path + "mail/locales/en-US/en-US/searchplugins/", "mail", "en-US", channel, jsondata)
-        extract_sp_product(path + "suite/locales/en-US/en-US/searchplugins/", "seamonkey", "en-US", channel, jsondata)
+
+        # Create a list of en-US searchplugins for each channel. If list.txt
+        # for a locale contains a searchplugin with the same name of the en-US
+        # one (e.g. "google"), this will have precedence. Therefore a file with
+        # this name should not exist in the locale folder
+        splistenUS_browser = []
+        extract_splist_enUS(path + "browser/locales/en-US/en-US/searchplugins/", splistenUS_browser)
+        splistenUS_mobile = []
+        extract_splist_enUS(path + "mobile/locales/en-US/en-US/searchplugins/", splistenUS_mobile)
+        splistenUS_mail = []
+        extract_splist_enUS(path + "mail/locales/en-US/en-US/searchplugins/", splistenUS_mail)
+        splistenUS_suite = []
+        extract_splist_enUS(path + "suite/locales/en-US/en-US/searchplugins/", splistenUS_suite)
+
+        extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "browser", "en-US", channel, jsondata, splistenUS_browser)
+        extract_sp_product(path + "mobile/locales/en-US/en-US/searchplugins/", "mobile", "en-US", channel, jsondata, splistenUS_mobile)
+        extract_sp_product(path + "mail/locales/en-US/en-US/searchplugins/", "mail", "en-US", channel, jsondata, splistenUS_mail)
+        extract_sp_product(path + "suite/locales/en-US/en-US/searchplugins/", "seamonkey", "en-US", channel, jsondata, splistenUS_suite)
 
         locale_list = open(localeslist, "r").read().splitlines()
         for locale in locale_list:
-            print "Analyzing " + locale + " searchplugins on " + channel.upper()
+            print "Locale: " + locale + " (" + channel.upper() + ")"
             path = pathl10n + locale + "/"
-            extract_sp_product(path + "browser/searchplugins/", "browser", locale, channel, jsondata)
-            extract_sp_product(path + "mobile/searchplugins/", "mobile", locale, channel, jsondata)
-            extract_sp_product(path + "mail/searchplugins/", "mail", locale, channel, jsondata)
-            extract_sp_product(path + "suite/searchplugins/", "seamonkey", locale, channel, jsondata)
+            extract_sp_product(path + "browser/searchplugins/", "browser", locale, channel, jsondata, splistenUS_browser)
+            extract_sp_product(path + "mobile/searchplugins/", "mobile", locale, channel, jsondata, splistenUS_mobile)
+            extract_sp_product(path + "mail/searchplugins/", "mail", locale, channel, jsondata, splistenUS_mail)
+            extract_sp_product(path + "suite/searchplugins/", "seamonkey", locale, channel, jsondata, splistenUS_suite)
     except Exception as e:
-            print "  Error reading list of locales from " + localeslist
-            if (outputlevel > 0):
-                print e
+        print "Error reading list of locales from " + localeslist
+        if (outputlevel > 0):
+            print e
+
+
 
 
 def main():
+    # Read configuration file
+    parser = SafeConfigParser()
+    parser.read("web/inc/config.ini")
+    local_hg = parser.get("config", "local_hg")
+    install_folder = parser.get("config", "install")
+
+    # Set Transvision"s folders and locale files
+    release_l10n = local_hg + "/RELEASE_L10N/"
+    beta_l10n = local_hg + "/BETA_L10N/"
+    aurora_l10n = local_hg + "/AURORA_L10N/"
+    trunk_l10n = local_hg + "/TRUNK_L10N/"
+
+    release_source = local_hg + "/RELEASE_EN-US/"
+    beta_source = local_hg + "/BETA_EN-US/"
+    aurora_source = local_hg + "/AURORA_EN-US/"
+    trunk_source = local_hg + "/TRUNK_EN-US/"
+
+    trunk_locales = install_folder + "/central.txt"
+    aurora_locales = install_folder + "/aurora.txt"
+    beta_locales = install_folder + "/beta.txt"
+    release_locales = install_folder + "/release.txt"
+
     jsonfilename = "web/searchplugins.json"
     jsondata = {}
 
@@ -192,6 +248,9 @@ def main():
     jsonfile = open(jsonfilename, "w")
     jsonfile.write(json.dumps(jsondata, indent=4, sort_keys=True))
     jsonfile.close()
+
+
+
 
 if __name__ == "__main__":
     main()
