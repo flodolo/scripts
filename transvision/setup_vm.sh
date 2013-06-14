@@ -12,6 +12,7 @@
 
 forkedrepo=https://github.com/flodolo/transvision
 originalrepo=https://github.com/mozfr/transvision
+branch=master
 
 # Update the system
 sudo apt-get update
@@ -30,6 +31,7 @@ cd ~/github/transvision
 git remote add upstream $originalrepo
 git fetch upstream
 git merge upstream/master
+git checkout $branch
 
 # Set config.ini
 
@@ -38,7 +40,7 @@ homefolder=$(readlink -f ~)
 echo "[config]
 root=$homefolder/transvision
 local_hg=$homefolder/transvision/data/hg
-glossaire=$homefolder/transvision/glossaire
+libraries=$homefolder/transvision/libraries
 install=$homefolder/github/transvision
 " > ~/github/transvision/web/inc/config.ini
 
