@@ -3,13 +3,15 @@
 # This script is designed to work inside a Transvision's folder
 # (https://github.com/mozfr/transvision)
 
+
 import glob
 import json
 import os
 import re
-from xml.dom import minidom
-from optparse import OptionParser
 from ConfigParser import SafeConfigParser
+from optparse import OptionParser
+from time import gmtime, strftime
+from xml.dom import minidom
 
 # Output detail level
 # 0: print only actions performed and errors extracting data from searchplugins
@@ -249,6 +251,8 @@ def main():
 
     jsonfilename = "web/searchplugins.json"
     jsondata = {}
+
+    print "Last update: " + strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
     extract_sp_channel(release_source, release_l10n, release_locales, "release", jsondata)
     extract_sp_channel(beta_source, beta_l10n, beta_locales, "beta", jsondata)
