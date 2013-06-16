@@ -35,13 +35,20 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
 
         output = ""
 
-        # Get a list of all files inside path
-        for singlefile in glob.glob(path+'*'):
-            # Remove extension
-            filename = os.path.basename(singlefile)
-            filename_noext = os.path.splitext(filename)[0]
-            if (filename_noext not in sp_list) & (filename != "list.txt"):
-                print "  File " + filename + " not in list.txt (" + locale + ", " + product + ", " + channel + ")"
+        if locale != "en-US":
+            # Get a list of all files inside path
+            for singlefile in glob.glob(path+'*'):
+                # Remove extension
+                filename = os.path.basename(singlefile)
+                filename_noext = os.path.splitext(filename)[0]
+                if (filename_noext in splist_enUS):
+                    # There's a problem: file exists but has the same name of an
+                    # en-US searchplugin. Warn about this
+                    print "   Error: file " + filename + " should not exist in the locale folder, same name of en-US searchplugin (" + locale + ", " + product + ", " + channel + ")."
+                else:
+                    # File is not in use, should be removed
+                    if (filename_noext not in sp_list) & (filename != "list.txt"):
+                        print "   File " + filename + " not in list.txt (" + locale + ", " + product + ", " + channel + ")"
 
         # For each searchplugin check if the file exists (localized version) or
         # not (using en-US version)
@@ -55,7 +62,6 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                 # en-US searchplugin. This file will never be picked at build
                 # time, so let's analyze en-US and use it for json, acting
                 # like the file doesn't exist, and print an error
-                print "   Error: file " + sp + ".xml should not exist in the locale folder, same name of en-US searchplugin (" + locale + ", " + product + ", " + channel + ")."
                 existingfile = False
 
             if (existingfile):
@@ -253,6 +259,7 @@ def main():
     jsondata = {}
 
     print "Last update: " + strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    print ""
 
     extract_sp_channel(release_source, release_l10n, release_locales, "release", jsondata)
     extract_sp_channel(beta_source, beta_l10n, beta_locales, "beta", jsondata)
