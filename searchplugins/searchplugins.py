@@ -37,7 +37,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
 
         if locale != "en-US":
             # Get a list of all files inside path
-            for singlefile in glob.glob(path+'*'):
+            for singlefile in glob.glob(path+"*"):
                 # Remove extension
                 filename = os.path.basename(singlefile)
                 filename_noext = os.path.splitext(filename)[0]
@@ -179,7 +179,7 @@ def extract_splist_enUS (pathsource, splist_enUS):
     # Create a list of en-US searchplugins in pathsource, store this data in
     # splist
     try:
-        for singlefile in glob.glob(pathsource+'*.xml'):
+        for singlefile in glob.glob(pathsource+"*.xml"):
             filename = os.path.basename(singlefile)
             filename_noext = os.path.splitext(filename)[0]
             splist_enUS.append(filename_noext)
@@ -233,6 +233,15 @@ def extract_sp_channel(pathsource, pathl10n, localeslist, channel, jsondata):
 
 
 def main():
+    # Parse command line options
+    clparser = OptionParser()
+    clparser.add_option("-p", "--product", help="Choose a specific product", choices=["browser", "mobile", "mail", "suite", "all"], default="all")
+    clparser.add_option("-b", "--branch", help="Choose a specific branch", choices=["release", "beta", "aurora", "trunk", "all"], default="all")
+
+    (options, args) = clparser.parse_args()
+    clproduct = options.product
+    clbranch = options.branch
+
     # Read configuration file
     parser = SafeConfigParser()
     parser.read("web/inc/config.ini")
@@ -259,12 +268,16 @@ def main():
     jsondata = {}
 
     print "Last update: " + strftime("%Y-%m-%d %H:%M:%S", gmtime())
-    print ""
+    print "Analyzing product: " + clproduct + " - " + "branch: " + clbranch + "\n"
 
-    extract_sp_channel(release_source, release_l10n, release_locales, "release", jsondata)
-    extract_sp_channel(beta_source, beta_l10n, beta_locales, "beta", jsondata)
-    extract_sp_channel(aurora_source, aurora_l10n, aurora_locales, "aurora", jsondata)
-    extract_sp_channel(trunk_source, trunk_l10n, trunk_locales, "trunk", jsondata)
+    if (clbranch=="all") or (clbranch=="release"):
+        extract_sp_channel(release_source, release_l10n, release_locales, "release", jsondata)
+    if (clbranch=="all") or (clbranch=="beta"):
+        extract_sp_channel(beta_source, beta_l10n, beta_locales, "beta", jsondata)
+    if (clbranch=="all") or (clbranch=="aurora"):
+        extract_sp_channel(aurora_source, aurora_l10n, aurora_locales, "aurora", jsondata)
+    if (clbranch=="all") or (clbranch=="trunk"):
+        extract_sp_channel(trunk_source, trunk_l10n, trunk_locales, "trunk", jsondata)
 
     # Write back updated json data
     jsonfile = open(jsonfilename, "w")
