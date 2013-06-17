@@ -8,6 +8,7 @@ import glob
 import json
 import os
 import re
+import StringIO
 from ConfigParser import SafeConfigParser
 from optparse import OptionParser
 from time import gmtime, strftime
@@ -16,13 +17,13 @@ from xml.dom import minidom
 # Output detail level
 # 0: print only actions performed and errors extracting data from searchplugins
 # 1: print errors about missing list.txt and the complete Python's error message
-outputlevel = 0
+outputlevel = 1
 clproduct = ""
 
 
 def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
+    global outputlevel
     try:
-
         if locale != "en-US":
             # Read the list of searchplugins from list.txt
             sp_list = open(path + "list.txt", "r").read().splitlines()
@@ -32,7 +33,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
             # en-US is different: I must analyze all xml files in the folder,
             # since some searchplugins are not used in en-US but from other
             # locales
-            sp_list = splist_enUS;
+            sp_list = splist_enUS
 
         output = ""
 
@@ -56,7 +57,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
         for sp in sp_list:
             sp_file = path + sp + ".xml"
 
-            existingfile=os.path.isfile(sp_file)
+            existingfile = os.path.isfile(sp_file)
 
             if (locale != "en-US") & (sp in splist_enUS) & (existingfile):
                 # There's a problem: file exists but has the same name of an
@@ -72,9 +73,32 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                     try:
                         xmldoc = minidom.parse(sp_file)
                     except Exception as e:
-                        print "   Error parsing XML for searchplugin " + searchplugin_info
-                        if (outputlevel > 0):
-                            print e
+                        # Some search plugin has preprocessing instructions
+                        # (#define, #if), so they fail validation. In order to
+                        # extract the information I need I read the file,
+                        # remove lines starting with # and parse that content
+                        # instead of the original XML file
+                        preprocessor = False
+                        newspcontent = ""
+                        for line in open(sp_file, "r").readlines():
+                            if re.match("#", line):
+                                # Line starts with a #
+                                preprocessor = True
+                            else:
+                                # Line is ok, adding it to newspcontent
+                                newspcontent = newspcontent + line
+                        if preprocessor:
+                            print "   Warning: searchplugin contains preprocessor instructions (e.g. #define, #if) that have been stripped in order to parse the XML " + searchplugin_info
+                            try:
+                                xmldoc = minidom.parse(StringIO.StringIO(newspcontent))
+                            except Exception as e:
+                                print "   Error parsing XML for searchplugin " + searchplugin_info
+                                if (outputlevel > 0):
+                                    print e
+                        else:
+                            print "   Error parsing XML for searchplugin " + searchplugin_info
+                            if (outputlevel > 0):
+                                print e
 
                     # Some searchplugins use the form <tag>, others <os:tag>
                     try:
@@ -179,6 +203,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
 def extract_splist_enUS (pathsource, splist_enUS):
     # Create a list of en-US searchplugins in pathsource, store this data in
     # splist
+    global outputlevel
     try:
         for singlefile in glob.glob(pathsource+"*.xml"):
             filename = os.path.basename(singlefile)
@@ -195,6 +220,7 @@ def extract_splist_enUS (pathsource, splist_enUS):
 
 def extract_sp_channel(pathsource, pathl10n, localeslist, channel, jsondata):
     global clproduct
+    global outputlevel
     try:
         # Analyze en-US searchplugins
         print "Locale: en-US (" + channel.upper() + ")"
