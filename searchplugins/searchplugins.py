@@ -17,6 +17,7 @@ from xml.dom import minidom
 # 0: print only actions performed and errors extracting data from searchplugins
 # 1: print errors about missing list.txt and the complete Python's error message
 outputlevel = 0
+clproduct = ""
 
 
 def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
@@ -193,6 +194,7 @@ def extract_splist_enUS (pathsource, splist_enUS):
 
 
 def extract_sp_channel(pathsource, pathl10n, localeslist, channel, jsondata):
+    global clproduct
     try:
         # Analyze en-US searchplugins
         print "Locale: en-US (" + channel.upper() + ")"
@@ -202,28 +204,38 @@ def extract_sp_channel(pathsource, pathl10n, localeslist, channel, jsondata):
         # for a locale contains a searchplugin with the same name of the en-US
         # one (e.g. "google"), this will have precedence. Therefore a file with
         # this name should not exist in the locale folder
-        splistenUS_browser = []
-        extract_splist_enUS(path + "browser/locales/en-US/en-US/searchplugins/", splistenUS_browser)
-        splistenUS_mobile = []
-        extract_splist_enUS(path + "mobile/locales/en-US/en-US/searchplugins/", splistenUS_mobile)
-        splistenUS_mail = []
-        extract_splist_enUS(path + "mail/locales/en-US/en-US/searchplugins/", splistenUS_mail)
-        splistenUS_suite = []
-        extract_splist_enUS(path + "suite/locales/en-US/en-US/searchplugins/", splistenUS_suite)
+        if (clproduct=="all") or (clproduct=="browser"):
+            splistenUS_browser = []
+            extract_splist_enUS(path + "browser/locales/en-US/en-US/searchplugins/", splistenUS_browser)
+            extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "browser", "en-US", channel, jsondata, splistenUS_browser)
 
-        extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "browser", "en-US", channel, jsondata, splistenUS_browser)
-        extract_sp_product(path + "mobile/locales/en-US/en-US/searchplugins/", "mobile", "en-US", channel, jsondata, splistenUS_mobile)
-        extract_sp_product(path + "mail/locales/en-US/en-US/searchplugins/", "mail", "en-US", channel, jsondata, splistenUS_mail)
-        extract_sp_product(path + "suite/locales/en-US/en-US/searchplugins/", "seamonkey", "en-US", channel, jsondata, splistenUS_suite)
+        if (clproduct=="all") or (clproduct=="mobile"):
+            splistenUS_mobile = []
+            extract_splist_enUS(path + "mobile/locales/en-US/en-US/searchplugins/", splistenUS_mobile)
+            extract_sp_product(path + "mobile/locales/en-US/en-US/searchplugins/", "mobile", "en-US", channel, jsondata, splistenUS_mobile)
+
+        if (clproduct=="all") or (clproduct=="mail"):
+            splistenUS_mail = []
+            extract_splist_enUS(path + "mail/locales/en-US/en-US/searchplugins/", splistenUS_mail)
+            extract_sp_product(path + "mail/locales/en-US/en-US/searchplugins/", "mail", "en-US", channel, jsondata, splistenUS_mail)
+
+        if (clproduct=="all") or (clproduct=="suite"):
+            splistenUS_suite = []
+            extract_splist_enUS(path + "suite/locales/en-US/en-US/searchplugins/", splistenUS_suite)
+            extract_sp_product(path + "suite/locales/en-US/en-US/searchplugins/", "suite", "en-US", channel, jsondata, splistenUS_suite)
 
         locale_list = open(localeslist, "r").read().splitlines()
         for locale in locale_list:
             print "Locale: " + locale + " (" + channel.upper() + ")"
             path = pathl10n + locale + "/"
-            extract_sp_product(path + "browser/searchplugins/", "browser", locale, channel, jsondata, splistenUS_browser)
-            extract_sp_product(path + "mobile/searchplugins/", "mobile", locale, channel, jsondata, splistenUS_mobile)
-            extract_sp_product(path + "mail/searchplugins/", "mail", locale, channel, jsondata, splistenUS_mail)
-            extract_sp_product(path + "suite/searchplugins/", "seamonkey", locale, channel, jsondata, splistenUS_suite)
+            if (clproduct=="all") or (clproduct=="browser"):
+                extract_sp_product(path + "browser/searchplugins/", "browser", locale, channel, jsondata, splistenUS_browser)
+            if (clproduct=="all") or (clproduct=="mobile"):
+                extract_sp_product(path + "mobile/searchplugins/", "mobile", locale, channel, jsondata, splistenUS_mobile)
+            if (clproduct=="all") or (clproduct=="mail"):
+                extract_sp_product(path + "mail/searchplugins/", "mail", locale, channel, jsondata, splistenUS_mail)
+            if (clproduct=="all") or (clproduct=="suite"):
+                extract_sp_product(path + "suite/searchplugins/", "suite", locale, channel, jsondata, splistenUS_suite)
     except Exception as e:
         print "Error reading list of locales from " + localeslist
         if (outputlevel > 0):
@@ -233,6 +245,8 @@ def extract_sp_channel(pathsource, pathl10n, localeslist, channel, jsondata):
 
 
 def main():
+    global clproduct
+
     # Parse command line options
     clparser = OptionParser()
     clparser.add_option("-p", "--product", help="Choose a specific product", choices=["browser", "mobile", "mail", "suite", "all"], default="all")
