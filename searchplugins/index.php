@@ -86,7 +86,8 @@
     $jsonarray = json_decode($jsondata, true);
 
     $channels = array('release', 'beta', 'aurora', 'trunk');
-    $products = array('browser', 'mobile', 'mail', 'seamonkey');
+    $products = array('browser', 'mobile', 'mail', 'suite');
+    $productnames = array('Firefox', 'Firefox for Android', 'Thunderbird', 'SeaMonkey');
 
     $locales = array('ach', 'af', 'ak', 'an', 'ar', 'as', 'ast', 'be', 'bg', 'bn-BD',
         'bn-IN', 'br', 'bs', 'ca', 'cs', 'csb', 'cy', 'da', 'de', 'el',
@@ -112,9 +113,9 @@
     echo "  </p>
           </div>";
 
-    foreach ($products as $product) {
+    foreach ($products as $i=>$product) {
         echo "<div class='product'>
-                <h2>$product</h2>\n";
+                <h2>" . $productnames[$i] ."</h2>\n";
         foreach ($channels as $channel) {
             echo "<div class='channel'>
                     <h3>$channel</h3>
