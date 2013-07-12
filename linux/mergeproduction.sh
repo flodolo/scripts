@@ -11,10 +11,10 @@ tag=PRODUCTION
 cd $production
 echo "----------------"
 echo "Merge a revision to $tag tag for mozilla.org"
-read -p "Which revision do you want to merge?" revision
-read -p "Do you want to svn update the repo (y/n, default yes)?" -n 1 updatesvn
+read -p "Which revision do you want to merge? " revision
+read -p "Do you want to svn update the repo (y/n, default yes)? " -n 1 updatesvn
 echo "----------------"
-if [ ($updatesvn == 'y') || ($updatesvn == '') ]
+if [ "$updatesvn" == 'y' ] || [ "$updatesvn" == '' ]
 then
     echo "Updating $tag repo to the latest version..."
     svn up --ignore-externals
@@ -23,4 +23,7 @@ echo "Starting merge..."
 svn merge $stage --ignore-ancestry -c${revision}
 echo "End of merge, don't forget to commit your changes to $tag."
 echo "Current status"
+
+production+="locales"
+cd $production
 svn status
