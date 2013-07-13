@@ -47,9 +47,11 @@ install=$homefolder/github/transvision
 # Run Transvision setup
 ./setup.sh
 
-# Set default Transvision as the default webserver
+# Set default Transvision as the default webserver and change AllowOverride
+# directive (None->All). This obviously makes sense only on a dedicated VM
 sudo cp /etc/apache2/sites-available/default /etc/apache2/sites-available/default_old
 sudo sed -i "s|/var/www|$homefolder/github/transvision/web|g" /etc/apache2/sites-available/default
+sudo sed -i "s|AllowOverride None|AllowOverride All|g" /etc/apache2/sites-available/default
 sudo /etc/init.d/apache2 restart
 
 # Install composer
