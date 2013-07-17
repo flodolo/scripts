@@ -3,7 +3,7 @@
 # This script is designed to work inside a Transvision's folder
 # (https://github.com/mozfr/transvision)
 
-
+import collections
 import glob
 import json
 import os
@@ -17,7 +17,7 @@ from xml.dom import minidom
 # Output detail level
 # 0: print only actions performed and errors extracting data from searchplugins
 # 1: print errors about missing list.txt and the complete Python's error message
-outputlevel = 1
+outputlevel = 0
 clproduct = ""
 
 
@@ -29,6 +29,14 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
             sp_list = open(path + "list.txt", "r").read().splitlines()
             # Remove empty lines
             sp_list = filter(bool, sp_list)
+            # Check for duplicates
+            if (len(sp_list) != len(set(sp_list))):
+                # set(sp_list) remove duplicates. If I'm here, there are
+                # duplicated elements in list.txt, which is an error
+                duplicated_items = [x for x, y in collections.Counter(sp_list).items() if y > 1] 
+                duplicated_items_str =  ", ".join(duplicated_items)              
+                print "   Error: there are duplicated items (" + duplicated_items_str + ") in list.txt (" + locale + ", " + product + ", " + channel + ")."
+                
         else:
             # en-US is different: I must analyze all xml files in the folder,
             # since some searchplugins are not used in en-US but from other
