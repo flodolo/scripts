@@ -1,4 +1,4 @@
-#!/bin/sh
+#! /usr/bin/env bash
 # Link https://l10n.etherpad.mozilla.org/gaia-multilocale
 
 localecode="it"
