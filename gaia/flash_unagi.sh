@@ -3,9 +3,12 @@
 
 localecode="it"
 
+# This line force reads $PATH from .profile on OS X
+# Ref: http://www.tech-recipes.com/rx/2621/os_x_change_path_environment_variable/
 cd ~
 . ./.profile echo $PATH
 
+# Pull Gaia, pull locale and make
 cd ~/moz/gaia/
 git checkout v1-train
 git reset --hard
