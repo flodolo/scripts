@@ -5,6 +5,7 @@ import os
 import re
 import subprocess
 from optparse import OptionParser
+from time import gmtime, strftime
 
 # First time you need to clone these repositories
 # git clone https://github.com/mozilla/fireplace
@@ -85,10 +86,16 @@ def write_html(json, products, filename):
                 <td>&nbsp;</td>
                 <td class='lastsection'>&nbsp;</td>
                 '''
-                print e
-
+                print "Product not found (" + locale + ", " + product + ")"
 
         html_code = html_code + "</tr>"
+
+    html_code = html_code + '''
+                </tbody>
+            </table>
+        <p>Last update: ''' + strftime("%Y-%m-%d %H:%M:%S", gmtime()) + '''</p>
+    </body>
+    </html>'''
 
     json_file = open(filename, "w")
     json_file.write(html_code)
