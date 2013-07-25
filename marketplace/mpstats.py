@@ -7,11 +7,6 @@ import subprocess
 from optparse import OptionParser
 from time import gmtime, strftime
 
-# First time you need to clone these repositories
-# git clone https://github.com/mozilla/fireplace
-# git clone https://github.com/mozilla/webpay
-# git clone https://github.com/mozilla/zamboni
-
 def write_html(json, products, filename):
     html_code = '''
         <!DOCTYPE html>
@@ -115,6 +110,25 @@ def main():
     json_filename = "/home/flodolo/github/transvision/web/marketplace.json"
     html_filename = "/home/flodolo/github/transvision/web/marketplace.html"
     json_data = {}
+
+    # Check if repositories exist and pull, if not clone
+    for product in products:
+        if os.path.isdir(path + "/" + product):
+            os.chdir(path + "/" + product)
+            print "Updating repository " + product
+            cmd_status = subprocess.check_output(
+                'git pull',
+                stderr = subprocess.STDOUT,
+                shell = True)
+            print cmd_status
+        else:
+            os.chdir(path)
+            print "Cloning repository https://github.com/mozilla/" + product
+            cmd_status = subprocess.check_output(
+                'git clone https://github.com/mozilla/' +  product,
+                stderr = subprocess.STDOUT,
+                shell = True)
+            print cmd_status
 
     for product in products:
         product_folder = path + "/" + product + "/locale"
