@@ -100,15 +100,15 @@ def write_html(json, products, filename):
 def main():
     # Parse command line options
     clparser = OptionParser()
-    clparser.add_option("-o", "--output", help="Choose a type of output", choices=["html", "json"], default="json")
+    clparser.add_option("-o", "--output", help="Choose a type of output", choices=["html", "json", "all"], default="all")
 
     (options, args) = clparser.parse_args()
     output_type = options.output
 
-    path = "/home/flodolo/pei"
+    path = "/home/flodolo/mozilla/marketplace"
     products = ["fireplace", "webpay", "zamboni"]
-    json_filename = "/home/flodolo/github/transvision/web/marketplace.json"
-    html_filename = "/home/flodolo/github/transvision/web/marketplace.html"
+    json_filename = "/home/flodolo/mozilla/marketplace/marketplace.json"
+    html_filename = "/home/flodolo/mozilla/marketplace/marketplace.html"
     json_data = {}
 
     # Check if repositories exist and pull, if not clone
@@ -154,19 +154,34 @@ def main():
 
                 # Translated messages is always present
                 search_result = re.search(r'([0-9]*) translated messages', translation_status)
-                string_translated = int(search_result.group(1))
+                try:
+                    string_translated = int(search_result.group(1))
+                except Exception as e: 
+                    string_translated = 0
+                    print "Error extracting number of translated messages"
+                    print e
 
                 # Untranslated messages
                 search_result = re.search(r'([0-9]*) untranslated messages', translation_status)
                 if search_result:
-                    string_untranslated = int(search_result.group(1))
+                    try:
+                        string_untranslated = int(search_result.group(1))
+                    except Exception as e: 
+                        string_untranslated = 0
+                        print "Error extracting number of translated messages"
+                        print e
                 else:
                     string_untranslated = 0
 
                 # Fuzzy messages
                 search_result = re.search(r'([0-9]*) fuzzy translations', translation_status)
                 if search_result:
-                    string_fuzzy = int(search_result.group(1))
+                    try:
+                        string_fuzzy = int(search_result.group(1))
+                    except Exception as e: 
+                        string_fuzzy = 0
+                        print "Error extracting number of translated messages"
+                        print e                    
                 else:
                     string_fuzzy = 0
 
@@ -197,13 +212,13 @@ def main():
 
 
     # Write back updated json data
-    if (output_type == 'json'):
+    if (output_type == 'json') or (output_type == 'all'):
         json_file = open(json_filename, "w")
         json_file.write(json.dumps(json_data, indent=4, sort_keys=True))
         json_file.close()
 
     # Write back updated json data
-    if (output_type == 'html'):
+    if (output_type == 'html') or (output_type == 'all'):
         write_html(json_data, products, html_filename)
 
 if __name__ == "__main__":
