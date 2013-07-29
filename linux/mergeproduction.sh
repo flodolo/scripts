@@ -27,3 +27,12 @@ echo "Current status"
 production+="locales"
 cd $production
 svn status
+
+echo "----------------"
+read -p "Do you want to commit your changes (y/n, default no)? " -n 1 commitsvn
+echo "----------------"
+if [ "$commitsvn" == 'y' ]
+then
+    echo "Commit to production..."
+    svn ci -m "l10n: translation update"
+fi
