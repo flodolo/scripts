@@ -232,7 +232,7 @@ def extract_splist_enUS (pathsource, splist_enUS):
 
 
 
-def extract_sp_channel(pathsource, pathl10n, localeslist, channel, jsondata):
+def extract_p12n_channel(pathsource, pathl10n, localeslist, channel, jsondata):
     global clproduct
     global outputlevel
     try:
@@ -302,7 +302,7 @@ def main():
     local_hg = parser.get("config", "local_hg")
     install_folder = parser.get("config", "install")
 
-    # Set Transvision"s folders and locale files
+    # Set Transvision's folders and locale files
     release_l10n = local_hg + "/RELEASE_L10N/"
     beta_l10n = local_hg + "/BETA_L10N/"
     aurora_l10n = local_hg + "/AURORA_L10N/"
@@ -325,13 +325,13 @@ def main():
     print "Analyzing product: " + clproduct + " - " + "branch: " + clbranch + "\n"
 
     if (clbranch=="all") or (clbranch=="release"):
-        extract_sp_channel(release_source, release_l10n, release_locales, "release", jsondata)
+        extract_p12n_channel(release_source, release_l10n, release_locales, "release", jsondata)
     if (clbranch=="all") or (clbranch=="beta"):
-        extract_sp_channel(beta_source, beta_l10n, beta_locales, "beta", jsondata)
+        extract_p12n_channel(beta_source, beta_l10n, beta_locales, "beta", jsondata)
     if (clbranch=="all") or (clbranch=="aurora"):
-        extract_sp_channel(aurora_source, aurora_l10n, aurora_locales, "aurora", jsondata)
+        extract_p12n_channel(aurora_source, aurora_l10n, aurora_locales, "aurora", jsondata)
     if (clbranch=="all") or (clbranch=="trunk"):
-        extract_sp_channel(trunk_source, trunk_l10n, trunk_locales, "trunk", jsondata)
+        extract_p12n_channel(trunk_source, trunk_l10n, trunk_locales, "trunk", jsondata)
 
     # Write back updated json data
     jsonfile = open(jsonfilename, "w")
