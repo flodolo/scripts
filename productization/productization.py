@@ -21,6 +21,8 @@ outputlevel = 0
 clproduct = ""
 
 
+
+
 def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
     global outputlevel
     try:
@@ -161,21 +163,25 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                         print "   Error: problem extracting image from searchplugin " + searchplugin_info
                         image = "data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC/0lEQVR4XoWSbUiTexjG7x6d0OZW4FD3IigqaFEfJHRMt7WVGLQ9CZpR8pSiHwIZHHGdzbmzovl2tjnb8WjzBe2NCCnMFzycJ578kktwUZRDkCKhVDgouJdEn9n+/Sssy+Rc8Ptwc3FxX/z/NzQBwIBMxpsZHBx51d9fheddNeVwwHRLywV/b+/Yzfz8eMAixDicRVEPuBsbun1crkfR1FT5q/BTHI4EApQwPr53P0Inc8vLh27I5fHwyGKx+Lu60OvubuTF+Pr6WK/V+kOTKacTJs3mCn9rKzvndKL3PT1o0eOJ+qzWK8R/U1Pu8OLio/lgEDbX1mBvKMSJSUz05DU0fGkyabfD+srK+b0cTg8KhzkxsbHwMRRCywsLE3NerwuwwC2VcseNRtpnsyGmuRn9g/E6HCxjNFZjKp+YTOxkTQ2awb6/sTH6rL6e6UxP58F23dJo+KN1dfT9+npEWyzoMYax2SK0wcCOURSa0OvRc7M56jUYmNsajWArtwe26ZpYzE0rKXm4trpayBEKgWBZWF9aAi72eCkpKAowMTc8TOrn5z/AbhpQqfjXjh9/UScUotYjR9BfhYXoXnEx+levfzmgVAp+DhDbh/GGBoCEhNJ3s7MHgsvL8Mbng7fT0xAJhyGyuZklyM4+veudjJpM4CkpOX9RImGrANBn9ASBfo+JQUbM1YMH0ShFRUaqq3feyZDBAF0kWfGbWMwW4+AZTGVsbNSlVjN/HztGV3E46A8A1B4Xh9qzs9nbOt33O3lQWwsdJEmViURsKQ5SmDKCiLaqVEy3TCbokcv5nWo1fRm3qMWeFXNDJIrcJcmvTdpJsqwGh09iQ405jTe3KJWMSyr99s9tSUlcl0pFX8JNnADIjvkzOZm9c+rUWXBrtYpzaWmBMmxo8WazQsFcz83d8dqevDy+R6mkrbiJAQB1pKYGbmq1R7+YHTqdojwzc/VKfj7TJpHwYBc5ExO5bQUFtCMjI9i/Fd7CXVR0yJ6TI4D/kSMnh3/9xInDW/MnJPlM3rrfgeYAAAAASUVORK5CYII="
 
-                    searchplugin = {
+                    # Check if node for locale already exists
+                    if (locale not in jsondata):
+                        jsondata[locale] = {}
+                    # Check if node for locale->product already exists
+                    if (product not in jsondata[locale]):
+                        jsondata[locale][product] = {}
+                    # Check if node for locale->product->channel already exists
+                    if (channel not in jsondata[locale][product]):
+                        jsondata[locale][product][channel] = {}
+                    
+                    jsondata[locale][product][channel][sp] = {
                         "file": sp + ".xml",
                         "name": name,
                         "description": description,
                         "url": url,
                         "secure": secure,
                         "image": image,
-                        "locale": locale,
-                        "product": product,
-                        "channel": channel
                     }
 
-                    # Example: id_record = it_browser_release_amazon-it
-                    id_record = locale + "_" + product + "_" + channel + "_" + sp
-                    jsondata[id_record] = searchplugin
                 except Exception as e:
                     print "   Error: problem analyzing searchplugin " + searchplugin_info
                     if (outputlevel > 0):
@@ -184,28 +190,33 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                 # File does not exists, locale is using the same plugin of en-
                 # US, I have to retrieve it from the dictionary
                 try:
-                    searchplugin_enUS = jsondata["en-US_" + product + "_" + channel + "_" + sp]
-                    searchplugin = {
+                    searchplugin_enUS = jsondata["en-US"][product][channel][sp]
+
+                    # Check if node for locale already exists
+                    if (locale not in jsondata):
+                        jsondata[locale] = {}
+                    # Check if node for locale->product already exists
+                    if (product not in jsondata[locale]):
+                        jsondata[locale][product] = {}
+                    # Check if node for locale->product->channel already exists
+                    if (channel not in jsondata[locale][product]):
+                        jsondata[locale][product][channel] = {}
+
+                    jsondata[locale][product][channel][sp] = {
                         "file": sp + ".xml",
                         "name": searchplugin_enUS["name"],
                         "description": "(en-US) " + searchplugin_enUS["description"],
                         "url": searchplugin_enUS["url"],
                         "secure": searchplugin_enUS["secure"],
-                        "image": searchplugin_enUS["image"],
-                        "locale": locale,
-                        "product": product,
-                        "channel": channel
-                    }
-                    # Example: id_record = it_browser_release_amazon-it
-                    id_record = locale + "_" + product + "_" + channel + "_" + sp
-                    jsondata[id_record] = searchplugin
+                        "image": searchplugin_enUS["image"]
+                    }                    
                 except Exception as e:
                     # File does not exist but we don't have the en-US either.
                     # This means that list.txt references a non existing
                     # plugin, which will cause the build to fail
                     print "   Error: file referenced in list.txt but not available (" + locale + ", " + product + ", " + channel + ", " + sp + ".xml)"
                     if (outputlevel > 0):
-                        print e
+                        print e                 
 
     except Exception as e:
         if (outputlevel > 0):
@@ -214,9 +225,52 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
 
 
 
+def extract_p12n_product(source, product, locale, channel, jsondata):
+    global outputlevel
+
+    try:
+        # Read region.properties, ignore comments and empty lines
+        values = {}
+        for line in open(source):
+            li = line.strip()
+            if (not li.startswith("#")) & (li != ""):   
+                try:        
+                    # Split considering only the firs =     
+                    key, value = li.split('=', 1)
+                    # Remove whitespaces, some locales use key = value instead of key=value                    
+                    values[key.strip()] = value.strip()
+                except Exception as e:
+                    print "   Error: parsing " + source + " (" + locale + ", " + product + ", " + channel + ")"            
+                    if (outputlevel > 0):
+                        print e
+    except Exception as e:
+        print "   Error: reading " + source + " (" + locale + ", " + product + ", " + channel + ")"
+        if (outputlevel > 0):
+            print e  
+
+    # Check if node for locale already exists
+    if (locale not in jsondata):
+        jsondata[locale] = {}
+    # Check if node for locale->product already exists
+    if (product not in jsondata[locale]):
+        jsondata[locale][product] = {}
+    # Check if node for locale->product->channel already exists
+    if (channel not in jsondata[locale][product]):
+        jsondata[locale][product][channel] = {}    
+
+    try:
+        jsondata[locale][product][channel]["p12n"] = {
+            "defaultenginename": values["browser.search.defaultenginename"]
+        }
+    except Exception as e:
+        print "   Error: saving data from " + source + " (" + locale + ", " + product + ", " + channel + ")"               
+
+
+
+
 def extract_splist_enUS (pathsource, splist_enUS):
     # Create a list of en-US searchplugins in pathsource, store this data in
-    # splist
+    # splist_enUS
     global outputlevel
     try:
         for singlefile in glob.glob(pathsource+"*.xml"):
@@ -248,21 +302,25 @@ def extract_p12n_channel(pathsource, pathl10n, localeslist, channel, jsondata):
             splistenUS_browser = []
             extract_splist_enUS(path + "browser/locales/en-US/en-US/searchplugins/", splistenUS_browser)
             extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "browser", "en-US", channel, jsondata, splistenUS_browser)
+            extract_p12n_product(path + "browser/locales/en-US/en-US/chrome/browser-region/region.properties", "browser", "en-US", channel, jsondata)
 
         if (clproduct=="all") or (clproduct=="mobile"):
             splistenUS_mobile = []
             extract_splist_enUS(path + "mobile/locales/en-US/en-US/searchplugins/", splistenUS_mobile)
             extract_sp_product(path + "mobile/locales/en-US/en-US/searchplugins/", "mobile", "en-US", channel, jsondata, splistenUS_mobile)
+            extract_p12n_product(path + "mobile/locales/en-US/en-US/chrome/region.properties", "mobile", "en-US", channel, jsondata)
 
         if (clproduct=="all") or (clproduct=="mail"):
             splistenUS_mail = []
             extract_splist_enUS(path + "mail/locales/en-US/en-US/searchplugins/", splistenUS_mail)
             extract_sp_product(path + "mail/locales/en-US/en-US/searchplugins/", "mail", "en-US", channel, jsondata, splistenUS_mail)
+            extract_p12n_product(path + "mail/locales/en-US/en-US/chrome/messenger-region/region.properties", "mail", "en-US", channel, jsondata)
 
         if (clproduct=="all") or (clproduct=="suite"):
             splistenUS_suite = []
             extract_splist_enUS(path + "suite/locales/en-US/en-US/searchplugins/", splistenUS_suite)
             extract_sp_product(path + "suite/locales/en-US/en-US/searchplugins/", "suite", "en-US", channel, jsondata, splistenUS_suite)
+            extract_p12n_product(path + "suite/locales/en-US/en-US/chrome/browser/region.properties", "suite", "en-US", channel, jsondata)
 
         locale_list = open(localeslist, "r").read().splitlines()
         for locale in locale_list:
@@ -270,12 +328,16 @@ def extract_p12n_channel(pathsource, pathl10n, localeslist, channel, jsondata):
             path = pathl10n + locale + "/"
             if (clproduct=="all") or (clproduct=="browser"):
                 extract_sp_product(path + "browser/searchplugins/", "browser", locale, channel, jsondata, splistenUS_browser)
+                extract_p12n_product(path + "browser/chrome/browser-region/region.properties", "browser", locale, channel, jsondata)
             if (clproduct=="all") or (clproduct=="mobile"):
                 extract_sp_product(path + "mobile/searchplugins/", "mobile", locale, channel, jsondata, splistenUS_mobile)
+                extract_p12n_product(path + "mobile/chrome/region.properties", "mobile", locale, channel, jsondata)
             if (clproduct=="all") or (clproduct=="mail"):
                 extract_sp_product(path + "mail/searchplugins/", "mail", locale, channel, jsondata, splistenUS_mail)
+                extract_p12n_product(path + "mail/chrome/messenger-region/region.properties", "mail", locale, channel, jsondata)
             if (clproduct=="all") or (clproduct=="suite"):
                 extract_sp_product(path + "suite/searchplugins/", "suite", locale, channel, jsondata, splistenUS_suite)
+                extract_p12n_product(path + "suite/chrome/browser/region.properties", "suite", locale, channel, jsondata)
     except Exception as e:
         print "Error reading list of locales from " + localeslist
         if (outputlevel > 0):

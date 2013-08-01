@@ -77,11 +77,6 @@
 
 <?php
 
-    function preg_array_key_exists($pattern, $array) {
-        $keys = array_keys ($array);
-        return preg_grep ($pattern, $keys);
-    }
-
     $jsondata = file_get_contents("searchplugins.json");
     $jsonarray = json_decode($jsondata, true);
 
@@ -120,31 +115,29 @@
             echo "<div class='channel'>
                     <h3>$channel</h3>
                  ";
-            $re = '/^' . $locale . '_' . $product . '_' . $channel . '/';
-            $keys = preg_array_key_exists($re, $jsonarray);
             $printeditems = 0;
-            foreach ($keys as $key) {
+            foreach ($jsonarray[$locale][$product][$channel] as $singlesp) {
                 echo '<div class="searchplugin">';
-                echo '<img src="' . $jsonarray[$key]['image'] . '" alt="searchplugin icon" />';
+                echo '<img src="' . $singlesp['image'] . '" alt="searchplugin icon" />';
 
-                if ( $jsonarray[$key]['name'] == 'not available') {
-                    echo '<p class="error"><strong>' . $jsonarray[$key]['name'] . '</strong> (' . $jsonarray[$key]['file'] . ')</p>';
+                if ( $singlesp['name'] == 'not available') {
+                    echo '<p class="error"><strong>' . $singlesp['name'] . '</strong> (' . $singlesp['file'] . ')</p>';
                 } else {
-                    echo '<p><strong>' . $jsonarray[$key]['name'] . '</strong> (' . $jsonarray[$key]['file'] . ')</p>';
+                    echo '<p><strong>' . $singlesp['name'] . '</strong> (' . $singlesp['file'] . ')</p>';
                 }
 
-                if ( strpos($jsonarray[$key]['description'], 'not available')) {
-                    echo '<p class="error">' . $jsonarray[$key]['description'] . '</p>';
+                if ( strpos($singlesp['description'], 'not available')) {
+                    echo '<p class="error">' . $singlesp['description'] . '</p>';
                 } else {
-                    echo '<p>' . $jsonarray[$key]['description'] . '</p>';
+                    echo '<p>' . $singlesp['description'] . '</p>';
                 }
 
-                echo '<p>Locale: ' . $jsonarray[$key]['locale'] . '</p>';
+                echo '<p>Locale: ' . $locale . '</p>';
 
-                if ($jsonarray[$key]['secure']) {
-                    echo '<p class="https" title="Connection over https">URL: <a href="' . $jsonarray[$key]['url'] . '">link</a></p>';
+                if ($singlesp['secure']) {
+                    echo '<p class="https" title="Connection over https">URL: <a href="' . $singlesp['url'] . '">link</a></p>';
                 } else {
-                    echo '<p class="http" title="Connection over http">URL: <a href="' . $jsonarray[$key]['url'] . '">link</a></p>';
+                    echo '<p class="http" title="Connection over http">URL: <a href="' . $singlesp['url'] . '">link</a></p>';
                 }
                 echo '</div>';
                 $printeditems++;
