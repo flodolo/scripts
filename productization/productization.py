@@ -35,10 +35,10 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
             if (len(sp_list) != len(set(sp_list))):
                 # set(sp_list) remove duplicates. If I'm here, there are
                 # duplicated elements in list.txt, which is an error
-                duplicated_items = [x for x, y in collections.Counter(sp_list).items() if y > 1] 
-                duplicated_items_str =  ", ".join(duplicated_items)              
+                duplicated_items = [x for x, y in collections.Counter(sp_list).items() if y > 1]
+                duplicated_items_str =  ", ".join(duplicated_items)
                 print "   Error: there are duplicated items (" + duplicated_items_str + ") in list.txt (" + locale + ", " + product + ", " + channel + ")."
-                
+
         else:
             # en-US is different: I must analyze all xml files in the folder,
             # since some searchplugins are not used in en-US but from other
@@ -172,7 +172,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                     # Check if node for locale->product->channel already exists
                     if (channel not in jsondata[locale][product]):
                         jsondata[locale][product][channel] = {}
-                    
+
                     jsondata[locale][product][channel][sp] = {
                         "file": sp + ".xml",
                         "name": name,
@@ -209,14 +209,14 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                         "url": searchplugin_enUS["url"],
                         "secure": searchplugin_enUS["secure"],
                         "image": searchplugin_enUS["image"]
-                    }                    
+                    }
                 except Exception as e:
                     # File does not exist but we don't have the en-US either.
                     # This means that list.txt references a non existing
                     # plugin, which will cause the build to fail
                     print "   Error: file referenced in list.txt but not available (" + locale + ", " + product + ", " + channel + ", " + sp + ".xml)"
                     if (outputlevel > 0):
-                        print e                 
+                        print e
 
     except Exception as e:
         if (outputlevel > 0):
@@ -228,43 +228,78 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
 def extract_p12n_product(source, product, locale, channel, jsondata):
     global outputlevel
 
-    try:
-        # Read region.properties, ignore comments and empty lines
-        values = {}
-        for line in open(source):
-            li = line.strip()
-            if (not li.startswith("#")) & (li != ""):   
-                try:        
-                    # Split considering only the firs =     
-                    key, value = li.split('=', 1)
-                    # Remove whitespaces, some locales use key = value instead of key=value                    
-                    values[key.strip()] = value.strip()
-                except Exception as e:
-                    print "   Error: parsing " + source + " (" + locale + ", " + product + ", " + channel + ")"            
-                    if (outputlevel > 0):
-                        print e
-    except Exception as e:
-        print "   Error: reading " + source + " (" + locale + ", " + product + ", " + channel + ")"
+    existingfile = os.path.isfile(source)
+    if existingfile:
+        try:
+            # Read region.properties, ignore comments and empty lines
+            values = {}
+            for line in open(source):
+                li = line.strip()
+                if (not li.startswith("#")) & (li != ""):
+                    try:
+                        # Split considering only the firs =
+                        key, value = li.split('=', 1)
+                        # Remove whitespaces, some locales use key = value instead of key=value
+                        values[key.strip()] = value.strip()
+                    except Exception as e:
+                        print "   Error: parsing " + source + " (" + locale + ", " + product + ", " + channel + ")"
+                        if (outputlevel > 0):
+                            print e
+        except Exception as e:
+            print "   Error: reading " + source + " (" + locale + ", " + product + ", " + channel + ")"
+            if (outputlevel > 0):
+                print e
+
+        # Check if node for locale already exists
+        if (locale not in jsondata):
+            jsondata[locale] = {}
+        # Check if node for locale->product already exists
+        if (product not in jsondata[locale]):
+            jsondata[locale][product] = {}
+        # Check if node for locale->product->channel already exists
+        if (channel not in jsondata[locale][product]):
+            jsondata[locale][product][channel] = {}
+
+        # Extract data
+        # Default search engine name. Example:
+        # browser.search.defaultenginename=Google
+        defaultenginename = values["browser.search.defaultenginename"]
+
+        searchorder = {}
+        feedhandlers = {}
+
+        for key, value in values.iteritems():
+            # Search engines order. Example:
+            # browser.search.order.1=Google
+            if key.startswith('browser.search.order.'):
+                searchorder[key[-1:]] = value
+
+            # Feed handlers. Example:
+            # browser.contentHandlers.types.0.title=My Yahoo!
+            # browser.contentHandlers.types.0.uri=http://add.my.yahoo.com/rss?url=%s
+            if key.startswith('browser.contentHandlers.types.'):
+                if key.endswith('.title'):
+                    feedhandler_number = key[-7:-6]
+                    if (feedhandler_number not in feedhandlers):
+                        feedhandlers[feedhandler_number] = {}
+                    feedhandlers[feedhandler_number]["title"] = value
+                if key.endswith('.uri'):
+                    feedhandler_number = key[-5:-4]
+                    if (feedhandler_number not in feedhandlers):
+                        feedhandlers[feedhandler_number] = {}
+                    feedhandlers[feedhandler_number]["uri"] = value
+
+        try:
+            jsondata[locale][product][channel]["p12n"] = {
+                "defaultenginename": defaultenginename,
+                "searchorder": searchorder,
+                "feedhandlers": feedhandlers
+            }
+        except Exception as e:
+            print "   Error: saving data from " + source + " (" + locale + ", " + product + ", " + channel + ")"
+    else:
         if (outputlevel > 0):
-            print e  
-
-    # Check if node for locale already exists
-    if (locale not in jsondata):
-        jsondata[locale] = {}
-    # Check if node for locale->product already exists
-    if (product not in jsondata[locale]):
-        jsondata[locale][product] = {}
-    # Check if node for locale->product->channel already exists
-    if (channel not in jsondata[locale][product]):
-        jsondata[locale][product][channel] = {}    
-
-    try:
-        jsondata[locale][product][channel]["p12n"] = {
-            "defaultenginename": values["browser.search.defaultenginename"]
-        }
-    except Exception as e:
-        print "   Error: saving data from " + source + " (" + locale + ", " + product + ", " + channel + ")"               
-
+            print "   Warning: file does not exist " + source + " (" + locale + ", " + product + ", " + channel + ")"
 
 
 
