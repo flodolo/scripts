@@ -328,7 +328,7 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
 
             # Unrecognized line, print warning
             if (not lineok):
-                print "   Warning: uknown key in " + source
+                print "   Warning: unknown key in " + source
                 print "   " + key + "=" + value
 
         try:
@@ -345,6 +345,47 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
     else:
         if (outputlevel > 0):
             print "   Warning: file does not exist " + source + " (" + locale + ", " + product + ", " + channel + ")"
+
+
+
+
+def p12n_differences (jsondata):
+    # Analyze Firefox
+
+    for locale in jsondata:
+
+        p12n_release = {}
+        p12n_beta = {}
+        p12n_aurora = {}
+        p12n_trunk = {}
+
+        if ("release" in jsondata[locale]["browser"]):
+            p12n_release = jsondata[locale]["browser"]["release"]
+        if ("beta" in jsondata[locale]["browser"]):
+            p12n_beta = jsondata[locale]["browser"]["beta"]
+        if ("aurora" in jsondata[locale]["browser"]):
+            p12n_aurora = jsondata[locale]["browser"]["aurora"]
+        if ("trunk" in jsondata[locale]["browser"]):
+            p12n_trunk = jsondata[locale]["browser"]["trunk"]
+
+        if (p12n_release and p12n_beta):
+            diff = set(p12n_release.keys()) - set(p12n_beta.keys())
+            if diff:
+                print "\nDifferences between release and beta for " + locale
+                print diff
+
+        if (p12n_beta and p12n_aurora):
+            diff = set(p12n_beta.keys()) - set(p12n_aurora.keys())
+            if diff:
+                print "\nDifferences between beta and aurora for " + locale
+                print diff
+
+        if (p12n_aurora and p12n_trunk):
+            diff = set(p12n_aurora.keys()) - set(p12n_trunk.keys())
+            if diff:
+                print "\nDifferences between aurora and trunk for " + locale
+                print diff
+
 
 
 
@@ -370,7 +411,7 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
     global outputlevel
     try:
         # Analyze en-US searchplugins
-        print "Locale: en-US (" + channel.upper() + ")"
+        print "\nLocale: en-US (" + channel.upper() + ")"
         path = pathsource + "COMMUN/"
 
         # Create a list of en-US searchplugins for each channel. If list.txt
@@ -403,7 +444,7 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
 
         locale_list = open(localeslist, "r").read().splitlines()
         for locale in locale_list:
-            print "Locale: " + locale + " (" + channel.upper() + ")"
+            print "\nLocale: " + locale + " (" + channel.upper() + ")"
             path = pathl10n + locale + "/"
             if (clproduct=="all") or (clproduct=="browser"):
                 extract_sp_product(path + "browser/searchplugins/", "browser", locale, channel, jsondata, splistenUS_browser)
@@ -472,6 +513,9 @@ def main():
         extract_p12n_channel(clproduct, aurora_source, aurora_l10n, aurora_locales, "aurora", jsondata)
     if (clbranch=="all") or (clbranch=="trunk"):
         extract_p12n_channel(clproduct, trunk_source, trunk_l10n, trunk_locales, "trunk", jsondata)
+
+    if (clbranch=="all"):
+        p12n_differences(jsondata)
 
     # Write back updated json data
     jsonfile = open(jsonfilename, "w")
