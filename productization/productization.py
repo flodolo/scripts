@@ -18,7 +18,6 @@ from xml.dom import minidom
 # 0: print only actions performed and errors extracting data from searchplugins
 # 1: print errors about missing list.txt and the complete Python's error message
 outputlevel = 0
-clproduct = ""
 
 
 
@@ -367,8 +366,7 @@ def extract_splist_enUS (pathsource, splist_enUS):
 
 
 
-def extract_p12n_channel(pathsource, pathl10n, localeslist, channel, jsondata):
-    global clproduct
+def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, jsondata):
     global outputlevel
     try:
         # Analyze en-US searchplugins
@@ -428,7 +426,6 @@ def extract_p12n_channel(pathsource, pathl10n, localeslist, channel, jsondata):
 
 
 def main():
-    global clproduct
 
     # Parse command line options
     clparser = OptionParser()
@@ -468,13 +465,13 @@ def main():
     print "Analyzing product: " + clproduct + " - " + "branch: " + clbranch + "\n"
 
     if (clbranch=="all") or (clbranch=="release"):
-        extract_p12n_channel(release_source, release_l10n, release_locales, "release", jsondata)
+        extract_p12n_channel(clproduct, release_source, release_l10n, release_locales, "release", jsondata)
     if (clbranch=="all") or (clbranch=="beta"):
-        extract_p12n_channel(beta_source, beta_l10n, beta_locales, "beta", jsondata)
+        extract_p12n_channel(clproduct, beta_source, beta_l10n, beta_locales, "beta", jsondata)
     if (clbranch=="all") or (clbranch=="aurora"):
-        extract_p12n_channel(aurora_source, aurora_l10n, aurora_locales, "aurora", jsondata)
+        extract_p12n_channel(clproduct, aurora_source, aurora_l10n, aurora_locales, "aurora", jsondata)
     if (clbranch=="all") or (clbranch=="trunk"):
-        extract_p12n_channel(trunk_source, trunk_l10n, trunk_locales, "trunk", jsondata)
+        extract_p12n_channel(clproduct, trunk_source, trunk_l10n, trunk_locales, "trunk", jsondata)
 
     # Write back updated json data
     jsonfile = open(jsonfilename, "w")
