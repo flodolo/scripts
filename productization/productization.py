@@ -260,24 +260,32 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
         if (channel not in jsondata[locale][product]):
             jsondata[locale][product][channel] = {}
 
-        # Extract data
-        # Default search engine name. Example:
-        # browser.search.defaultenginename=Google
-        defaultenginename = values["browser.search.defaultenginename"]
-
+        defaultenginename = '-'
         searchorder = {}
         feedhandlers = {}
+        handlerversion = '-'
+        contenthandlers = {}
 
         for key, value in values.iteritems():
+            lineok = False
+
+            # Default search engine name. Example:
+            # browser.search.defaultenginename=Google
+            if key.startswith('browser.search.defaultenginename'):
+                lineok = True
+                defaultenginename = values["browser.search.defaultenginename"]
+
             # Search engines order. Example:
             # browser.search.order.1=Google
             if key.startswith('browser.search.order.'):
+                lineok = True
                 searchorder[key[-1:]] = value
 
             # Feed handlers. Example:
             # browser.contentHandlers.types.0.title=My Yahoo!
             # browser.contentHandlers.types.0.uri=http://add.my.yahoo.com/rss?url=%s
             if key.startswith('browser.contentHandlers.types.'):
+                lineok = True
                 if key.endswith('.title'):
                     feedhandler_number = key[-7:-6]
                     if (feedhandler_number not in feedhandlers):
@@ -289,14 +297,52 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
                         feedhandlers[feedhandler_number] = {}
                     feedhandlers[feedhandler_number]["uri"] = value
 
+            # Handler version. Example:
+            # gecko.handlerService.defaultHandlersVersion=4
+            if key.startswith('gecko.handlerService.defaultHandlersVersion'):
+                lineok = True
+                handlerversion = values["gecko.handlerService.defaultHandlersVersion"]
+
+            # Service handlers. Example:
+            # gecko.handlerService.schemes.webcal.0.name=30 Boxes
+            # gecko.handlerService.schemes.webcal.0.uriTemplate=https://30boxes.com/external/widget?refer=ff&url=%s
+            if key.startswith('gecko.handlerService.schemes.'):
+                lineok = True
+                splittedkey = key.split('.')
+                ch_name = splittedkey[3]
+                ch_number = splittedkey[4]
+                ch_param = splittedkey[5]
+                if (ch_number not in contenthandlers):
+                    contenthandlers[ch_number] = {}
+                if (ch_param == "name"):
+                    contenthandlers[ch_number]["name"] = value
+                if (ch_param == "uriTemplate"):
+                    contenthandlers[ch_number]["uri"] = value
+
+            # Ignore some keys for mail and seamonkey
+            if (product == "suite") or (product == "mail"):
+                ignored_keys = ['mail.addr_book.mapit_url.format', 'mailnews.messageid_browser.url', 'mailnews.localizedRe',
+                                'browser.translation.service', 'browser.search.defaulturl', 'browser.throbber.url',
+                                'startup.homepage_override_url', 'browser.startup.homepage', 'browser.translation.serviceDomain']
+                if key in ignored_keys:
+                    lineok = True
+
+            # Unrecognized line, print warning
+            if (not lineok):
+                print "   Warning: uknown key in " + source
+                print "   " + key + "=" + value
+
         try:
             jsondata[locale][product][channel]["p12n"] = {
                 "defaultenginename": defaultenginename,
                 "searchorder": searchorder,
-                "feedhandlers": feedhandlers
+                "feedhandlers": feedhandlers,
+                "handlerversion": handlerversion,
+                "contenthandlers": contenthandlers
             }
         except Exception as e:
-            print "   Error: saving data from " + source + " (" + locale + ", " + product + ", " + channel + ")"
+            print "   Error: problem saving data into json from " + source + " (" + locale + ", " + product + ", " + channel + ")"
+
     else:
         if (outputlevel > 0):
             print "   Warning: file does not exist " + source + " (" + locale + ", " + product + ", " + channel + ")"
