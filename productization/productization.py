@@ -350,10 +350,39 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
 
 
 def p12n_differences (jsondata):
+
+    def print_differences (more_stable, less_stable, more_stable_label, less_stable_label):
+        diff = set(more_stable.keys()) - set(less_stable.keys())
+        if diff:
+            print "\nThere are differences between " + more_stable_label + " and " + less_stable_label + " for " + locale
+
+            print "Items available in " + more_stable_label + " but non in " + less_stable_label
+            for item in diff:
+                print "  " + item
+
+            temp_diff = set(less_stable.keys()) - set(more_stable.keys())
+            if temp_diff:
+                print "Items available in " + less_stable_label + " but non in " + more_stable_label
+                for item in temp_diff:
+                    print "  " + item
+
+            common_items = set(more_stable.keys()).intersection(set(less_stable.keys()))
+            if common_items:
+                print "Items present in both but changed"
+                for item in common_items:
+                    if (more_stable[item] != less_stable[item]):
+                        print "  " + item
+
+
+
+
+    print "\n\n"
+    print "**********************************************************************"
+    print "*                       PRODUCTIZATION  CHECKS                       *"
+    print "**********************************************************************"
+
     # Analyze Firefox
-
     for locale in jsondata:
-
         p12n_release = {}
         p12n_beta = {}
         p12n_aurora = {}
@@ -369,23 +398,13 @@ def p12n_differences (jsondata):
             p12n_trunk = jsondata[locale]["browser"]["trunk"]
 
         if (p12n_release and p12n_beta):
-            diff = set(p12n_release.keys()) - set(p12n_beta.keys())
-            if diff:
-                print "\nDifferences between release and beta for " + locale
-                print diff
+            print_differences (p12n_release, p12n_beta, "RELEASE", "BETA")
 
         if (p12n_beta and p12n_aurora):
-            diff = set(p12n_beta.keys()) - set(p12n_aurora.keys())
-            if diff:
-                print "\nDifferences between beta and aurora for " + locale
-                print diff
+            print_differences (p12n_beta, p12n_aurora, "BETA", "AURORA")
 
         if (p12n_aurora and p12n_trunk):
-            diff = set(p12n_aurora.keys()) - set(p12n_trunk.keys())
-            if diff:
-                print "\nDifferences between aurora and trunk for " + locale
-                print diff
-
+            print_differences (p12n_aurora, p12n_trunk, "AURORA", "TRUNK")
 
 
 
