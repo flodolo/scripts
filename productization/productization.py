@@ -426,7 +426,7 @@ def extract_splist_enUS (pathsource, splist_enUS):
 
 
 
-def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, jsondata):
+def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, jsondata, clp12n):
     global outputlevel
     try:
         # Analyze en-US searchplugins
@@ -441,25 +441,29 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
             splistenUS_browser = []
             extract_splist_enUS(path + "browser/locales/en-US/en-US/searchplugins/", splistenUS_browser)
             extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "browser", "en-US", channel, jsondata, splistenUS_browser)
-            extract_p12n_product(path + "browser/locales/en-US/en-US/chrome/browser-region/region.properties", "browser", "en-US", channel, jsondata)
+            if clp12n:
+                extract_p12n_product(path + "browser/locales/en-US/en-US/chrome/browser-region/region.properties", "browser", "en-US", channel, jsondata)
 
         if (clproduct=="all") or (clproduct=="mobile"):
             splistenUS_mobile = []
             extract_splist_enUS(path + "mobile/locales/en-US/en-US/searchplugins/", splistenUS_mobile)
             extract_sp_product(path + "mobile/locales/en-US/en-US/searchplugins/", "mobile", "en-US", channel, jsondata, splistenUS_mobile)
-            extract_p12n_product(path + "mobile/locales/en-US/en-US/chrome/region.properties", "mobile", "en-US", channel, jsondata)
+            if clp12n:
+                extract_p12n_product(path + "mobile/locales/en-US/en-US/chrome/region.properties", "mobile", "en-US", channel, jsondata)
 
         if (clproduct=="all") or (clproduct=="mail"):
             splistenUS_mail = []
             extract_splist_enUS(path + "mail/locales/en-US/en-US/searchplugins/", splistenUS_mail)
             extract_sp_product(path + "mail/locales/en-US/en-US/searchplugins/", "mail", "en-US", channel, jsondata, splistenUS_mail)
-            extract_p12n_product(path + "mail/locales/en-US/en-US/chrome/messenger-region/region.properties", "mail", "en-US", channel, jsondata)
+            if clp12n:
+                extract_p12n_product(path + "mail/locales/en-US/en-US/chrome/messenger-region/region.properties", "mail", "en-US", channel, jsondata)
 
         if (clproduct=="all") or (clproduct=="suite"):
             splistenUS_suite = []
             extract_splist_enUS(path + "suite/locales/en-US/en-US/searchplugins/", splistenUS_suite)
             extract_sp_product(path + "suite/locales/en-US/en-US/searchplugins/", "suite", "en-US", channel, jsondata, splistenUS_suite)
-            extract_p12n_product(path + "suite/locales/en-US/en-US/chrome/browser/region.properties", "suite", "en-US", channel, jsondata)
+            if clp12n:
+                extract_p12n_product(path + "suite/locales/en-US/en-US/chrome/browser/region.properties", "suite", "en-US", channel, jsondata)
 
         locale_list = open(localeslist, "r").read().splitlines()
         for locale in locale_list:
@@ -467,16 +471,20 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
             path = pathl10n + locale + "/"
             if (clproduct=="all") or (clproduct=="browser"):
                 extract_sp_product(path + "browser/searchplugins/", "browser", locale, channel, jsondata, splistenUS_browser)
-                extract_p12n_product(path + "browser/chrome/browser-region/region.properties", "browser", locale, channel, jsondata)
+                if clp12n:
+                    extract_p12n_product(path + "browser/chrome/browser-region/region.properties", "browser", locale, channel, jsondata)
             if (clproduct=="all") or (clproduct=="mobile"):
                 extract_sp_product(path + "mobile/searchplugins/", "mobile", locale, channel, jsondata, splistenUS_mobile)
-                extract_p12n_product(path + "mobile/chrome/region.properties", "mobile", locale, channel, jsondata)
+                if clp12n:
+                    extract_p12n_product(path + "mobile/chrome/region.properties", "mobile", locale, channel, jsondata)
             if (clproduct=="all") or (clproduct=="mail"):
                 extract_sp_product(path + "mail/searchplugins/", "mail", locale, channel, jsondata, splistenUS_mail)
-                extract_p12n_product(path + "mail/chrome/messenger-region/region.properties", "mail", locale, channel, jsondata)
+                if clp12n:
+                    extract_p12n_product(path + "mail/chrome/messenger-region/region.properties", "mail", locale, channel, jsondata)
             if (clproduct=="all") or (clproduct=="suite"):
                 extract_sp_product(path + "suite/searchplugins/", "suite", locale, channel, jsondata, splistenUS_suite)
-                extract_p12n_product(path + "suite/chrome/browser/region.properties", "suite", locale, channel, jsondata)
+                if clp12n:
+                    extract_p12n_product(path + "suite/chrome/browser/region.properties", "suite", locale, channel, jsondata)
     except Exception as e:
         print "Error reading list of locales from " + localeslist
         if (outputlevel > 0):
@@ -491,10 +499,12 @@ def main():
     clparser = OptionParser()
     clparser.add_option("-p", "--product", help="Choose a specific product", choices=["browser", "mobile", "mail", "suite", "all"], default="all")
     clparser.add_option("-b", "--branch", help="Choose a specific branch", choices=["release", "beta", "aurora", "trunk", "all"], default="all")
+    clparser.add_option("-s", "--productization", help="Enable productization checks", action="store_true")
 
     (options, args) = clparser.parse_args()
     clproduct = options.product
     clbranch = options.branch
+    clp12n = options.productization if options.productization else False
 
     # Read configuration file
     parser = SafeConfigParser()
@@ -525,15 +535,15 @@ def main():
     print "Analyzing product: " + clproduct + " - " + "branch: " + clbranch + "\n"
 
     if (clbranch=="all") or (clbranch=="release"):
-        extract_p12n_channel(clproduct, release_source, release_l10n, release_locales, "release", jsondata)
+        extract_p12n_channel(clproduct, release_source, release_l10n, release_locales, "release", jsondata, clp12n)
     if (clbranch=="all") or (clbranch=="beta"):
-        extract_p12n_channel(clproduct, beta_source, beta_l10n, beta_locales, "beta", jsondata)
+        extract_p12n_channel(clproduct, beta_source, beta_l10n, beta_locales, "beta", jsondata, clp12n)
     if (clbranch=="all") or (clbranch=="aurora"):
-        extract_p12n_channel(clproduct, aurora_source, aurora_l10n, aurora_locales, "aurora", jsondata)
+        extract_p12n_channel(clproduct, aurora_source, aurora_l10n, aurora_locales, "aurora", jsondata, clp12n)
     if (clbranch=="all") or (clbranch=="trunk"):
-        extract_p12n_channel(clproduct, trunk_source, trunk_l10n, trunk_locales, "trunk", jsondata)
+        extract_p12n_channel(clproduct, trunk_source, trunk_l10n, trunk_locales, "trunk", jsondata, clp12n)
 
-    if (clbranch=="all"):
+    if (clbranch=="all") and (clp12n):
         p12n_differences(jsondata)
 
     # Write back updated json data
