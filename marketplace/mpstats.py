@@ -5,7 +5,7 @@ import os
 import re
 import subprocess
 from optparse import OptionParser
-from time import gmtime, strftime
+from time import localtime, strftime
 
 def write_html(json, products, filename):
     html_code = '''
@@ -88,7 +88,7 @@ def write_html(json, products, filename):
     html_code = html_code + '''
                 </tbody>
             </table>
-        <p>Last update: ''' + strftime("%Y-%m-%d %H:%M:%S", gmtime()) + '''</p>
+        <p style="padding-top: 20px;">Last update: ''' + strftime("%Y-%m-%d %H:%M:%S", localtime()) + ''' CET</p>
     </body>
     </html>'''
 
