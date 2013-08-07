@@ -105,10 +105,10 @@ def main():
     (options, args) = clparser.parse_args()
     output_type = options.output
 
-    path = "/home/flodolo/mozilla/marketplace"
+    path = "/home/flod/git/marketplace"
     products = ["fireplace", "webpay", "zamboni"]
-    json_filename = "/home/flodolo/mozilla/marketplace/marketplace.json"
-    html_filename = "/home/flodolo/mozilla/marketplace/marketplace.html"
+    json_filename = "/home/flod/public_html/mpstats/marketplace.json"
+    html_filename = "/home/flod/public_html/mpstats/index.html"
     json_data = {}
 
     # Check if repositories exist and pull, if not clone
@@ -156,7 +156,7 @@ def main():
                 search_result = re.search(r'([0-9]*) translated messages', translation_status)
                 try:
                     string_translated = int(search_result.group(1))
-                except Exception as e: 
+                except Exception as e:
                     string_translated = 0
                     print "Error extracting number of translated messages"
                     print e
@@ -166,7 +166,7 @@ def main():
                 if search_result:
                     try:
                         string_untranslated = int(search_result.group(1))
-                    except Exception as e: 
+                    except Exception as e:
                         string_untranslated = 0
                         print "Error extracting number of translated messages"
                         print e
@@ -178,10 +178,10 @@ def main():
                 if search_result:
                     try:
                         string_fuzzy = int(search_result.group(1))
-                    except Exception as e: 
+                    except Exception as e:
                         string_fuzzy = 0
                         print "Error extracting number of translated messages"
-                        print e                    
+                        print e
                 else:
                     string_fuzzy = 0
 
