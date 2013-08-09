@@ -22,8 +22,9 @@ def write_html(json, products, filename):
             table a:visited {color: #777;}
             table a:hover {color: #000;}
             table thead th {background: #3A4856; padding: 15px 10px; color: #fff; text-align: center; font-weight: normal; vertical-align: top;}
-            table .firstsection {padding-left: 40px; border-left: 1px solid #555;}
-            table .lastsection {padding-right: 40px; border-right: 1px solid #555;}
+            table td.firstsection {padding-left: 40px; border-left: 1px solid #999;}
+            table td.lastsection {padding-right: 40px; border-right: 1px solid #999;}
+            table .lastsection:last-child {border-right: 0};
             table tbody, table thead {border-left: 1px solid #EAECEE; border-right: 1px solid #EAECEE;}
             table tbody {border-bottom: 1px solid #EAECEE;}
             table tbody td, table tbody th {padding: 5px 20px; text-align: left;}
