@@ -2,13 +2,13 @@
 
 # Original script by Pascal Chevrel (https://github.com/pascalchevrel)
 
-# Merge stage to production for mozilla.org
+# Merge trunk to stage for mozilla.org
 
-production=/home/flodolo/mozilla/svn/mozilla.com/tags/production/
 stage=/home/flodolo/mozilla/svn/mozilla.com/tags/stage/
-tag=PRODUCTION
+trunk=/home/flodolo/mozilla/svn/mozilla.com/trunk/
+tag=STAGE
 
-cd $production
+cd $stage
 echo "----------------"
 echo "Merge a revision to $tag tag for mozilla.org"
 read -p "Which revision do you want to merge? " revision
@@ -20,12 +20,12 @@ then
     svn up --ignore-externals
 fi
 echo "Starting merge..."
-svn merge $stage --ignore-ancestry -c${revision}
+svn merge $trunk --ignore-ancestry -c${revision}
 echo "End of merge, don't forget to commit your changes to $tag."
 echo "Current status"
 
-production+="locales"
-cd $production
+stage+="locales"
+cd $stage
 svn status
 
 echo "----------------"
