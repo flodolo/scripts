@@ -1,8 +1,27 @@
 #! /usr/bin/env bash
 
+# Pretty printing functions
+NORMAL=$(tput sgr0)
+GREEN=$(tput setaf 2; tput bold)
+YELLOW=$(tput setaf 3)
+RED=$(tput setaf 1)
+
+function red() {
+    echo -e "$RED$*$NORMAL"
+}
+
+function green() {
+    echo -e "$GREEN$*$NORMAL"
+}
+
+function yellow() {
+    echo -e "$YELLOW$*$NORMAL"
+}
+
+
 if [ $# -lt 1 ]
   then
-    echo "ERROR: no arguments supplied."
+    red "ERROR: no arguments supplied."
     echo "Usage: git_updateall.sh *path*"
     echo "Example 1: git_updateall.sh ."
     echo "Example 2: git_updateall.sh /home/user/git"
@@ -23,7 +42,7 @@ then
 		then
 			# It's a git repository
 			echo "----------"
-			echo "Updating $folder..."
+			green "Updating $folder..."
 			cd $folder
 			git checkout master
 			git fetch upstream
@@ -34,7 +53,7 @@ then
 		else
 			# Not a git repository
 			echo "----------"
-			echo "$folder: not a git repository."
+			yellow "$folder: not a git repository."
 		fi
 	done
 fi
