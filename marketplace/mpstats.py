@@ -140,11 +140,16 @@ def main():
             if (os.path.isdir(os.path.join(product_folder, locale))) & (locale != "templates") & (locale != "dbg"):
                 print os.path.join(product_folder, locale)
 
-                cmd = "msgfmt --statistics " + os.path.join(product_folder, locale) + "/LC_MESSAGES/messages.po"
-                translation_status = subprocess.check_output(
-                    cmd,
-                    stderr = subprocess.STDOUT,
-                    shell = True)
+                try:
+                    cmd = "msgfmt --statistics " + os.path.join(product_folder, locale) + "/LC_MESSAGES/messages.po"
+                    translation_status = subprocess.check_output(
+                        cmd,
+                        stderr = subprocess.STDOUT,
+                        shell = True)
+                except Exception as e:
+                    print "Error running msgfmt on " + locale
+                    translation_status = "0 translated messages, 9999 untranslated messages."
+                
                 pretty_locale = locale.replace('_', '-')
                 print "Locale: " + pretty_locale
                 print translation_status
@@ -196,6 +201,13 @@ def main():
                     # Need to calculate the completeness
                     complete = False
                     percentage = round((float(string_translated) / string_total) * 100, 1)
+
+                if (string_untranslated == 9999):
+                    # There was a problem running msgfmt. Set complete to
+                    # false and string_untranslated and string_total to 0
+                    complete = False
+                    string_untranslated = 0
+                    string_total = 0
 
                 status_record = {
                     "total": string_total,
