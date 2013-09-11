@@ -290,6 +290,9 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
                     if (feedhandler_number not in feedhandlers):
                         feedhandlers[feedhandler_number] = {}
                     feedhandlers[feedhandler_number]["title"] = value
+                    # Print warning for Google Reader
+                    if (value.lower() == 'google'):
+                        print "   Warning: Google Reader has been dismissed, see bug 882093 (" + key + ")."
                 if key.endswith('.uri'):
                     feedhandler_number = key[-5:-4]
                     if (feedhandler_number not in feedhandlers):
@@ -328,7 +331,7 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
 
             # Unrecognized line, print warning
             if (not lineok):
-                print "   Warning: unknown key in " + source
+                print "   Warning: unknown key in region.properties: " + locale + ", " + product + ", " + channel + "."
                 print "   " + key + "=" + value
 
         try:
