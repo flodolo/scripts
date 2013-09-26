@@ -15,58 +15,57 @@ def write_html(json, products, filename):
           <meta charset=utf-8>
           <title>Repo Status</title>
           <style type="text/css">
-            body {background-color: #f9f9f9; font-family: Arial, Verdana; font-size: 14px; padding: 10px 30px;}
+            body {background-color: #FFF; font-family: Arial, Verdana; font-size: 14px; padding: 10px 30px;}
             p {margin-top: 2px;}
             table {padding: 0; margin: 0; border-collapse: collapse; color: #333; background: #F3F5F7;}
-            table a {color: #3A4856; text-decoration: none; border-bottom: 1px solid #C6C8CB;}
+            table a {color: #3A4856; text-decoration: none; border-bottom: 1px solid #DDD;}
             table a:visited {color: #777;}
             table a:hover {color: #000;}
-            table thead th {background: #3A4856; padding: 15px 10px; color: #fff; text-align: center; font-weight: normal; vertical-align: top;}
-            table td.firstsection {padding-left: 40px; border-left: 1px solid #BBB;}
-            table td.lastsection {padding-right: 40px; border-right: 1px solid #BBB;}
+            table thead th {background: #EAECEE; padding: 15px 10px; color: #000; text-align: center; font-weight: bold; vertical-align: top;}
+            table tr th {background: #EAECEE;}
+            table td.firstsection {padding-left: 40px; border-left: 1px solid #DDD;}
+            table td.lastsection {padding-right: 40px; border-right: 1px solid #DDD;}
             table .lastsection:last-child {border-right: 0};
-            table tbody, table thead {border-left: 1px solid #EAECEE; border-right: 1px solid #EAECEE;}
-            table tbody {border-bottom: 1px solid #EAECEE;}
+            table tbody, table thead {border-left: 1px solid #DDD; border-right: 1px solid #DDD;}
+            table tbody {border-bottom: 1px solid #DDD;}
             table tbody td, table tbody th {padding: 5px 20px; text-align: left;}
-            table tbody td {border-bottom: 1px solid #BBB}
+            table tbody td {border-bottom: 1px solid #DDD}
             table tbody tr {background: #F5F5F5;}
             table tbody tr.odd {background: #F0F2F4;}
             table tbody tr:hover {background: #EAECEE; color: #111;}
             table tbody tr.fixed {background: #A5FAB0;}
             table tbody td.number {text-align: center;}
-            table tbody td.complete {background-color: #C2FCDD}
-            table tbody td.incomplete {background-color: #FF9191}
+            table tbody td.complete {background-color: #92CC6E}
+            table tbody td.incomplete {background-color: #FF5252}
           </style>
         </head>
         <body>
             <table>
               <thead>
                 <tr>
-                    <th>&nbsp;</th>
-                    <th colspan="4">Fireplace</th>
-                    <th colspan="4">Webpay</th>
-                    <th colspan="4">Zamboni</th>
-                <tr>
-                    <th>Locale</th>
-                    <th class="firstsection">Translated<br/>strings</th>
-                    <th>Untranslated<br/>strings</th>
-                    <th>Fuzzy<br/>strings</th>
-                    <th class="lastsection">%</th>
-                    <th class="firstsection">Translated<br/>strings</th>
-                    <th>Untranslated<br/>strings</th>
-                    <th>Fuzzy<br/>strings</th>
-                    <th class="lastsection">%</th>
-                    <th class="firstsection">Translated<br/>strings</th>
-                    <th>Untranslated<br/>strings</th>
-                    <th>Fuzzy<br/>strings</th>
-                    <th class="lastsection">%</th>
-                </tr>
-              </thead>
-              <tbody>
+                    <th>&nbsp;</th>''';
+
+    for product in products:
+        html_code = html_code + '''
+                    <th colspan="4">''' + product + '''</th>
         '''
 
+    html_code = html_code + '''<tr>
+                    <th>Locale</th>'''
+
+    for product in products:
+        html_code = html_code + '''<th class="firstsection">trans.</th>
+                    <th>not trans.</th>
+                    <th>fuzzy</th>
+                    <th class="lastsection">%</th>
+    '''
+
+    html_code = html_code + '''</tr>
+              </thead>
+              <tbody>'''
+
     for locale in sorted(json):
-        html_code = html_code + "<tr>\n<td>" + locale + "</td>"
+        html_code = html_code + "<tr>\n<th>" + locale + "</th>"
         for product in products:
             try:
                 html_code = html_code + "  <td class='firstsection'>" + str(json[locale][product]['translated']) + "</td>\n"
@@ -108,7 +107,7 @@ def main():
     output_type = options.output
 
     path = "/home/flod/git/marketplace"
-    products = ["fireplace", "webpay", "zamboni"]
+    products = ["fireplace", "webpay", "zamboni", "commbadge", "rocketfuel"]
     json_filename = "/home/flod/public_html/mpstats/marketplace.json"
     html_filename = "/home/flod/public_html/mpstats/index.html"
     json_data = {}
@@ -149,7 +148,7 @@ def main():
                 except Exception as e:
                     print "Error running msgfmt on " + locale
                     translation_status = "0 translated messages, 9999 untranslated messages."
-                
+
                 pretty_locale = locale.replace('_', '-')
                 print "Locale: " + pretty_locale
                 print translation_status
