@@ -27,7 +27,10 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
     try:
         if locale != "en-US":
             # Read the list of searchplugins from list.txt
-            sp_list = open(path + "list.txt", "r").read().splitlines()
+            if (product != "metro"):
+                sp_list = open(path + "list.txt", "r").read().splitlines()
+            else:
+                sp_list = open(path + "metrolist.txt", "r").read().splitlines()
             # Remove empty lines
             sp_list = filter(bool, sp_list)
             # Check for duplicates
@@ -58,7 +61,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                     print "   Error: file " + filename + " should not exist in the locale folder, same name of en-US searchplugin (" + locale + ", " + product + ", " + channel + ")."
                 else:
                     # File is not in use, should be removed
-                    if (filename_noext not in sp_list) & (filename != "list.txt"):
+                    if (filename_noext not in sp_list) & (filename != "list.txt") & (filename != "metrolist.txt"):
                         print "   Error: file " + filename + " not in list.txt (" + locale + ", " + product + ", " + channel + ")"
 
         # For each searchplugin check if the file exists (localized version) or
@@ -444,6 +447,8 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
             splistenUS_browser = []
             extract_splist_enUS(path + "browser/locales/en-US/en-US/searchplugins/", splistenUS_browser)
             extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "browser", "en-US", channel, jsondata, splistenUS_browser)
+            # Metro: same searchplugins folder
+            extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "metro", "en-US", channel, jsondata, splistenUS_browser)
             if clp12n:
                 extract_p12n_product(path + "browser/locales/en-US/en-US/chrome/browser-region/region.properties", "browser", "en-US", channel, jsondata)
 
