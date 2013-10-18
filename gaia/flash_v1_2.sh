@@ -17,12 +17,12 @@ cd ~
 . ./.profile echo $PATH
 
 echo ""
+cd ~/moz/gaia/
 
 if $updatelocale
 then
 	echo "-----------------------"
 	echo "Updating Gaia"
-	cd ~/moz/gaia/
 	git checkout v1.2
 	git reset --hard
 	git pull
