@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 # Reference Link: https://l10n.etherpad.mozilla.org/gaia-multilocale
-
+# This script flash Gaia 1.2 on the phone
 localecode="it"
 
 updatelocale=true
@@ -12,19 +12,20 @@ then
 	updatelocale=false
 fi
 
+# This two lines force the system to read the PATH save in .profile (for adb)
 cd ~
 . ./.profile echo $PATH
 
 echo ""
-echo "-----------------------"
-echo "Updating Gaia"
-cd ~/moz/gaia/
-git checkout v1-train
-git reset --hard
-git pull
 
 if $updatelocale
 then
+	echo "-----------------------"
+	echo "Updating Gaia"
+	cd ~/moz/gaia/
+	git checkout v1.2
+	git reset --hard
+	git pull
 	echo ""
 	echo "-----------------------"
 	echo "Updating locale"
