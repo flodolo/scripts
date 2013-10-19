@@ -9,15 +9,51 @@ from time import localtime, strftime
 def main():
 
     # Path to repository folder and output json file
-    # path = '/home/flod/git/webstatus'
-    # json_filename = '/home/flod/public_html/mpstats/webstatus.json'
-    path = '/home/flodolo/mozilla/test_webstatus'
-    json_filename = '/home/flodolo/mozilla/test_webstatus/webstatus.json'
+    path = '/home/flod/git/webstatus'
+    json_filename = '/home/flod/public_html/webstatus/webstatus.json'
+    # path = '/home/flodolo/mozilla/test_webstatus'
+    # json_filename = '/home/flodolo/mozilla/test_webstatus/webstatus.json'
     json_data = {}
     ignored_folders = ['dbg', 'templates']
 
     # Define all products that we need to check
     products = {}
+    products['browserid'] = {
+        'repository_name': 'browserid',
+        'product_name': 'browserid',
+        'displayed_name': 'Browser ID (main)',
+        'repository_type': 'svn',
+        'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/browserid/',
+        'po_file': 'LC_MESSAGES/messages.po',
+        'locale_folder': 'locale'
+    }
+    products['browserid-bigtent'] = {
+        'repository_name': 'browserid-bigtent',
+        'product_name': 'browserid-bigtent',
+        'displayed_name': 'Browser ID Big Tent (main)',
+        'repository_type': 'svn',
+        'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/browserid-bigtent/',
+        'po_file': 'LC_MESSAGES/messages.po',
+        'locale_folder': 'locale'
+    }
+    products['browserid-bigtent-gmail'] = {
+        'repository_name': 'browserid-bigtent',
+        'product_name': 'browserid-bigtent-gmail',
+        'displayed_name': 'Browser ID Big Tent (Gmail)',
+        'repository_type': 'svn',
+        'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/browserid-bigtent/',
+        'po_file': 'LC_MESSAGES/gmail.po',
+        'locale_folder': 'locale'
+    }
+    products['browserid-client'] = {
+        'repository_name': 'browserid',
+        'product_name': 'browserid-client',
+        'displayed_name': 'Browser ID (client)',
+        'repository_type': 'svn',
+        'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/browserid/',
+        'po_file': 'LC_MESSAGES/client.po',
+        'locale_folder': 'locale'
+    }
     products['commbadge'] = {
         'repository_name': 'commbadge',
         'product_name': 'commbadge',
@@ -27,12 +63,39 @@ def main():
         'po_file': 'LC_MESSAGES/messages.po',
         'locale_folder': 'locale'
     }
+    products['firefoxflicks'] = {
+        'repository_name': 'firefoxflicks',
+        'product_name': 'firefoxflicks',
+        'displayed_name': 'Firefox Flicks',
+        'repository_type': 'svn',
+        'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/firefoxflicks/',
+        'po_file': 'LC_MESSAGES/messages.po',
+        'locale_folder': 'locale'
+    }
     products['fireplace'] = {
         'repository_name': 'fireplace',
         'product_name': 'fireplace',
         'displayed_name': 'Fireplace',
         'repository_type': 'git',
         'repository_url': 'https://github.com/mozilla/fireplace',
+        'po_file': 'LC_MESSAGES/messages.po',
+        'locale_folder': 'locale'
+    }
+    products['input'] = {
+        'repository_name': 'input',
+        'product_name': 'input',
+        'displayed_name': 'Firefox Input',
+        'repository_type': 'svn',
+        'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/input/',
+        'po_file': 'LC_MESSAGES/messages.po',
+        'locale_folder': 'locale'
+    }
+    products['mozillians'] = {
+        'repository_name': 'mozillians',
+        'product_name': 'mozillians',
+        'displayed_name': 'Mozillians',
+        'repository_type': 'svn',
+        'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/mozillians/',
         'po_file': 'LC_MESSAGES/messages.po',
         'locale_folder': 'locale'
     }
