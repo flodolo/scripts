@@ -192,7 +192,7 @@ def main():
                     print 'Error running msgfmt on ' + locale
                     translation_status = '0 translated messages, 9999 untranslated messages.'
                     error_status = True
-                    error_message = e + ''
+                    error_message = 'Error extracting data with msgfmt --statistics'
 
                 pretty_locale = locale.replace('_', '-')
                 print 'Locale: ' + pretty_locale
@@ -203,7 +203,7 @@ def main():
                 # 0 translated messages, 4992 untranslated messages.
                 # 4992 translated messages.
                 # Translated messages is always present
-                search_result = re.search(r'([0-9]*) translated messages', translation_status)
+                search_result = re.search(r'([0-9]*) translated message', translation_status)
                 try:
                     string_translated = int(search_result.group(1))
                 except Exception as e:
@@ -214,7 +214,7 @@ def main():
                     print e
 
                 # Untranslated messages
-                search_result = re.search(r'([0-9]*) untranslated messages', translation_status)
+                search_result = re.search(r'([0-9]*) untranslated message', translation_status)
                 if search_result:
                     try:
                         string_untranslated = int(search_result.group(1))
@@ -228,7 +228,7 @@ def main():
                     string_untranslated = 0
 
                 # Fuzzy messages
-                search_result = re.search(r'([0-9]*) fuzzy translations', translation_status)
+                search_result = re.search(r'([0-9]*) fuzzy translation', translation_status)
                 if search_result:
                     try:
                         string_fuzzy = int(search_result.group(1))
@@ -259,6 +259,7 @@ def main():
                     string_total = 0
 
                 status_record = {
+                    'name': product['displayed_name'],
                     'total': string_total,
                     'untranslated': string_untranslated,
                     'translated': string_translated,
