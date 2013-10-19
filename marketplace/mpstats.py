@@ -106,7 +106,7 @@ def main():
     (options, args) = clparser.parse_args()
     output_type = options.output
 
-    path = "/home/flod/git/marketplace"
+    path = "/home/flod/git/webstatus"
     products = ["fireplace", "webpay", "zamboni", "commbadge", "rocketfuel"]
     json_filename = "/home/flod/public_html/mpstats/marketplace.json"
     html_filename = "/home/flod/public_html/mpstats/index.html"
@@ -159,7 +159,7 @@ def main():
                 # 4992 translated messages.
 
                 # Translated messages is always present
-                search_result = re.search(r'([0-9]*) translated messages', translation_status)
+                search_result = re.search(r'([0-9]*) translated message', translation_status)
                 try:
                     string_translated = int(search_result.group(1))
                 except Exception as e:
@@ -168,7 +168,7 @@ def main():
                     print e
 
                 # Untranslated messages
-                search_result = re.search(r'([0-9]*) untranslated messages', translation_status)
+                search_result = re.search(r'([0-9]*) untranslated message', translation_status)
                 if search_result:
                     try:
                         string_untranslated = int(search_result.group(1))
@@ -180,7 +180,7 @@ def main():
                     string_untranslated = 0
 
                 # Fuzzy messages
-                search_result = re.search(r'([0-9]*) fuzzy translations', translation_status)
+                search_result = re.search(r'([0-9]*) fuzzy translation', translation_status)
                 if search_result:
                     try:
                         string_fuzzy = int(search_result.group(1))
