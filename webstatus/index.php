@@ -6,7 +6,7 @@
     <style type="text/css">
         body {background-color: #FFF; font-family: Arial, Verdana; font-size: 14px; padding: 10px 30px;}
         p {margin-top: 2px;}
-        div#localelist {background-color: #FAFAFA; padding: 6px; border: 1px solid #555; border-radius: 8px; line-height: 1.7em; font-size: 16px; width: 800px;}
+        div.list {background-color: #FAFAFA; padding: 6px; border: 1px solid #555; border-radius: 8px; line-height: 1.7em; font-size: 16px; width: 800px;}
         table {padding: 0; margin: 0; border-collapse: collapse; color: #333; background: #F3F5F7; margin-top: 20px;}
         table a {color: #3A4856; text-decoration: none; border-bottom: 1px solid #DDD;}
         table a:visited {color: #777;}
@@ -36,73 +36,150 @@
 
 <?php
     date_default_timezone_set('Europe/Rome');
-    $jsondata = file_get_contents("webstatus.json");
-    $jsonarray = json_decode($jsondata, true);
+    $file_name = 'webstatus.json';
+    $file_cache = 'details.inc';
 
-    $locales = array(    'ach', 'af', 'ak', 'an', 'ar', 'as', 'ast', 'be', 'bg', 'bn-IN',
-        'bn-BD', 'br', 'bs', 'ca', 'cs', 'csb', 'cy', 'da', 'de', 'el',
-        'eo', 'es-AR', 'es-ES', 'es-CL', 'es-MX', 'et', 'eu', 'fa', 'ff',
-        'fi', 'fr', 'fy-NL', 'ga-IE', 'gd', 'gl', 'gu-IN', 'he', 'hi-IN',
-        'hr', 'hu', 'hy-AM', 'id', 'is', 'it', 'ja', 'ka', 'kk', 'kn', 'km',
-        'ko', 'ku', 'lg', 'lij', 'lt', 'lv', 'mai', 'mk', 'ml', 'mn', 'mr',
-        'ms', 'my', 'nb-NO', 'nl', 'nn-NO', 'nso', 'oc', 'or', 'pa-IN',
-        'pl', 'pt-BR', 'pt-PT', 'rm', 'ro', 'ru', 'si', 'sk', 'sl', 'son',
-        'sq', 'sr', 'sv-SE', 'sw', 'ta', 'ta-LK', 'te', 'th', 'tr', 'uk',
-        'ur', 'vi', 'wo', 'zh-CN', 'zh-TW', 'zu');
+    // Read the json file
+    $json_array = (array) json_decode(file_get_contents($file_name), true);
 
-    # Single locale
-    $locale = !empty($_REQUEST['locale']) ? $_REQUEST['locale'] : 'en-US';
+    // Check how old the cache file is
+    if ((! file_exists($file_cache)) || (time() - filemtime($file_cache) >= 60*60*5)) {
+        // File is older than 5 hours or doesn't exist, regenerate arrays and save it
+        $available_locales = array();
+        foreach (array_keys($json_array) as $locale_code) {
+            $available_locales[] = $locale_code;
+        }
+        $available_products = array();
+        $available_products[] = 'all';
+        foreach ($available_locales as $locale_code) {
+            foreach (array_keys($json_array[$locale_code]) as $product_code) {
+                if (! in_array($product_code, $available_products)) {
+                    $available_products[] = $product_code;
+                }
+            }
+        }
+        $txt_arrays = '<?php ' . PHP_EOL;
+        $txt_arrays .= '$available_locales = ' . json_encode($available_locales) . ';' . PHP_EOL;
+        $txt_arrays .= '$available_products = ' . json_encode($available_products) . ';' . PHP_EOL;
+        file_put_contents ($file_cache, $txt_arrays);
+    } else {
+        // File is recent, no need to regenerate the arrays
+        include_once $file_cache;
+        echo '<!-- Using cached file: ' . date ('Y-m-d H:i', filemtime($file_cache)) . "-->\n";
+    }
 
-    echo "<h1>Current locale: $locale</h1>\n";
-    echo "<div id='localelist'>
-            <p>Available locales <br/>";
-    foreach ($locales as $localecode) {
-        echo '<a href="?locale=' . $localecode . '">' . $localecode . '</a>&nbsp; ';
+    $requested_locale = !empty($_REQUEST['locale']) ? $_REQUEST['locale'] : 'en-US';
+    $requested_product = !empty($_REQUEST['product']) ? $_REQUEST['product'] : 'all';
+
+    echo '<h1>Current locale: ' . $requested_locale . "</h1>\n";
+    echo '<div class="list">
+            <p>Available locales: <br/>';
+    foreach ($available_locales as $locale_code) {
+        echo '<a href="?locale=' . $locale_code . '">' . $locale_code . '</a>&nbsp; ';
     }
     echo "  </p>
           </div>";
 
-    ?>
-    <table>
-        <thead>
-            <th>Product name</th>
-            <th>%</th>
-            <th>Translated</th>
-            <th>Untransl.</th>
-            <th>Fuzzy</th>
-            <th>Total</th>
-            <th>Errors</th>
-        </thead>
-        <tbody>
-    <?php
-    foreach ($jsonarray[$locale] as $website) {
-        if ($website['percentage'] == 100) {
-            $classrow = "complete";
-        } else {
-            $classrow = "incomplete";
-        }
-
-        if ($website['error_status'] == 'true') {
-            $classrow = 'error';
-        }
-
-        echo "<tr class='" . $classrow . "'>
-                ";
-        echo "<th>" . $website['name'] . "</th>\n";
-        echo "      <td class='number'>" . $website['percentage'] . "</td>";
-        echo "      <td class='number class='number''>" . $website['translated'] . "</td>";
-        echo "      <td class='number'>" . $website['untranslated'] . "</td>";
-        echo "      <td class='number'>" . $website['fuzzy'] . "</td>";
-        echo "      <td class='number'>" . $website['total'] . "</td>";
-        echo "      <td>" . $website['error_message'] . "</td>";
-        echo "</tr>";
+    echo '<h1>Current product: ' . $requested_product . "</h1>\n";
+    echo '<div class="list">
+            <p>Available products: <br/>';
+    foreach ($available_products as $product_code) {
+        echo '<a href="?product=' . $product_code . '">' . $product_code . '</a>&nbsp; ';
     }
-?>
-        </tbody>
-    <table>
+    echo '  </p>
+          </div>';
+
+    if ($requested_product == 'all') {
+        // Display all products for one locale
+        ?>
+        <table>
+            <thead>
+                <th>Product</th>
+                <th>%</th>
+                <th>Translated</th>
+                <th>Untransl.</th>
+                <th>Fuzzy</th>
+                <th>Total</th>
+                <th>Errors</th>
+            </thead>
+            <tbody>
+        <?php
+        foreach ($json_array[$requested_locale] as $current_product) {
+            if ($current_product['percentage'] == 100) {
+                $classrow = 'complete';
+            } else {
+                $classrow = 'incomplete';
+            }
+
+            if ($current_product['error_status'] == 'true') {
+                $classrow = 'error';
+            }
+
+            echo '<tr class="' . $classrow . '">
+                    ';
+            echo '<th>' . $current_product['name'] . "</th>\n";
+            echo '      <td class="number">' . $current_product['percentage'] . '</td>';
+            echo '      <td class="number">' . $current_product['translated'] . '</td>';
+            echo '      <td class="number">' . $current_product['untranslated'] . '</td>';
+            echo '      <td class="number">' . $current_product['fuzzy'] . '</td>';
+            echo '      <td class="number">' . $current_product['total'] . '</td>';
+            echo '      <td>' . $current_product['error_message'] . '</td>';
+            echo '</tr>';
+        }
+        ?>
+            </tbody>
+        <table>
+    <?php
+    } else {
+        // Display all locales for one product
+    ?>
+        <h2><?php echo $requested_product; ?></h2>
+        <table>
+            <thead>
+                <th>Locale</th>
+                <th>%</th>
+                <th>Translated</th>
+                <th>Untransl.</th>
+                <th>Fuzzy</th>
+                <th>Total</th>
+                <th>Errors</th>
+            </thead>
+            <tbody>
+        <?php
+        foreach ($available_locales as $locale_code) {
+            if (isset($json_array[$locale_code][$requested_product])) {
+                $current_product = $json_array[$locale_code][$requested_product];
+                if ($current_product['percentage'] == 100) {
+                    $classrow = 'complete';
+                } else {
+                    $classrow = 'incomplete';
+                }
+
+                if ($current_product['error_status'] == 'true') {
+                    $classrow = 'error';
+                }
+
+                echo '<tr class="' . $classrow . '">
+                        ';
+                echo '<th>' . $locale_code . "</th>\n";
+                echo '      <td class="number">' . $current_product['percentage'] . '</td>';
+                echo '      <td class="number">' . $current_product['translated'] . '</td>';
+                echo '      <td class="number">' . $current_product['untranslated'] . '</td>';
+                echo '      <td class="number">' . $current_product['fuzzy'] . '</td>';
+                echo '      <td class="number">' . $current_product['total'] . '</td>';
+                echo '      <td>' . $current_product['error_message'] . '</td>';
+                echo '</tr>';
+            }
+        }
+        ?>
+            </tbody>
+        <table>
+    <?php
+    }
+    ?>
 
 <?php
-    echo "<p id='update'>Last update: " . date ("Y-m-d H:i", filemtime("webstatus.json")) . "</p>";
+    echo '<p id="update">Last update: ' . date ("Y-m-d H:i", filemtime($file_name)) . '</p>';
 ?>
 </body>
 </html>
