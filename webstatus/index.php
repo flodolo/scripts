@@ -47,21 +47,21 @@
         // File is older than 5 hours or doesn't exist, regenerate arrays and save it
         $available_locales = array();
         foreach (array_keys($json_array) as $locale_code) {
-            $available_locales[] = $locale_code;
+            $available_locales[$locale_code] = $locale_code;
         }
         $available_products = array();
-        $available_products[] = 'all';
+        $available_products['all'] = 'All Products';
         foreach ($available_locales as $locale_code) {
             foreach (array_keys($json_array[$locale_code]) as $product_code) {
                 if (! in_array($product_code, $available_products)) {
-                    $available_products[] = $product_code;
+                    $available_products[$product_code] = $json_array[$locale_code][$product_code]['name'];
                 }
             }
         }
-        $txt_arrays = '<?php ' . PHP_EOL;
-        $txt_arrays .= '$available_locales = ' . json_encode($available_locales) . ';' . PHP_EOL;
-        $txt_arrays .= '$available_products = ' . json_encode($available_products) . ';' . PHP_EOL;
-        file_put_contents ($file_cache, $txt_arrays);
+        $file_content = '<?php' . PHP_EOL;
+        $file_content .= '$available_locales = ' . var_export($available_locales, true) . ';' . PHP_EOL;
+        $file_content .= '$available_products = ' . var_export($available_products, true) . ';' . PHP_EOL;
+        file_put_contents($file_cache, $file_content);
     } else {
         // File is recent, no need to regenerate the arrays
         include_once $file_cache;
@@ -80,11 +80,11 @@
     echo "  </p>
           </div>";
 
-    echo '<h1>Current product: ' . $requested_product . "</h1>\n";
+    echo '<h1>Current product: ' . $available_products[$requested_product] . "</h1>\n";
     echo '<div class="list">
             <p>Available products: <br/>';
-    foreach ($available_products as $product_code) {
-        echo '<a href="?product=' . $product_code . '">' . $product_code . '</a>&nbsp; ';
+    foreach ($available_products as $product_code => $product_name) {
+        echo '<a href="?product=' . $product_code . '">' . $product_name . '</a>&nbsp; ';
     }
     echo '  </p>
           </div>';
@@ -133,7 +133,7 @@
     } else {
         // Display all locales for one product
     ?>
-        <h2><?php echo $requested_product; ?></h2>
+        <h2><?php echo $available_products[$requested_product]; ?></h2>
         <table>
             <thead>
                 <th>Locale</th>
