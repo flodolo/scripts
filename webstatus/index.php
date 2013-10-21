@@ -28,13 +28,14 @@
         table tbody tr.complete {background-color: #92CC6E}
         table tbody tr.incomplete {background-color: #FFA952}
         table tbody tr.error {background-color: #FF5252}
+        p#update {margin: 20px;}
     </style>
 </head>
 
 <body>
 
 <?php
-
+    date_default_timezone_set('Europe/Rome');
     $jsondata = file_get_contents("webstatus.json");
     $jsonarray = json_decode($jsondata, true);
 
@@ -99,5 +100,9 @@
 ?>
         </tbody>
     <table>
+
+<?php
+    echo "<p id='update'>Last update: " . date ("Y-m-d H:i", filemtime("webstatus.json")) . "</p>";
+?>
 </body>
 </html>
