@@ -18,10 +18,19 @@ def main():
 
     # Define all products that we need to check
     products = {}
+    products['affiliates'] = {
+        'repository_name': 'affiliates',
+        'product_name': 'affiliates',
+        'displayed_name': 'Firefox Affiliates',
+        'repository_type': 'svn',
+        'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/affiliates/',
+        'po_file': 'LC_MESSAGES/messages.po',
+        'locale_folder': 'locale'
+    }
     products['browserid'] = {
         'repository_name': 'browserid',
         'product_name': 'browserid',
-        'displayed_name': 'Browser ID (main)',
+        'displayed_name': 'Browser ID',
         'repository_type': 'svn',
         'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/browserid/',
         'po_file': 'LC_MESSAGES/messages.po',
@@ -30,7 +39,7 @@ def main():
     products['browserid-bigtent'] = {
         'repository_name': 'browserid-bigtent',
         'product_name': 'browserid-bigtent',
-        'displayed_name': 'Browser ID Big Tent (main)',
+        'displayed_name': 'Browser ID Big Tent',
         'repository_type': 'svn',
         'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/browserid-bigtent/',
         'po_file': 'LC_MESSAGES/messages.po',
@@ -39,7 +48,7 @@ def main():
     products['browserid-bigtent-gmail'] = {
         'repository_name': 'browserid-bigtent',
         'product_name': 'browserid-bigtent-gmail',
-        'displayed_name': 'Browser ID Big Tent (Gmail)',
+        'displayed_name': 'Browser ID Big Tent (gmail.po)',
         'repository_type': 'svn',
         'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/browserid-bigtent/',
         'po_file': 'LC_MESSAGES/gmail.po',
@@ -48,7 +57,7 @@ def main():
     products['browserid-client'] = {
         'repository_name': 'browserid',
         'product_name': 'browserid-client',
-        'displayed_name': 'Browser ID (client)',
+        'displayed_name': 'Browser ID (client.po)',
         'repository_type': 'svn',
         'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/browserid/',
         'po_file': 'LC_MESSAGES/client.po',
