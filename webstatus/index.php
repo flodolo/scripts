@@ -43,8 +43,8 @@
     $json_array = (array) json_decode(file_get_contents($file_name), true);
 
     // Check how old the cache file is
-    if ((! file_exists($file_cache)) || (time() - filemtime($file_cache) >= 60*60*5)) {
-        // File is older than 5 hours or doesn't exist, regenerate arrays and save it
+    if ((! file_exists($file_cache)) || (time() - filemtime($file_cache) >= 60*60)) {
+        // File is older than 1 hour or doesn't exist, regenerate arrays and save it
         $available_locales = array();
         foreach (array_keys($json_array) as $locale_code) {
             $available_locales[$locale_code] = $locale_code;
