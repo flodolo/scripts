@@ -73,7 +73,7 @@
 
     echo '<h1>Current locale: ' . $requested_locale . "</h1>\n";
     echo '<div class="list">
-            <p>Available locales: <br/>';
+            <p>Display localization status for a specific locale<br/>';
     foreach ($available_locales as $locale_code) {
         echo '<a href="?locale=' . $locale_code . '">' . $locale_code . '</a>&nbsp; ';
     }
@@ -82,7 +82,7 @@
 
     echo '<h1>Current product: ' . $available_products[$requested_product] . "</h1>\n";
     echo '<div class="list">
-            <p>Available products: <br/>';
+            <p>Display localization status for a specific project<br/>';
     foreach ($available_products as $product_code => $product_name) {
         echo '<a href="?product=' . $product_code . '">' . $product_name . '</a>&nbsp; ';
     }
@@ -94,13 +94,15 @@
         ?>
         <table>
             <thead>
-                <th>Product</th>
-                <th>%</th>
-                <th>Translated</th>
-                <th>Untransl.</th>
-                <th>Fuzzy</th>
-                <th>Total</th>
-                <th>Errors</th>
+                <tr>
+                    <th>Product</th>
+                    <th>%</th>
+                    <th>Translated</th>
+                    <th>Untransl.</th>
+                    <th>Fuzzy</th>
+                    <th>Total</th>
+                    <th>Errors</th>
+                </tr>
             </thead>
             <tbody>
         <?php
@@ -128,7 +130,7 @@
         }
         ?>
             </tbody>
-        <table>
+        </table>
     <?php
     } else {
         // Display all locales for one product
@@ -136,13 +138,15 @@
         <h2><?php echo $available_products[$requested_product]; ?></h2>
         <table>
             <thead>
-                <th>Locale</th>
-                <th>%</th>
-                <th>Translated</th>
-                <th>Untransl.</th>
-                <th>Fuzzy</th>
-                <th>Total</th>
-                <th>Errors</th>
+                <tr>
+                    <th>Locale</th>
+                    <th>%</th>
+                    <th>Translated</th>
+                    <th>Untransl.</th>
+                    <th>Fuzzy</th>
+                    <th>Total</th>
+                    <th>Errors</th>
+                </tr>
             </thead>
             <tbody>
         <?php
@@ -173,7 +177,7 @@
         }
         ?>
             </tbody>
-        <table>
+        </table>
     <?php
     }
     ?>
