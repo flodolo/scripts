@@ -14,7 +14,7 @@ def main():
     # path = '/home/flodolo/mozilla/test_webstatus'
     # json_filename = '/home/flodolo/mozilla/test_webstatus/webstatus.json'
     json_data = {}
-    ignored_folders = ['dbg', 'templates']
+    ignored_folders = ['dbg', 'templates', '.svn', '.git']
 
     # Define all products that we need to check
     products = {}
@@ -106,7 +106,7 @@ def main():
         'repository_type': 'svn',
         'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/mozillians/',
         'po_file': 'LC_MESSAGES/messages.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locales'
     }
     products['rocketfuel'] = {
         'repository_name': 'rocketfuel',
@@ -184,7 +184,7 @@ def main():
 
     for key,product in products.iteritems():
         product_folder = os.path.join(path, product['repository_name'], product['locale_folder'])
-        for locale in sorted(os.listdir(product['locale_folder'])):
+        for locale in sorted(os.listdir(product_folder)):
             # Ignore files, just folders, and ignore some of them based on ignore_folders
             locale_folder = os.path.join(product_folder, locale)
             if (os.path.isdir(locale_folder)) & (locale not in ignored_folders):
