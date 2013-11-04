@@ -231,137 +231,141 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
     global outputlevel
 
     # Use jsondata to create a list of all Searchplugins' descriptions
-    available_searchplugins = []
-    for element in jsondata[locale][product][channel].values():
-        if element["name"]:
-            available_searchplugins.append(element["name"])
+    try:
+        available_searchplugins = []
+        if (channel in jsondata[locale][product]):
+            # I need to proceed only if I have searchplugin for this branch+product+locale
+            for element in jsondata[locale][product][channel].values():
+                if element["name"]:
+                    available_searchplugins.append(element["name"])
 
-    existingfile = os.path.isfile(source)
-    if existingfile:
-        try:
-            # Read region.properties, ignore comments and empty lines
-            values = {}
-            for line in open(source):
-                li = line.strip()
-                if (not li.startswith("#")) & (li != ""):
-                    try:
-                        # Split considering only the firs =
-                        key, value = li.split('=', 1)
-                        # Remove whitespaces, some locales use key = value instead of key=value
-                        values[key.strip()] = value.strip()
-                    except Exception as e:
-                        print "   Error: parsing " + source + " (" + locale + ", " + product + ", " + channel + ")"
-                        if (outputlevel > 0):
-                            print e
-        except Exception as e:
-            print "   Error: reading " + source + " (" + locale + ", " + product + ", " + channel + ")"
-            if (outputlevel > 0):
-                print e
+            existingfile = os.path.isfile(source)
+            if existingfile:
+                try:
+                    # Read region.properties, ignore comments and empty lines
+                    values = {}
+                    for line in open(source):
+                        li = line.strip()
+                        if (not li.startswith("#")) & (li != ""):
+                            try:
+                                # Split considering only the firs =
+                                key, value = li.split('=', 1)
+                                # Remove whitespaces, some locales use key = value instead of key=value
+                                values[key.strip()] = value.strip()
+                            except Exception as e:
+                                print "   Error: parsing " + source + " (" + locale + ", " + product + ", " + channel + ")"
+                                if (outputlevel > 0):
+                                    print e
+                except Exception as e:
+                    print "   Error: reading " + source + " (" + locale + ", " + product + ", " + channel + ")"
+                    if (outputlevel > 0):
+                        print e
 
-        # Check if node for locale already exists
-        if (locale not in jsondata):
-            jsondata[locale] = {}
-        # Check if node for locale->product already exists
-        if (product not in jsondata[locale]):
-            jsondata[locale][product] = {}
-        # Check if node for locale->product->channel already exists
-        if (channel not in jsondata[locale][product]):
-            jsondata[locale][product][channel] = {}
+                # Check if node for locale already exists
+                if (locale not in jsondata):
+                    jsondata[locale] = {}
+                # Check if node for locale->product already exists
+                if (product not in jsondata[locale]):
+                    jsondata[locale][product] = {}
+                # Check if node for locale->product->channel already exists
+                if (channel not in jsondata[locale][product]):
+                    jsondata[locale][product][channel] = {}
 
-        defaultenginename = '-'
-        searchorder = {}
-        feedhandlers = {}
-        handlerversion = '-'
-        contenthandlers = {}
+                defaultenginename = '-'
+                searchorder = {}
+                feedhandlers = {}
+                handlerversion = '-'
+                contenthandlers = {}
 
-        for key, value in values.iteritems():
-            lineok = False
+                for key, value in values.iteritems():
+                    lineok = False
 
-            # Default search engine name. Example:
-            # browser.search.defaultenginename=Google
-            if key.startswith('browser.search.defaultenginename'):
-                lineok = True
-                defaultenginename = values["browser.search.defaultenginename"]
-                if (unicode(defaultenginename, "utf-8") not in available_searchplugins):
-                    print "   Error: " + defaultenginename + " is set as default but not available in searchplugins (check if the name is spelled correctly)"
+                    # Default search engine name. Example:
+                    # browser.search.defaultenginename=Google
+                    if key.startswith('browser.search.defaultenginename'):
+                        lineok = True
+                        defaultenginename = values["browser.search.defaultenginename"]
+                        if (unicode(defaultenginename, "utf-8") not in available_searchplugins):
+                            print "   Error: " + defaultenginename + " is set as default but not available in searchplugins (check if the name is spelled correctly)"
 
-            # Search engines order. Example:
-            # browser.search.order.1=Google
-            if key.startswith('browser.search.order.'):
-                lineok = True
-                searchorder[key[-1:]] = value
-                if (unicode(value, "utf-8") not in available_searchplugins):
-                    print "   Error: " + value + " is defined in searchorder but not available in searchplugins (check if the name is spelled correctly)"
+                    # Search engines order. Example:
+                    # browser.search.order.1=Google
+                    if key.startswith('browser.search.order.'):
+                        lineok = True
+                        searchorder[key[-1:]] = value
+                        if (unicode(value, "utf-8") not in available_searchplugins):
+                            print "   Error: " + value + " is defined in searchorder but not available in searchplugins (check if the name is spelled correctly)"
 
-            # Feed handlers. Example:
-            # browser.contentHandlers.types.0.title=My Yahoo!
-            # browser.contentHandlers.types.0.uri=http://add.my.yahoo.com/rss?url=%s
-            if key.startswith('browser.contentHandlers.types.'):
-                lineok = True
-                if key.endswith('.title'):
-                    feedhandler_number = key[-7:-6]
-                    if (feedhandler_number not in feedhandlers):
-                        feedhandlers[feedhandler_number] = {}
-                    feedhandlers[feedhandler_number]["title"] = value
-                    # Print warning for Google Reader
-                    if (value.lower() == 'google'):
-                        print "   Warning: Google Reader has been dismissed, see bug 882093 (" + key + ")."
-                if key.endswith('.uri'):
-                    feedhandler_number = key[-5:-4]
-                    if (feedhandler_number not in feedhandlers):
-                        feedhandlers[feedhandler_number] = {}
-                    feedhandlers[feedhandler_number]["uri"] = value
+                    # Feed handlers. Example:
+                    # browser.contentHandlers.types.0.title=My Yahoo!
+                    # browser.contentHandlers.types.0.uri=http://add.my.yahoo.com/rss?url=%s
+                    if key.startswith('browser.contentHandlers.types.'):
+                        lineok = True
+                        if key.endswith('.title'):
+                            feedhandler_number = key[-7:-6]
+                            if (feedhandler_number not in feedhandlers):
+                                feedhandlers[feedhandler_number] = {}
+                            feedhandlers[feedhandler_number]["title"] = value
+                            # Print warning for Google Reader
+                            if (value.lower() == 'google'):
+                                print "   Warning: Google Reader has been dismissed, see bug 882093 (" + key + ")."
+                        if key.endswith('.uri'):
+                            feedhandler_number = key[-5:-4]
+                            if (feedhandler_number not in feedhandlers):
+                                feedhandlers[feedhandler_number] = {}
+                            feedhandlers[feedhandler_number]["uri"] = value
 
-            # Handler version. Example:
-            # gecko.handlerService.defaultHandlersVersion=4
-            if key.startswith('gecko.handlerService.defaultHandlersVersion'):
-                lineok = True
-                handlerversion = values["gecko.handlerService.defaultHandlersVersion"]
+                    # Handler version. Example:
+                    # gecko.handlerService.defaultHandlersVersion=4
+                    if key.startswith('gecko.handlerService.defaultHandlersVersion'):
+                        lineok = True
+                        handlerversion = values["gecko.handlerService.defaultHandlersVersion"]
 
-            # Service handlers. Example:
-            # gecko.handlerService.schemes.webcal.0.name=30 Boxes
-            # gecko.handlerService.schemes.webcal.0.uriTemplate=https://30boxes.com/external/widget?refer=ff&url=%s
-            if key.startswith('gecko.handlerService.schemes.'):
-                lineok = True
-                splittedkey = key.split('.')
-                ch_name = splittedkey[3]
-                ch_number = splittedkey[4]
-                ch_param = splittedkey[5]
-                if (ch_number not in contenthandlers):
-                    contenthandlers[ch_number] = {}
-                if (ch_param == "name"):
-                    contenthandlers[ch_number]["name"] = value
-                if (ch_param == "uriTemplate"):
-                    contenthandlers[ch_number]["uri"] = value
+                    # Service handlers. Example:
+                    # gecko.handlerService.schemes.webcal.0.name=30 Boxes
+                    # gecko.handlerService.schemes.webcal.0.uriTemplate=https://30boxes.com/external/widget?refer=ff&url=%s
+                    if key.startswith('gecko.handlerService.schemes.'):
+                        lineok = True
+                        splittedkey = key.split('.')
+                        ch_name = splittedkey[3]
+                        ch_number = splittedkey[4]
+                        ch_param = splittedkey[5]
+                        if (ch_number not in contenthandlers):
+                            contenthandlers[ch_number] = {}
+                        if (ch_param == "name"):
+                            contenthandlers[ch_number]["name"] = value
+                        if (ch_param == "uriTemplate"):
+                            contenthandlers[ch_number]["uri"] = value
 
-            # Ignore some keys for mail and seamonkey
-            if (product == "suite") or (product == "mail"):
-                ignored_keys = ['mail.addr_book.mapit_url.format', 'mailnews.messageid_browser.url', 'mailnews.localizedRe',
-                                'browser.translation.service', 'browser.search.defaulturl', 'browser.throbber.url',
-                                'startup.homepage_override_url', 'browser.startup.homepage', 'browser.translation.serviceDomain']
-                if key in ignored_keys:
-                    lineok = True
+                    # Ignore some keys for mail and seamonkey
+                    if (product == "suite") or (product == "mail"):
+                        ignored_keys = ['mail.addr_book.mapit_url.format', 'mailnews.messageid_browser.url', 'mailnews.localizedRe',
+                                        'browser.translation.service', 'browser.search.defaulturl', 'browser.throbber.url',
+                                        'startup.homepage_override_url', 'browser.startup.homepage', 'browser.translation.serviceDomain']
+                        if key in ignored_keys:
+                            lineok = True
 
-            # Unrecognized line, print warning
-            if (not lineok):
-                print "   Warning: unknown key in region.properties: " + locale + ", " + product + ", " + channel + "."
-                print "   " + key + "=" + value
+                    # Unrecognized line, print warning
+                    if (not lineok):
+                        print "   Warning: unknown key in region.properties: " + locale + ", " + product + ", " + channel + "."
+                        print "   " + key + "=" + value
 
-        try:
-            jsondata[locale][product][channel]["p12n"] = {
-                "defaultenginename": defaultenginename,
-                "searchorder": searchorder,
-                "feedhandlers": feedhandlers,
-                "handlerversion": handlerversion,
-                "contenthandlers": contenthandlers
-            }
-        except Exception as e:
-            print "   Error: problem saving data into json from " + source + " (" + locale + ", " + product + ", " + channel + ")"
+                try:
+                    jsondata[locale][product][channel]["p12n"] = {
+                        "defaultenginename": defaultenginename,
+                        "searchorder": searchorder,
+                        "feedhandlers": feedhandlers,
+                        "handlerversion": handlerversion,
+                        "contenthandlers": contenthandlers
+                    }
+                except Exception as e:
+                    print "   Error: problem saving data into json from " + source + " (" + locale + ", " + product + ", " + channel + ")"
 
-    else:
-        if (outputlevel > 0):
-            print "   Warning: file does not exist " + source + " (" + locale + ", " + product + ", " + channel + ")"
-
+            else:
+                if (outputlevel > 0):
+                    print "   Warning: file does not exist " + source + " (" + locale + ", " + product + ", " + channel + ")"
+    except Exception as e:
+        print "   No searchplugins available for this locale"
 
 
 
