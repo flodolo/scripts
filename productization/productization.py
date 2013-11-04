@@ -230,6 +230,12 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
 def extract_p12n_product(source, product, locale, channel, jsondata):
     global outputlevel
 
+    # Use jsondata to create a list of all Searchplugins' descriptions
+    available_searchplugins = []
+    for element in jsondata[locale][product][channel].values():
+        if element["name"]:
+            available_searchplugins.append(element["name"])
+
     existingfile = os.path.isfile(source)
     if existingfile:
         try:
@@ -276,12 +282,16 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
             if key.startswith('browser.search.defaultenginename'):
                 lineok = True
                 defaultenginename = values["browser.search.defaultenginename"]
+                if (unicode(defaultenginename, "utf-8") not in available_searchplugins):
+                    print "   Error: " + defaultenginename + " is set as default but not available in searchplugins (check if the name is spelled correctly)"
 
             # Search engines order. Example:
             # browser.search.order.1=Google
             if key.startswith('browser.search.order.'):
                 lineok = True
                 searchorder[key[-1:]] = value
+                if (unicode(value, "utf-8") not in available_searchplugins):
+                    print "   Error: " + value + " is defined in searchorder but not available in searchplugins (check if the name is spelled correctly)"
 
             # Feed handlers. Example:
             # browser.contentHandlers.types.0.title=My Yahoo!
