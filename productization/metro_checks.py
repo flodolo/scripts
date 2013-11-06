@@ -14,23 +14,15 @@ from optparse import OptionParser
 from time import gmtime, strftime
 from xml.dom import minidom
 
-# Output detail level
-# 0: print only actions performed and errors extracting data from searchplugins
-# 1: print errors about missing list.txt and the complete Python's error message
-outputlevel = 0
 
-
-
-
-def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
-    global outputlevel
+def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, html_output):
     try:
         if locale != "en-US":
             # Read the list of searchplugins from list.txt or metrolist.txt
             if (os.path.isfile(path + "list.txt")):
                 sp_list_desktop = open(path + "list.txt", "r").read().splitlines()
             else:
-                print "   Warning: path to list.txt does not exists (" + locale + ", " + product + ", " + channel + ")."
+                html_output.append("<p><span class='warning'>Warning:</span> path to list.txt does not exists (" + locale + ", " + product + ", " + channel + ").</p>")
                 sp_list_desktop = []
 
             if (os.path.isfile(path + "metrolist.txt")):
@@ -38,7 +30,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
             else:
                 if (product=="metro"):
                     # Display error only once when checking metro
-                    print "   Warning: path to metrolist.txt does not exists (" + locale + ", " + product + ", " + channel + ")."
+                    html_output.append("<p><span class='warning'>Warning:</span> path to metrolist.txt does not exists (" + locale + ", " + product + ", " + channel + ").</p>")
                 sp_list_metro = []
 
             sp_list_complete = sp_list_metro + sp_list_desktop
@@ -54,7 +46,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                 # duplicated elements in list.txt, which is an error
                 duplicated_items = [x for x, y in collections.Counter(sp_list).items() if y > 1]
                 duplicated_items_str =  ", ".join(duplicated_items)
-                print "   Error: there are duplicated items (" + duplicated_items_str + ") in list.txt (" + locale + ", " + product + ", " + channel + ")."
+                html_output.append("<p><span class='error'>Error:</span> there are duplicated items (" + duplicated_items_str + ") in list.txt (" + locale + ", " + product + ", " + channel + ").</p>")
 
         else:
             # en-US is different: I must analyze all xml files in the folder,
@@ -73,11 +65,11 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                 if (filename_noext in splist_enUS):
                     # There's a problem: file exists but has the same name of an
                     # en-US searchplugin. Warn about this
-                    print "   Error: file " + filename + " should not exist in the locale folder, same name of en-US searchplugin (" + locale + ", " + product + ", " + channel + ")."
+                    html_output.append("<p><span class='error'>Error:</span> file " + filename + " should not exist in the locale folder, same name of en-US searchplugin (" + locale + ", " + product + ", " + channel + ").</p>")
                 else:
                     # File is not in use, should be removed
                     if (filename_noext not in sp_list_complete) & (filename != "list.txt") & (filename != "metrolist.txt"):
-                        print "   Error: file " + filename + " not in list.txt or metrolist.txt (" + locale + ", " + product + ", " + channel + ")"
+                        html_output.append("<p><span class='error'>Error:</span> file " + filename + " not in list.txt or metrolist.txt (" + locale + ", " + product + ", " + channel + ")</p>")
 
         # For each searchplugin check if the file exists (localized version) or
         # not (using en-US version)
@@ -118,13 +110,11 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                             try:
                                 xmldoc = minidom.parse(StringIO.StringIO(newspcontent))
                             except Exception as e:
-                                print "   Error parsing XML for searchplugin " + searchplugin_info
-                                if (outputlevel > 0):
-                                    print e
-                        else:
-                            print "   Error: problem parsing XML for searchplugin " + searchplugin_info
-                            if (outputlevel > 0):
+                                html_output.append("<p class='error'>Error parsing XML for searchplugin " + searchplugin_info + "</p>")
                                 print e
+                        else:
+                            html_output.append("<p><span class='error'>Error:</span> problem parsing XML for searchplugin " + searchplugin_info + "</p>")
+                            print e
 
                     # Some searchplugins use the form <tag>, others <os:tag>
                     try:
@@ -133,7 +123,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                             node = xmldoc.getElementsByTagName("os:ShortName")
                         name = node[0].childNodes[0].nodeValue
                     except Exception as e:
-                        print "   Error: problem extracting name from searchplugin " + searchplugin_info
+                        html_output.append("<p><span class='error'>Error:</span> problem extracting name from searchplugin " + searchplugin_info + "</p>")
                         name = "not available"
 
                     # Check if node for locale already exists
@@ -152,9 +142,8 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                     }
 
                 except Exception as e:
-                    print "   Error: problem analyzing searchplugin " + searchplugin_info
-                    if (outputlevel > 0):
-                        print e
+                    html_output.append("<p><span class='error'>Error:</span> problem analyzing searchplugin " + searchplugin_info + "</p>")
+                    print e
             else:
                 # File does not exists, locale is using the same plugin of en-
                 # US, I have to retrieve it from the dictionary
@@ -180,20 +169,16 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                     # File does not exist but we don't have the en-US either.
                     # This means that list.txt references a non existing
                     # plugin, which will cause the build to fail
-                    print "   Error: file referenced in list.txt but not available (" + locale + ", " + product + ", " + channel + ", " + sp + ".xml)"
-                    if (outputlevel > 0):
-                        print e
+                    html_output.append("<p><span class='error'>Error:</span> file referenced in list.txt but not available (" + locale + ", " + product + ", " + channel + ", " + sp + ".xml)</p>")
+                    print e
 
     except Exception as e:
-        if (outputlevel > 0):
-            print "  Error reading  (" + locale + ")" + path + "list.txt"
+        print "  Error reading  (" + locale + ")" + path + "list.txt"
 
 
 
 
-def extract_p12n_product(source, product, locale, channel, jsondata):
-    global outputlevel
-
+def extract_p12n_product(source, product, locale, channel, jsondata, html_output):
     # Use jsondata to create a list of all Searchplugins' descriptions
     try:
         available_searchplugins = []
@@ -217,13 +202,11 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
                                 # Remove whitespaces, some locales use key = value instead of key=value
                                 values[key.strip()] = value.strip()
                             except Exception as e:
-                                print "   Error: parsing " + source + " (" + locale + ", " + product + ", " + channel + ")"
-                                if (outputlevel > 0):
-                                    print e
+                                html_output.append("<p><span class='error'>Error:</span> parsing " + source + " (" + locale + ", " + product + ", " + channel + ")</p>")
+                                print e
                 except Exception as e:
-                    print "   Error: reading " + source + " (" + locale + ", " + product + ", " + channel + ")"
-                    if (outputlevel > 0):
-                        print e
+                    html_output.append("<p><span class='error'>Error:</span> reading " + source + " (" + locale + ", " + product + ", " + channel + ")</p>")
+                    print e
 
                 # Check if node for locale already exists
                 if (locale not in jsondata):
@@ -247,7 +230,7 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
                         lineok = True
                         defaultenginename = values["browser.search.defaultenginename"]
                         if (unicode(defaultenginename, "utf-8") not in available_searchplugins):
-                            print "   Error: " + defaultenginename + " is set as default but not available in searchplugins (check if the name is spelled correctly)"
+                            html_output.append("<p><span class='error'>Error:</span> " + defaultenginename + " (" + product + ") is set as default but not available in searchplugins (check if the name is spelled correctly).</p>")
 
                     # Search engines order. Example:
                     # browser.search.order.1=Google
@@ -255,7 +238,7 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
                         lineok = True
                         searchorder[key[-1:]] = value
                         if (unicode(value, "utf-8") not in available_searchplugins):
-                            print "   Error: " + value + " is defined in searchorder but not available in searchplugins (check if the name is spelled correctly)"
+                            html_output.append("<p><span class='error'>Error:</span> " + value + " (" + product + ") is defined in searchorder but not available in searchplugins (check if the name is spelled correctly).</p>")
 
                     # I don't need this data for Metro, just ignore them
                     if ( key.startswith('browser.contentHandlers.types.') or
@@ -266,8 +249,8 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
 
                     # Unrecognized line, print warning
                     if (not lineok):
-                        print "   Warning: unknown key in region.properties: " + locale + ", " + product + ", " + channel + "."
-                        print "   " + key + "=" + value
+                        html_output.append("<p><span class='warning'>Warning:</span> unknown key in region.properties: " + locale + ", " + product + ", " + channel + ".<br/>")
+                        html_output.append("<span class='code'>" + key + "=" + value + "</span></p>")
 
                 try:
                     jsondata[locale][product][channel]["p12n"] = {
@@ -278,15 +261,14 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
                     print "   Error: problem saving data into json from " + source + " (" + locale + ", " + product + ", " + channel + ")"
 
             else:
-                if (outputlevel > 0):
-                    print "   Warning: file does not exist " + source + " (" + locale + ", " + product + ", " + channel + ")"
+                html_output.append("<p><span class='warning'>Warning:</span> file does not exist " + source + " (" + locale + ", " + product + ", " + channel + ")</p>")
     except Exception as e:
-        print "   Warning: no searchplugins available for this locale (" + product + ")"
+        print "No searchplugins available for this locale (" +locale + ", " + product + ")"
 
 
 
 
-def check_p12n(locale, channel, jsondata):
+def check_p12n(locale, channel, jsondata, html_output):
     # Check Metro status
     try:
         if ("metro" in jsondata[locale]):
@@ -294,25 +276,31 @@ def check_p12n(locale, channel, jsondata):
                 if (sp != "p12n"):
                     element = jsondata[locale]["metro"][channel][sp]
                     if (element["file"] == "google.xml"):
-                        print "   METROCHECK: use googlemetrofx.xml instead of google.xml"
+                        html_output.append("<p><span class='metro'>Metro:</span> use googlemetrofx.xml instead of google.xml</p>")
                     if (element["file"] == "bing.xml"):
-                        print "   METROCHECK: use bingmetrofx.xml instead of bing.xml"
+                        html_output.append("<p><span class='metro'>Metro:</span> use bingmetrofx.xml instead of bing.xml</p>")
 
             if ("p12n" in jsondata[locale]["metro"][channel]):
                 # I have p12n for Metro
                 default_metro = jsondata[locale]["metro"][channel]["p12n"]["defaultenginename"]
                 default_desktop = jsondata[locale]["desktop"][channel]["p12n"]["defaultenginename"]
                 if (default_desktop != default_metro):
-                    print "   METROCHECK: default engine on Desktop (" + default_desktop + ") is different from default engine on Metro (" + default_metro + ")"
+                    html_output.append("<p><span class='metro'>Metro:</span> default engine on Desktop (" + default_desktop + ") is different from default engine on Metro (" + default_metro + ")</p>")
 
                 order_metro = jsondata[locale]["metro"][channel]["p12n"]["searchorder"]
                 order_desktop = jsondata[locale]["desktop"][channel]["p12n"]["searchorder"]
                 if (default_desktop != default_metro):
-                    print "   METROCHECK: search engine order on Desktop is different from Metro"
-                    print "   Desktop"
-                    print order_desktop
-                    print "   Metro"
-                    print order_metro
+                    html_output.append("<p><span class='metro'>Metro:</span> search engine order on Metro is different from Desktop.</p>")
+                    html_output.append("<p>Desktop:</p>")
+                    html_output.append("  <ul>")
+                    for number in sorted(order_desktop.iterkeys()):
+                        html_output.append("    <li>" + number + ":" + order_desktop[number] + "</li>")
+                    html_output.append("  </ul>")
+                    html_output.append("<p>Metro:</p>")
+                    html_output.append("  <ul>")
+                    for number in sorted(order_metro.iterkeys()):
+                        html_output.append("    <li>" + number + ":" + order_metro[number] + "</li>")
+                    html_output.append("  </ul>")
     except Exception as e:
         print e
 
@@ -322,7 +310,6 @@ def check_p12n(locale, channel, jsondata):
 def extract_splist_enUS (pathsource, splist_enUS):
     # Create a list of en-US searchplugins in pathsource, store this data in
     # splist_enUS
-    global outputlevel
     try:
         for singlefile in glob.glob(pathsource+"*.xml"):
             filename = os.path.basename(singlefile)
@@ -331,17 +318,16 @@ def extract_splist_enUS (pathsource, splist_enUS):
 
     except Exception as e:
         print " Error: problem reading list of en-US searchplugins from " + pathsource
-        if (outputlevel > 0):
-            print e
+        print e
 
 
 
 
-def extract_p12n_channel(pathsource, pathl10n, localeslist, channel, jsondata):
-    global outputlevel
+def extract_p12n_channel(pathsource, pathl10n, localeslist, channel, jsondata, html_output):
     try:
         # Analyze en-US searchplugins
-        print "\nLocale: en-US (" + channel.upper() + ")"
+        html_output.append("<h2>Locale: en-US (" + channel.upper() + ")</h2>")
+
         path = pathsource + "COMMUN/"
 
         # Get a list of all .xml files in the en-US searchplugins folder (both Metro and Desktop)
@@ -351,23 +337,22 @@ def extract_p12n_channel(pathsource, pathl10n, localeslist, channel, jsondata):
         # Extract searchplugins information: I need en-US only to check names
         # when a locale rely on en-US searchplugins, so I'll keep them under a
         # generic "browser" product (no need to separate "desktop" and "metro")
-        extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "browser", "en-US", channel, jsondata, splistenUS)
+        extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "browser", "en-US", channel, jsondata, splistenUS, html_output)
 
         locale_list = open(localeslist, "r").read().splitlines()
         for locale in locale_list:
-            print "\nLocale: " + locale + " (" + channel.upper() + ")"
+            html_output.append("<h2>Locale: " + locale + " (" + channel.upper() + ")</h2>")
             path = pathl10n + locale + "/"
 
-            extract_sp_product(path + "browser/searchplugins/", "desktop", locale, channel, jsondata, splistenUS)
-            extract_p12n_product(path + "browser/chrome/browser-region/region.properties", "desktop", locale, channel, jsondata)
-            extract_sp_product(path + "browser/searchplugins/", "metro", locale, channel, jsondata, splistenUS)
-            extract_p12n_product(path + "browser/metro/chrome/region.properties", "metro", locale, channel, jsondata)
-            check_p12n(locale, channel, jsondata)
+            extract_sp_product(path + "browser/searchplugins/", "desktop", locale, channel, jsondata, splistenUS, html_output)
+            extract_p12n_product(path + "browser/chrome/browser-region/region.properties", "desktop", locale, channel, jsondata, html_output)
+            extract_sp_product(path + "browser/searchplugins/", "metro", locale, channel, jsondata, splistenUS, html_output)
+            extract_p12n_product(path + "browser/metro/chrome/region.properties", "metro", locale, channel, jsondata, html_output)
+            check_p12n(locale, channel, jsondata, html_output)
 
     except Exception as e:
         print "Error reading list of locales from " + localeslist
-        if (outputlevel > 0):
-            print e
+        print e
 
 
 
@@ -406,22 +391,49 @@ def main():
     jsonfilename = "web/searchplugins.json"
     jsondata = {}
 
-    print "Last update: " + strftime("%Y-%m-%d %H:%M:%S", gmtime())
-    print "Analyzing product: Firefox - " + "branch: " + clbranch + "\n"
+    htmlfilename = "web/metro.html"
+    html_output = ['''<!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset=utf-8>
+            <title>Metro Status</title>
+            <style type="text/css">
+                body {background-color: #FFF; font-family: Arial, Verdana; font-size: 14px; padding: 10px;}
+                p {margin-top: 2px;}
+                span.warning {color: orange; font-weight: bold;}
+                span.error {color: red; font-weight: bold;}
+                span.metro {color: blue; font-weight: bold;}
+                span.code {font-family: monospace;}
+            </style>
+        </head>
+
+        <body>
+        ''']
+    html_output.append("<p>Last update: " + strftime("%Y-%m-%d %H:%M:%S", gmtime()) + "</p>")
+    html_output.append("        <p>Analyzing product: Firefox</p>")
+    html_output.append("        <p>Branch: " + clbranch + "</p>")
 
     if (clbranch=="all") or (clbranch=="release"):
-        extract_p12n_channel(release_source, release_l10n, release_locales, "release", jsondata)
+        extract_p12n_channel(release_source, release_l10n, release_locales, "release", jsondata, html_output)
     if (clbranch=="all") or (clbranch=="beta"):
-        extract_p12n_channel(beta_source, beta_l10n, beta_locales, "beta", jsondata)
+        extract_p12n_channel(beta_source, beta_l10n, beta_locales, "beta", jsondata, html_output)
     if (clbranch=="all") or (clbranch=="aurora"):
-        extract_p12n_channel(aurora_source, aurora_l10n, aurora_locales, "aurora", jsondata)
+        extract_p12n_channel(aurora_source, aurora_l10n, aurora_locales, "aurora", jsondata, html_output)
     if (clbranch=="all") or (clbranch=="trunk"):
-        extract_p12n_channel(trunk_source, trunk_l10n, trunk_locales, "trunk", jsondata)
+        extract_p12n_channel(trunk_source, trunk_l10n, trunk_locales, "trunk", jsondata, html_output)
 
     # Write back updated json data
     jsonfile = open(jsonfilename, "w")
     jsonfile.write(json.dumps(jsondata, indent=4, sort_keys=True))
     jsonfile.close()
+
+    # Finalize and write html
+    html_output.append("</body>")
+    html_code = "\n".join(html_output)
+    html_file = open(htmlfilename, "w")
+    html_file.write(html_code)
+    html_file.close()
+
 
 
 
