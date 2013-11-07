@@ -22,7 +22,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
             if (os.path.isfile(path + "list.txt")):
                 sp_list_desktop = open(path + "list.txt", "r").read().splitlines()
             else:
-                html_output.append("<p><span class='warning'>Warning:</span> path to list.txt does not exists (" + locale + ", " + product + ", " + channel + ").</p>")
+                html_output.append("<p><span class='warning'>Warning:</span> file list.txt not found in your repository.</p>")
                 sp_list_desktop = []
 
             if (os.path.isfile(path + "metrolist.txt")):
@@ -30,7 +30,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
             else:
                 if (product=="metro"):
                     # Display error only once when checking metro
-                    html_output.append("<p><span class='warning'>Warning:</span> path to metrolist.txt does not exists (" + locale + ", " + product + ", " + channel + ").</p>")
+                    html_output.append("<p><span class='warning'>Warning:</span> file metrolist.txt not found in your repository.</p>")
                 sp_list_metro = []
 
             sp_list_complete = sp_list_metro + sp_list_desktop
@@ -182,86 +182,92 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
     # Use jsondata to create a list of all Searchplugins' descriptions
     try:
         available_searchplugins = []
-        if (channel in jsondata[locale][product]):
+
+        # Check if region.properties exists
+        existingfile = os.path.isfile(source)
+        if (not existingfile):
+            html_output.append("<p><span class='warning'>Warning:</span> file region.properties not found in your repository (" + product + ")</p>")
+
+        if (channel in jsondata[locale][product]) and (existingfile):
+
             # I need to proceed only if I have searchplugin for this branch+product+locale
             for element in jsondata[locale][product][channel].values():
                 if element["name"]:
                     available_searchplugins.append(element["name"])
 
-            existingfile = os.path.isfile(source)
-            if existingfile:
-                try:
-                    # Read region.properties, ignore comments and empty lines
-                    values = {}
-                    for line in open(source):
-                        li = line.strip()
-                        if (not li.startswith("#")) & (li != ""):
-                            try:
-                                # Split considering only the firs =
-                                key, value = li.split('=', 1)
-                                # Remove whitespaces, some locales use key = value instead of key=value
-                                values[key.strip()] = value.strip()
-                            except Exception as e:
-                                html_output.append("<p><span class='error'>Error:</span> parsing " + source + " (" + locale + ", " + product + ", " + channel + ")</p>")
-                                print e
-                except Exception as e:
-                    html_output.append("<p><span class='error'>Error:</span> reading " + source + " (" + locale + ", " + product + ", " + channel + ")</p>")
-                    print e
+            try:
+                # Read region.properties, ignore comments and empty lines
+                values = {}
+                for line in open(source):
+                    li = line.strip()
+                    if (not li.startswith("#")) & (li != ""):
+                        try:
+                            # Split considering only the firs =
+                            key, value = li.split('=', 1)
+                            # Remove whitespaces, some locales use key = value instead of key=value
+                            values[key.strip()] = value.strip()
+                        except Exception as e:
+                            html_output.append("<p><span class='error'>Error:</span> parsing " + source + " (" + locale + ", " + product + ", " + channel + ")</p>")
+                            print e
+            except Exception as e:
+                html_output.append("<p><span class='error'>Error:</span> reading " + source + " (" + locale + ", " + product + ", " + channel + ")</p>")
+                print e
 
-                # Check if node for locale already exists
-                if (locale not in jsondata):
-                    jsondata[locale] = {}
-                # Check if node for locale->product already exists
-                if (product not in jsondata[locale]):
-                    jsondata[locale][product] = {}
-                # Check if node for locale->product->channel already exists
-                if (channel not in jsondata[locale][product]):
-                    jsondata[locale][product][channel] = {}
+            # Check if node for locale already exists
+            if (locale not in jsondata):
+                jsondata[locale] = {}
+            # Check if node for locale->product already exists
+            if (product not in jsondata[locale]):
+                jsondata[locale][product] = {}
+            # Check if node for locale->product->channel already exists
+            if (channel not in jsondata[locale][product]):
+                jsondata[locale][product][channel] = {}
 
-                defaultenginename = '-'
-                searchorder = {}
+            defaultenginename = '-'
+            searchorder = {}
 
-                for key, value in values.iteritems():
-                    lineok = False
+            for key, value in values.iteritems():
+                lineok = False
 
-                    # Default search engine name. Example:
-                    # browser.search.defaultenginename=Google
-                    if key.startswith('browser.search.defaultenginename'):
-                        lineok = True
-                        defaultenginename = values["browser.search.defaultenginename"]
-                        if (unicode(defaultenginename, "utf-8") not in available_searchplugins):
-                            html_output.append("<p><span class='error'>Error:</span> " + defaultenginename + " (" + product + ") is set as default but not available in searchplugins (check if the name is spelled correctly).</p>")
+                # Default search engine name. Example:
+                # browser.search.defaultenginename=Google
+                if key.startswith('browser.search.defaultenginename'):
+                    lineok = True
+                    defaultenginename = values["browser.search.defaultenginename"]
+                    if (unicode(defaultenginename, "utf-8") not in available_searchplugins):
+                        html_output.append("<p><span class='error'>Error:</span> " + defaultenginename + " (" + product + ") is set as default but not available in searchplugins (check if the name is spelled correctly).</p>")
 
-                    # Search engines order. Example:
-                    # browser.search.order.1=Google
-                    if key.startswith('browser.search.order.'):
-                        lineok = True
-                        searchorder[key[-1:]] = value
-                        if (unicode(value, "utf-8") not in available_searchplugins):
-                            html_output.append("<p><span class='error'>Error:</span> " + value + " (" + product + ") is defined in searchorder but not available in searchplugins (check if the name is spelled correctly).</p>")
+                # Search engines order. Example:
+                # browser.search.order.1=Google
+                if key.startswith('browser.search.order.'):
+                    lineok = True
+                    searchorder[key[-1:]] = value
+                    if (unicode(value, "utf-8") not in available_searchplugins):
+                        html_output.append("<p><span class='error'>Error:</span> " + value + " (" + product + ") is defined in searchorder but not available in searchplugins (check if the name is spelled correctly).</p>")
 
-                    # I don't need this data for Metro, just ignore them
-                    if ( key.startswith('browser.contentHandlers.types.') or
-                         key.startswith('gecko.handlerService.defaultHandlersVersion') or
-                         key.startswith('gecko.handlerService.schemes.')):
-                        lineok = True
+                # I don't need this data for Metro, just ignore them
+                if ( key.startswith('gecko.handlerService.defaultHandlersVersion') or
+                     key.startswith('gecko.handlerService.schemes.')):
+                    lineok = True
 
+                if key.startswith('browser.contentHandlers.types.'):
+                    lineok = True
+                    if key.endswith('.title') and (value.lower() == 'google'):
+                        html_output.append("<p><span class='warning'>Warning:</span> Google Reader has been dismissed, see <a href='https://bugzilla.mozilla.org/show_bug.cgi?id=906688'>bug 906688</a> (" + key + ", " + product + ").</p>")
 
-                    # Unrecognized line, print warning
-                    if (not lineok):
-                        html_output.append("<p><span class='warning'>Warning:</span> unknown key in region.properties: " + locale + ", " + product + ", " + channel + ".<br/>")
-                        html_output.append("<span class='code'>" + key + "=" + value + "</span></p>")
+                # Unrecognized line, print warning
+                if (not lineok):
+                    html_output.append("<p><span class='warning'>Warning:</span> unknown key in region.properties (" + product + ").<br/>")
+                    html_output.append("<span class='code'>" + key + "=" + value + "</span></p>")
 
-                try:
-                    jsondata[locale][product][channel]["p12n"] = {
-                        "defaultenginename": defaultenginename,
-                        "searchorder": searchorder,
-                    }
-                except Exception as e:
-                    print "   Error: problem saving data into json from " + source + " (" + locale + ", " + product + ", " + channel + ")"
+            try:
+                jsondata[locale][product][channel]["p12n"] = {
+                    "defaultenginename": defaultenginename,
+                    "searchorder": searchorder,
+                }
+            except Exception as e:
+                print "   Error: problem saving data into json from " + source + " (" + locale + ", " + product + ", " + channel + ")"
 
-            else:
-                html_output.append("<p><span class='warning'>Warning:</span> file does not exist " + source + " (" + locale + ", " + product + ", " + channel + ")</p>")
     except Exception as e:
         print "No searchplugins available for this locale (" +locale + ", " + product + ")"
 
@@ -403,7 +409,7 @@ def main():
                 span.warning {color: orange; font-weight: bold;}
                 span.error {color: red; font-weight: bold;}
                 span.metro {color: blue; font-weight: bold;}
-                span.code {font-family: monospace;}
+                span.code {font-family: monospace; font-size: 12px; background-color: #CCC;}
             </style>
         </head>
 
