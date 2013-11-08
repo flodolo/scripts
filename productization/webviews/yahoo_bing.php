@@ -53,7 +53,8 @@
         'zu');
     $html_output = '';
     foreach ($products as $i=>$product) {
-        $html_output .= "<h1>" . $productnames[$i] ."</h1>\n";
+        $channel = "beta";
+        $html_output .= "<h1>" . $productnames[$i] . ' (' . $channel . ")</h1>\n";
         $yahoo_total = $yahoo_enUS = $bing_total = $bing_enUS = 0;
 
         $html_output .= '<table>
@@ -68,7 +69,6 @@
                 <tbody>' . "\n";
 
         foreach ($locales as $locale) {
-            $channel = "beta";
             if (array_key_exists($product, $jsonarray[$locale])) {
                 // I have searchplugin for this locale
                 foreach ($jsonarray[$locale][$product][$channel] as $singlesp) {
