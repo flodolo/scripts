@@ -15,6 +15,11 @@ from time import gmtime, strftime
 from xml.dom import minidom
 
 
+def diff(a, b):
+    b = set(b)
+    return [aa for aa in a if aa not in b]
+
+
 def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, html_output):
     try:
         if locale != "en-US":
@@ -275,8 +280,10 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
 
 
 def check_p12n(locale, channel, jsondata, html_output):
-    # Check Metro status
+    # Compare Metro and Desktop list of searchplugin
     try:
+        metro_searchplugins = []
+        desktop_searchplugins = []
         if ("metro" in jsondata[locale]):
             for sp in jsondata[locale]["metro"][channel]:
                 if (sp != "p12n"):
@@ -286,6 +293,40 @@ def check_p12n(locale, channel, jsondata, html_output):
                     if (element["file"] == "bing.xml"):
                         html_output.append("<p><span class='metro'>Metro:</span> use bingmetrofx.xml instead of bing.xml</p>")
 
+                    # Strip .xml from the filename
+                    searchplugin_name = element["file"][:-4]
+                    # If it's a Metro version, strip "metro" from the name
+                    if (searchplugin_name in ["googlemetrofx", "bingmetrofx"]):
+                        searchplugin_name = searchplugin_name[:-7]
+                    metro_searchplugins.append(searchplugin_name)
+                    metro_searchplugins.sort()
+
+            for sp in jsondata[locale]["desktop"][channel]:
+                if (sp != "p12n"):
+                    element = jsondata[locale]["desktop"][channel][sp]
+                    # Strip .xml from the filename
+                    searchplugin_name = element["file"][:-4]
+                    desktop_searchplugins.append(searchplugin_name)
+                    desktop_searchplugins.sort()
+
+            differences = diff(metro_searchplugins, desktop_searchplugins)
+            if differences:
+                html_output.append("<p><span class='metro'>Metro:</span> there are differences between the searchplugins used in Metro and Desktop</p>")
+                html_output.append("<p>Metro searchplugins: ")
+                for element in metro_searchplugins:
+                    html_output.append(element + " ")
+                html_output.append("</p>")
+
+                html_output.append("<p>Desktop searchplugins: ")
+                for element in desktop_searchplugins:
+                    html_output.append(element + " ")
+                html_output.append("</p>")
+    except Exception as e:
+        print e
+
+    # Check Metro status for region.properties
+    try:
+        if ("metro" in jsondata[locale]):
             if ("p12n" in jsondata[locale]["metro"][channel]):
                 # I have p12n for Metro
                 default_metro = jsondata[locale]["metro"][channel]["p12n"]["defaultenginename"]
