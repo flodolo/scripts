@@ -388,7 +388,7 @@ def extract_p12n_channel(pathsource, pathl10n, localeslist, channel, jsondata, h
 
         locale_list = open(localeslist, "r").read().splitlines()
         for locale in locale_list:
-            html_output.append("<h2>Locale: " + locale + " (" + channel.upper() + ")</h2>")
+            html_output.append("<h2><a id='" + locale + "' href='#" + locale + "'>Locale: " + locale + " (" + channel.upper() + ")</a></h2>")
             path = pathl10n + locale + "/"
 
             extract_sp_product(path + "browser/searchplugins/", "desktop", locale, channel, jsondata, splistenUS, html_output)
