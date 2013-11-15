@@ -46,18 +46,40 @@ for line in urllib2.urlopen(rewrite_rule_url):
 search_result = re.search('\((.*?)\)', rewrite_rule_locales).group(1)
 rewrite_rule_locales = search_result.split("|")
 
+# Print results
 print "Checking: " + filename
 print "Rewrite rule current content"
-print ', '.join(rewrite_rule_locales)
+if rewrite_rule_locales:
+	print ', '.join(rewrite_rule_locales)
+else:
+ print "(no locales)"
+
 print ""
 print "Activated locales"
-print ', '.join(activated_locales)
+if activated_locales:
+	print ', '.join(activated_locales)
+else:
+	print "(no locales)"
+
 print ""
 print "Locales activated with missing or identical strings"
-print ', '.join(warning_locales)
+if warning_locales:
+	print ', '.join(warning_locales)
+else:
+	print "(no locales)"
+
 print ""
 print "All locales missing from rewrite rule"
-print ', '.join(diff(activated_locales, rewrite_rule_locales))
+missing_locales = diff(activated_locales, rewrite_rule_locales)
+if missing_locales:
+	print ', '.join(missing_locales)
+else:
+	print "(no locales)"
+
 print ""
 print "Complete locales missing from rewrite rule"
-print ', '.join(diff(diff(activated_locales,warning_locales), rewrite_rule_locales))
+missing_complete_locales = diff(diff(activated_locales,warning_locales), rewrite_rule_locales)
+if missing_complete_locales:
+	print ', '.join(missing_complete_locales)
+else:
+	print "(no locales)"
