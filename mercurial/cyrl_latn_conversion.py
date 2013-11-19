@@ -20,17 +20,18 @@ for rev in revs:
     for f in files:
         # If the same file doesn't exist in sr-Latn, script fails
         file_latn = 'sr-Latn/' + f
+        file_cyrl = 'sr-Cyrl/' + f
         if not os.path.isfile(file_latn):
             path_latn = os.path.dirname(file_latn)
             if not os.path.exists(path_latn):
                 # Create folder too since is missing
                 os.makedirs(path_latn)
                 print "Creating missing folders: " + path_latn
-            open('sr-Latn/' + f, 'a').close()
+            open(file_latn, 'a').close()
 
-            print 'Adding file to repo: ' + f
+            print 'Adding file to repo: ' + file_latn
             subprocess.check_call(hg_latn + ['add', file_latn])
 
         subprocess.check_call([uconv, '-x', 'Serbian-Latin/BGN',
-                               '-o', 'sr-Latn/' + f, 'sr-Cyrl/' + f])
+                               '-o', file_latn, file_cyrl])
     subprocess.check_call(hg_latn + ['ci', '-m', desc, '-u', author])
