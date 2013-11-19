@@ -53,9 +53,9 @@
         'zu');
     $html_output = '';
     foreach ($products as $i=>$product) {
-        $channel = "beta";
+        $channel = "aurora";
         $html_output .= "<h1>" . $productnames[$i] . ' (' . $channel . ")</h1>\n";
-        $yahoo_total = $yahoo_enUS = $bing_total = $bing_enUS = 0;
+        $yahoo_total = $yahoo_enUS = $bing_total = $bing_enUS = $ebay_total = $ebay_enUS = 0;
 
         $html_output .= '<table>
                 <thead>
@@ -72,11 +72,14 @@
             if (array_key_exists($product, $jsonarray[$locale])) {
                 // I have searchplugin for this locale
                 foreach ($jsonarray[$locale][$product][$channel] as $singlesp) {
-                    if (strpos($singlesp['file'], 'yahoo') !== false || strpos($singlesp['file'], 'bing')!== false) {
+                    $spfilename = strtolower($singlesp['file']);
+                    if (strpos($spfilename, 'yahoo') !== false
+                        || strpos($spfilename, 'bing')!== false
+                        || strpos($spfilename, 'ebay')!== false) {
                         // Print only Yahoo and Bing
 
                         // Increment counters
-                        if (strpos($singlesp['file'], 'yahoo') !== false) {
+                        if (strpos($spfilename, 'yahoo') !== false) {
                             // It's Yahoo
                             $yahoo_total++;
                             if (strpos($singlesp['description'], 'en-US') !== false) {
@@ -84,12 +87,20 @@
                                 $yahoo_enUS++;
                             }
                         }
-                        if (strpos($singlesp['file'], 'bing') !== false) {
+                        if (strpos($spfilename, 'bing') !== false) {
                             // It's Bing
                             $bing_total++;
                             if (strpos($singlesp['description'], 'en-US') !== false) {
                                 // It's the en-US version
                                 $bing_enUS++;
+                            }
+                        }
+                        if (strpos($spfilename, 'ebay') !== false) {
+                            // It's eBay
+                            $ebay_total++;
+                            if (strpos($singlesp['description'], 'en-US') !== false) {
+                                // It's the en-US version
+                                $ebay_enUS++;
                             }
                         }
 
@@ -114,10 +125,11 @@
         $html_output .= "</tbody>
                 </table>
             ";
-        $html_output .= "<p><strong>Yahoo:</strong> {$yahoo_total} ({$yahoo_enUS} en-US)";
-        $html_output .= "<p><strong>Bing:</strong> {$bing_total} ({$bing_enUS} en-US)";
+        $html_output .= "<p><strong>Yahoo:</strong> {$yahoo_total} ({$yahoo_enUS} en-US)\n";
+        $html_output .= "<p><strong>Bing:</strong> {$bing_total} ({$bing_enUS} en-US)\n";
+        $html_output .= "<p><strong>eBay:</strong> {$ebay_total} ({$ebay_enUS} en-US)\n";
     }
 
     echo $html_output;
-
+    echo '<p id="update">Last update: ' . date ("Y-m-d H:i", filemtime('searchplugins.json')) . '</p>';
 
