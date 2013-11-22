@@ -33,8 +33,8 @@
 <body>
 
 <?php
-
-    $jsondata = file_get_contents("searchplugins.json");
+    $filename = 'searchplugins.json';
+    $jsondata = file_get_contents($filename);
     $jsonarray = json_decode($jsondata, true);
 
     $products = array('browser', 'mobile');
@@ -42,7 +42,7 @@
 
     $locales = array('ach', 'af', 'ak', 'an', 'ar', 'as', 'ast', 'be', 'bg', 'bn-BD',
         'bn-IN', 'br', 'bs', 'ca', 'cs', 'csb', 'cy', 'da', 'de', 'el',
-        'en-GB', 'en-ZA', 'eo', 'es-AR', 'es-CL', 'es-ES', 'es-MX', 'et', 'eu', 'fa',
+        'en-GB', 'en-US', 'en-ZA', 'eo', 'es-AR', 'es-CL', 'es-ES', 'es-MX', 'et', 'eu', 'fa',
         'ff', 'fi', 'fr', 'fy-NL', 'ga-IE', 'gd', 'gl', 'gu-IN', 'he', 'hi-IN',
         'hr', 'hu', 'hy-AM', 'id', 'is', 'it', 'ja', 'ja-JP-mac', 'ka', 'kk',
         'km', 'kn', 'ko', 'ku', 'lg', 'lij', 'lt', 'lv', 'mai', 'mk', 'ml', 'mr',
@@ -120,5 +120,4 @@
     }
 
     echo $html_output;
-    echo '<p id="update">Last update: ' . date ("Y-m-d H:i", filemtime('searchplugins.json')) . '</p>';
-
+    echo '<p id="update">Last update: ' . date ("Y-m-d H:i", filemtime($filename)) . '</p>';

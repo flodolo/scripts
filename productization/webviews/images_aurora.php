@@ -24,8 +24,8 @@
         table tbody tr:hover {background: #EAECEE; color: #111;}
         table tbody tr.fixed {background: #A5FAB0;}
         table tbody td.number {text-align: right;}
-        table tbody tr.complete {background-color: #92CC6E}
-        table tbody tr.incomplete {background-color: #FFA952}
+        table tbody td.warnings {color: #F00; font-weight: bold;}
+        table tbody td.warnings image {float: left;}
         table tbody tr.error {background-color: #FF5252}
     </style>
 </head>
@@ -33,6 +33,7 @@
 <body>
 
 <?php
+    include_once('logos.inc');
     $filename = '../searchplugins.json';
     $jsondata = file_get_contents($filename);
     $jsonarray = json_decode($jsondata, true);
@@ -51,11 +52,11 @@
         'sl', 'son', 'sq', 'sr', 'ss', 'st', 'sv-SE', 'sw', 'ta', 'ta-LK', 'te',
         'th', 'tn', 'tr', 'ts', 'uk', 've', 'vi', 'wo', 'xh', 'zh-CN', 'zh-TW',
         'zu');
+
     $html_output = '';
     foreach ($products as $i=>$product) {
         $channel = "aurora";
         $html_output .= "<h1>" . $productnames[$i] . ' (' . $channel . ")</h1>\n";
-        $yahoo_total = $yahoo_enUS = $bing_total = $bing_enUS = $ebay_total = $ebay_enUS = 0;
 
         $html_output .= '<table>
                 <thead>
@@ -64,6 +65,7 @@
                         <th>Icon</th>
                         <th>Name</th>
                         <th>Description</th>
+                        <th>Warnings</th>
                     </tr>
                 </thead>
                 <tbody>' . "\n";
@@ -72,39 +74,30 @@
             if (array_key_exists($product, $jsonarray[$locale])) {
                 // I have searchplugin for this locale
                 foreach ($jsonarray[$locale][$product][$channel] as $singlesp) {
+                    $warnings = '';
+                    $keyname = '';
                     $spfilename = strtolower($singlesp['file']);
-                    if (strpos($spfilename, 'yahoo') !== false
-                        || strpos($spfilename, 'bing')!== false
-                        || strpos($spfilename, 'ebay')!== false) {
-                        // Print only Yahoo and Bing
+                    if (strpos($spfilename, 'amazon') !== false) {
+                        $keyname = 'amazon_' . $product;                        
+                    } elseif (strpos($spfilename, 'ebay') !== false) {
+                        $keyname = 'ebay_' . $product;                        
+                    } elseif (strpos($spfilename, 'google') !== false) {
+                        $keyname = 'google_' . $product;                        
+                    } elseif (strpos($spfilename, 'twitter') !== false) {
+                        $keyname = 'twitter_' . $product;                        
+                    } elseif (strpos($spfilename, 'wikipedia') !== false) {
+                        $keyname = 'wikipedia_' . $product;                        
+                    } elseif (strpos($spfilename, 'yahoo') !== false) {
+                        $keyname = 'yahoo_' . $product;                        
+                    } 
 
-                        // Increment counters
-                        if (strpos($spfilename, 'yahoo') !== false) {
-                            // It's Yahoo
-                            $yahoo_total++;
-                            if (strpos($singlesp['description'], 'en-US') !== false) {
-                                // It's the en-US version
-                                $yahoo_enUS++;
-                            }
+                    if ($keyname != '') {
+                        if ($singlesp['image'] != $enUS_images[$keyname]) {
+                            $warnings = '<img src="' . $enUS_images[$keyname] . '" alt="" title="Reference Logo" /> Image seems to be out of date.';
                         }
-                        if (strpos($spfilename, 'bing') !== false) {
-                            // It's Bing
-                            $bing_total++;
-                            if (strpos($singlesp['description'], 'en-US') !== false) {
-                                // It's the en-US version
-                                $bing_enUS++;
-                            }
-                        }
-                        if (strpos($spfilename, 'ebay') !== false) {
-                            // It's eBay
-                            $ebay_total++;
-                            if (strpos($singlesp['description'], 'en-US') !== false) {
-                                // It's the en-US version
-                                $ebay_enUS++;
-                            }
-                        }
+                    }
 
-                        $html_output .= '                   <tr>
+                    $html_output .= '                   <tr>
                       <td>' . $locale . '</td>
                       <td><img src="' . $singlesp['image'] . '" alt="searchplugin icon" /></td>' . "\n";
                         if ( $singlesp['name'] == 'not available') {
@@ -113,21 +106,22 @@
                             $html_output .=  '                      <td>' . $singlesp['name'] . ' (' . $singlesp['file'] . ")</td>\n";
                         }
                         if ( strpos($singlesp['description'], 'not available')) {
-                            $html_output .=  '                      <td>' . $singlesp['description'] . "</td></tr>\n";
+                            $html_output .=  '                      <td>' . $singlesp['description'] . "</td>\n";
                         } else {
-                            $html_output .=  '                      <td>' . $singlesp['description'] . "</td>
-                    </tr>\n";
+                            $html_output .=  '                      <td>' . $singlesp['description'] . "</td>\n";                    
                         }
-                    }
+                        if ($warnings != '') {
+                            $html_output .=  '                      <td class="warnings">' . $warnings . "</td>\n</tr>\n";                    
+                        } else {
+                            $html_output .=  "                      <td>&nbsp;</td>\n</tr>\n";                    
+                        }
                 }
             }
         }
+
         $html_output .= "</tbody>
                 </table>
             ";
-        $html_output .= "<p><strong>Yahoo:</strong> {$yahoo_total} ({$yahoo_enUS} en-US)\n";
-        $html_output .= "<p><strong>Bing:</strong> {$bing_total} ({$bing_enUS} en-US)\n";
-        $html_output .= "<p><strong>eBay:</strong> {$ebay_total} ({$ebay_enUS} en-US)\n";
     }
 
     echo $html_output;
