@@ -22,11 +22,9 @@
         table tbody tr {background: #F5F5F5;}
         table tbody tr.odd {background: #F0F2F4;}
         table tbody tr:hover {background: #EAECEE; color: #111;}
-        table tbody tr.fixed {background: #A5FAB0;}
-        table tbody td.number {text-align: right;}
-        table tbody td.warnings {color: #F00; font-weight: bold;}
-        table tbody td.warnings image {float: left;}
-        table tbody tr.error {background-color: #FF5252}
+        td.warnings {color: #F00; font-weight: bold;}
+        td.warnings span {color: #FFC130;}
+        td.warnings image {float: left;}        
     </style>
 </head>
 
@@ -78,22 +76,32 @@
                     $keyname = '';
                     $spfilename = strtolower($singlesp['file']);
                     if (strpos($spfilename, 'amazon') !== false) {
-                        $keyname = 'amazon_' . $product;                        
+                        $keyname = 'amazon_' . $product;
                     } elseif (strpos($spfilename, 'ebay') !== false) {
-                        $keyname = 'ebay_' . $product;                        
+                        $keyname = 'ebay_' . $product;
                     } elseif (strpos($spfilename, 'google') !== false) {
-                        $keyname = 'google_' . $product;                        
+                        $keyname = 'google_' . $product;
                     } elseif (strpos($spfilename, 'twitter') !== false) {
-                        $keyname = 'twitter_' . $product;                        
+                        $keyname = 'twitter_' . $product;
                     } elseif (strpos($spfilename, 'wikipedia') !== false) {
-                        $keyname = 'wikipedia_' . $product;                        
+                        $keyname = 'wikipedia_' . $product;
+                        if ((strpos($singlesp['description'], '(en-US)') === false) && ($locale != 'en-US') &&
+                            ((strpos($singlesp['url'], 'Special:Search') !== false) || (strpos($singlesp['url'], ':Search') !== false))) {
+                            # If locales is not en-US, or locale is not using en-US wikipedia                            
+                                $warnings .= '<span>Could be using a non localized search URL (check ' . 
+                                             '<a href="' . $singlesp['url'] . '">URL</a>).</span><br/>';                                
+                        }
+                        if (strpos($singlesp['url'], '%')) {
+                            $warnings .= 'Searchplugin should use UTF-8 URL.<br/>';
+                        }
+
                     } elseif (strpos($spfilename, 'yahoo') !== false) {
-                        $keyname = 'yahoo_' . $product;                        
-                    } 
+                        $keyname = 'yahoo_' . $product;
+                    }
 
                     if ($keyname != '') {
                         if ($singlesp['image'] != $enUS_images[$keyname]) {
-                            $warnings = '<img src="' . $enUS_images[$keyname] . '" alt="" title="Reference Logo" /> Image seems to be out of date.';
+                            $warnings .= '<img src="' . $enUS_images[$keyname] . '" alt="" title="Reference Logo" /> Image is outdated.';
                         }
                     }
 
@@ -108,12 +116,12 @@
                         if ( strpos($singlesp['description'], 'not available')) {
                             $html_output .=  '                      <td>' . $singlesp['description'] . "</td>\n";
                         } else {
-                            $html_output .=  '                      <td>' . $singlesp['description'] . "</td>\n";                    
+                            $html_output .=  '                      <td>' . $singlesp['description'] . "</td>\n";
                         }
                         if ($warnings != '') {
-                            $html_output .=  '                      <td class="warnings">' . $warnings . "</td>\n</tr>\n";                    
+                            $html_output .=  '                      <td class="warnings">' . $warnings . "</td>\n</tr>\n";
                         } else {
-                            $html_output .=  "                      <td>&nbsp;</td>\n</tr>\n";                    
+                            $html_output .=  "                      <td>&nbsp;</td>\n</tr>\n";
                         }
                 }
             }
