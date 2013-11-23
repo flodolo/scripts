@@ -33,8 +33,8 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
             if (os.path.isfile(path + "metrolist.txt")):
                 sp_list_metro = open(path + "metrolist.txt", "r").read().splitlines()
             else:
-                if (product=="metro"):
-                    # Display error only once when checking metro
+                if (product=="metro" and locale!='ja-JP-mac'):
+                    # Display error only once when checking metro, not for ja-JP-mac
                     html_output.append("<p><span class='warning'>Warning:</span> file metrolist.txt not found in your repository.</p>")
                 sp_list_metro = []
 
