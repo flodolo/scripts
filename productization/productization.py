@@ -277,6 +277,7 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
                 handlerversion = '-'
                 contenthandlers = {}
 
+                currentproductstring = '   [' + product + ', ' + channel + '] ';
                 for key, value in values.iteritems():
                     lineok = False
 
@@ -286,7 +287,7 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
                         lineok = True
                         defaultenginename = values["browser.search.defaultenginename"]
                         if (unicode(defaultenginename, "utf-8") not in available_searchplugins):
-                            print "   Error: " + defaultenginename + " is set as default but not available in searchplugins (check if the name is spelled correctly)"
+                            print currentproductstring + "Error: " + defaultenginename + " is set as default but not available in searchplugins (check if the name is spelled correctly)"
 
                     # Search engines order. Example:
                     # browser.search.order.1=Google
@@ -294,7 +295,7 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
                         lineok = True
                         searchorder[key[-1:]] = value
                         if (unicode(value, "utf-8") not in available_searchplugins):
-                            print "   Error: " + value + " is defined in searchorder but not available in searchplugins (check if the name is spelled correctly)"
+                            print currentproductstring + "Error: " + value + " is defined in searchorder but not available in searchplugins (check if the name is spelled correctly)"
 
                     # Feed handlers. Example:
                     # browser.contentHandlers.types.0.title=My Yahoo!
@@ -308,7 +309,7 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
                             feedhandlers[feedhandler_number]["title"] = value
                             # Print warning for Google Reader
                             if (value.lower() == 'google'):
-                                print "   Warning: Google Reader has been dismissed, see bug 882093 (" + key + ")."
+                                print currentproductstring + "Warning: Google Reader has been dismissed, see bug 882093 (" + key + ")."
                         if key.endswith('.uri'):
                             feedhandler_number = key[-5:-4]
                             if (feedhandler_number not in feedhandlers):
@@ -365,7 +366,7 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
                 if (outputlevel > 0):
                     print "   Warning: file does not exist " + source + " (" + locale + ", " + product + ", " + channel + ")"
     except Exception as e:
-        print "   No searchplugins available for this locale"
+        print "   [" + product + ', ' + channel + "] No searchplugins available for this locale"
 
 
 
