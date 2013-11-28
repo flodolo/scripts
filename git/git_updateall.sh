@@ -45,6 +45,7 @@ then
 			green "Updating $folder..."
 			cd $folder
 			git checkout master
+			git fetch -p
 			git fetch upstream
 			git merge upstream/master
 			git pull --recurse-submodules && git submodule update

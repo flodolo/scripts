@@ -9,6 +9,7 @@ fi
 
 cd $1
 git checkout master
+git fetch -p
 git fetch upstream
 git merge upstream/master
 git pull --recurse-submodules && git submodule update
