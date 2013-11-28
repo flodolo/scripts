@@ -22,7 +22,7 @@ outputlevel = 0
 
 
 
-def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
+def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, html_output):
     global outputlevel
     try:
         if locale != "en-US":
@@ -39,7 +39,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                 # duplicated elements in list.txt, which is an error
                 duplicated_items = [x for x, y in collections.Counter(sp_list).items() if y > 1]
                 duplicated_items_str =  ", ".join(duplicated_items)
-                print "   Error: there are duplicated items (" + duplicated_items_str + ") in list.txt (" + locale + ", " + product + ", " + channel + ")."
+                html_output.append("<p><span class='error'>Error:</span> there are duplicated items (" + duplicated_items_str + ") in list.txt (" + locale + ", " + product + ", " + channel + ").</p>")
 
         else:
             # en-US is different: I must analyze all xml files in the folder,
@@ -58,11 +58,11 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                 if (filename_noext in splist_enUS):
                     # There's a problem: file exists but has the same name of an
                     # en-US searchplugin. Warn about this
-                    print "   Error: file " + filename + " should not exist in the locale folder, same name of en-US searchplugin (" + locale + ", " + product + ", " + channel + ")."
+                    html_output.append("<p><span class='error'>Error:</span> file " + filename + " should not exist in the locale folder, same name of en-US searchplugin (" + locale + ", " + product + ", " + channel + ").</p>")
                 else:
                     # File is not in use, should be removed
                     if (filename_noext not in sp_list) & (filename != "list.txt") & (filename != "metrolist.txt"):
-                        print "   Error: file " + filename + " not in list.txt (" + locale + ", " + product + ", " + channel + ")"
+                        html_output.append("<p><span class='error'>Error:</span> file " + filename + " not in list.txt (" + locale + ", " + product + ", " + channel + ")")
 
         # For each searchplugin check if the file exists (localized version) or
         # not (using en-US version)
@@ -100,15 +100,15 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                                 # Line is ok, adding it to newspcontent
                                 newspcontent = newspcontent + line
                         if preprocessor:
-                            print "   Warning: searchplugin contains preprocessor instructions (e.g. #define, #if) that have been stripped in order to parse the XML " + searchplugin_info
+                            html_output.append("<p><span class='warning'>Warning:</span> searchplugin contains preprocessor instructions (e.g. #define, #if) that have been stripped in order to parse the XML " + searchplugin_info + "</p>")
                             try:
                                 xmldoc = minidom.parse(StringIO.StringIO(newspcontent))
                             except Exception as e:
-                                print "   Error parsing XML for searchplugin " + searchplugin_info
+                                html_output.append("<p><span class='error'>Error:</span> problem parsing XML for searchplugin " + searchplugin_info + "</p>")
                                 if (outputlevel > 0):
                                     print e
                         else:
-                            print "   Error: problem parsing XML for searchplugin " + searchplugin_info
+                            html_output.append("<p><span class='error'>Error:</span> problem parsing XML for searchplugin " + searchplugin_info + "</p>")
                             if (outputlevel > 0):
                                 print e
 
@@ -119,7 +119,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                             node = xmldoc.getElementsByTagName("os:ShortName")
                         name = node[0].childNodes[0].nodeValue
                     except Exception as e:
-                        print "   Error: problem extracting name from searchplugin " + searchplugin_info
+                        html_output.append("<p><span class='error'>Error:</span> problem extracting name from searchplugin " + searchplugin_info + "</p>")
                         name = "not available"
 
                     try:
@@ -147,10 +147,11 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                         if p.match(url):
                             secure = 1
                     except Exception as e:
-                        print "   Error: problem extracting url from searchplugin " + searchplugin_info
+                        html_output.append("<p><span class='error'>Error:</span> problem extracting url from searchplugin " + searchplugin_info + "</p>")
                         url = "not available"
 
                     try:
+                        # Since bug 900137,
                         node = xmldoc.getElementsByTagName("Image")
                         if (len(node) == 0):
                             node = xmldoc.getElementsByTagName("os:Image")
@@ -159,10 +160,10 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                         # On mobile we can't have % characters, see for example bug 850984. Print a warning in this case
                         if (product == "mobile"):
                             if ("%" in image):
-                                print "   Warning: searchplugin's image on mobile can't contain % character " + searchplugin_info
+                                html_output.append("<p><span class='warning'>Warning:</span> searchplugin's image on mobile can't contain % character " + searchplugin_info + "</p>")
 
                     except Exception as e:
-                        print "   Error: problem extracting image from searchplugin " + searchplugin_info
+                        html_output.append("<p><span class='error'>Error:</span> problem extracting image from searchplugin " + searchplugin_info + "</p>")
                         image = "data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC/0lEQVR4XoWSbUiTexjG7x6d0OZW4FD3IigqaFEfJHRMt7WVGLQ9CZpR8pSiHwIZHHGdzbmzovl2tjnb8WjzBe2NCCnMFzycJ578kktwUZRDkCKhVDgouJdEn9n+/Sssy+Rc8Ptwc3FxX/z/NzQBwIBMxpsZHBx51d9fheddNeVwwHRLywV/b+/Yzfz8eMAixDicRVEPuBsbun1crkfR1FT5q/BTHI4EApQwPr53P0Inc8vLh27I5fHwyGKx+Lu60OvubuTF+Pr6WK/V+kOTKacTJs3mCn9rKzvndKL3PT1o0eOJ+qzWK8R/U1Pu8OLio/lgEDbX1mBvKMSJSUz05DU0fGkyabfD+srK+b0cTg8KhzkxsbHwMRRCywsLE3NerwuwwC2VcseNRtpnsyGmuRn9g/E6HCxjNFZjKp+YTOxkTQ2awb6/sTH6rL6e6UxP58F23dJo+KN1dfT9+npEWyzoMYax2SK0wcCOURSa0OvRc7M56jUYmNsajWArtwe26ZpYzE0rKXm4trpayBEKgWBZWF9aAi72eCkpKAowMTc8TOrn5z/AbhpQqfjXjh9/UScUotYjR9BfhYXoXnEx+levfzmgVAp+DhDbh/GGBoCEhNJ3s7MHgsvL8Mbng7fT0xAJhyGyuZklyM4+veudjJpM4CkpOX9RImGrANBn9ASBfo+JQUbM1YMH0ShFRUaqq3feyZDBAF0kWfGbWMwW4+AZTGVsbNSlVjN/HztGV3E46A8A1B4Xh9qzs9nbOt33O3lQWwsdJEmViURsKQ5SmDKCiLaqVEy3TCbokcv5nWo1fRm3qMWeFXNDJIrcJcmvTdpJsqwGh09iQ405jTe3KJWMSyr99s9tSUlcl0pFX8JNnADIjvkzOZm9c+rUWXBrtYpzaWmBMmxo8WazQsFcz83d8dqevDy+R6mkrbiJAQB1pKYGbmq1R7+YHTqdojwzc/VKfj7TJpHwYBc5ExO5bQUFtCMjI9i/Fd7CXVR0yJ6TI4D/kSMnh3/9xInDW/MnJPlM3rrfgeYAAAAASUVORK5CYII="
 
                     # Check if node for locale already exists
@@ -185,7 +186,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                     }
 
                 except Exception as e:
-                    print "   Error: problem analyzing searchplugin " + searchplugin_info
+                    html_output.append("<p><span class='error'>Error:</span> problem analyzing searchplugin " + searchplugin_info + "</p>")
                     if (outputlevel > 0):
                         print e
             else:
@@ -216,18 +217,18 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS):
                     # File does not exist but we don't have the en-US either.
                     # This means that list.txt references a non existing
                     # plugin, which will cause the build to fail
-                    print "   Error: file referenced in list.txt but not available (" + locale + ", " + product + ", " + channel + ", " + sp + ".xml)"
+                    html_output.append("<p><span class='error'>Error:</span> file referenced in list.txt but not available (" + locale + ", " + product + ", " + channel + ", " + sp + ".xml)</p>")
                     if (outputlevel > 0):
                         print e
 
     except Exception as e:
         if (outputlevel > 0):
-            print "  Error reading  (" + locale + ")" + path + "list.txt"
+            html_output.append("<p><span class='error'>Error:</span> problem reading  (" + locale + ")" + path + "list.txt</p>")
 
 
 
 
-def extract_p12n_product(source, product, locale, channel, jsondata):
+def extract_p12n_product(source, product, locale, channel, jsondata, html_output):
     global outputlevel
 
     # Use jsondata to create a list of all Searchplugins' descriptions
@@ -253,11 +254,11 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
                                 # Remove whitespaces, some locales use key = value instead of key=value
                                 values[key.strip()] = value.strip()
                             except Exception as e:
-                                print "   Error: parsing " + source + " (" + locale + ", " + product + ", " + channel + ")"
+                                html_output.append("<p><span class='error'>Error:</span> problem parsing " + source + " (" + locale + ", " + product + ", " + channel + ")</p>")
                                 if (outputlevel > 0):
                                     print e
                 except Exception as e:
-                    print "   Error: reading " + source + " (" + locale + ", " + product + ", " + channel + ")"
+                    html_output.append("<p><span class='error'>Error:</span> problem reading " + source + " (" + locale + ", " + product + ", " + channel + ")</p>")
                     if (outputlevel > 0):
                         print e
 
@@ -287,7 +288,7 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
                         lineok = True
                         defaultenginename = values["browser.search.defaultenginename"]
                         if (unicode(defaultenginename, "utf-8") not in available_searchplugins):
-                            print currentproductstring + "Error: " + defaultenginename + " is set as default but not available in searchplugins (check if the name is spelled correctly)"
+                            html_output.append("<p><span class='error'>Error:</span> " + currentproductstring + " " + defaultenginename + " is set as default but not available in searchplugins (check if the name is spelled correctly)</p>")
 
                     # Search engines order. Example:
                     # browser.search.order.1=Google
@@ -295,7 +296,7 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
                         lineok = True
                         searchorder[key[-1:]] = value
                         if (unicode(value, "utf-8") not in available_searchplugins):
-                            print currentproductstring + "Error: " + value + " is defined in searchorder but not available in searchplugins (check if the name is spelled correctly)"
+                            html_output.append("<p><span class='error'>Error:</span> " + currentproductstring + " " + value + " is defined in searchorder but not available in searchplugins (check if the name is spelled correctly)</p>")
 
                     # Feed handlers. Example:
                     # browser.contentHandlers.types.0.title=My Yahoo!
@@ -309,7 +310,7 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
                             feedhandlers[feedhandler_number]["title"] = value
                             # Print warning for Google Reader
                             if (value.lower() == 'google'):
-                                print currentproductstring + "Warning: Google Reader has been dismissed, see bug 882093 (" + key + ")."
+                                html_output.append("<p><span class='warning'>Warning:</span> " + currentproductstring + " Google Reader has been dismissed, see bug 882093 (" + key + ")</p>")
                         if key.endswith('.uri'):
                             feedhandler_number = key[-5:-4]
                             if (feedhandler_number not in feedhandlers):
@@ -348,8 +349,7 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
 
                     # Unrecognized line, print warning
                     if (not lineok):
-                        print "   Warning: unknown key in region.properties: " + locale + ", " + product + ", " + channel + "."
-                        print "   " + key + "=" + value
+                        html_output.append("<p><span class='warning'>Warning:</span> unknown key in region.properties: " + locale + ", " + product + ", " + channel + "." + key + "=" + value + "</p>")
 
                 try:
                     jsondata[locale][product][channel]["p12n"] = {
@@ -360,13 +360,13 @@ def extract_p12n_product(source, product, locale, channel, jsondata):
                         "contenthandlers": contenthandlers
                     }
                 except Exception as e:
-                    print "   Error: problem saving data into json from " + source + " (" + locale + ", " + product + ", " + channel + ")"
+                    html_output.append("<p><span class='error'>Error:</span> problem saving data into json from " + source + " (" + locale + ", " + product + ", " + channel + ")</p>")
 
             else:
                 if (outputlevel > 0):
-                    print "   Warning: file does not exist " + source + " (" + locale + ", " + product + ", " + channel + ")"
+                    html_output.append("<p><span class='warning'>Warning:</span> file does not exist " + source + " (" + locale + ", " + product + ", " + channel + ")</p>")
     except Exception as e:
-        print "   [" + product + ', ' + channel + "] No searchplugins available for this locale"
+        html_output.append("<p>[" + product + ', ' + channel + "] No searchplugins available for this locale</p>")
 
 
 
@@ -447,7 +447,7 @@ def extract_splist_enUS (pathsource, splist_enUS):
 
 
 
-def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, jsondata, clp12n):
+def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, jsondata, clp12n, html_output):
     global outputlevel
     try:
         # Analyze en-US searchplugins
@@ -461,53 +461,53 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
         if (clproduct=="all") or (clproduct=="browser"):
             splistenUS_browser = []
             extract_splist_enUS(path + "browser/locales/en-US/en-US/searchplugins/", splistenUS_browser)
-            extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "browser", "en-US", channel, jsondata, splistenUS_browser)
+            extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "browser", "en-US", channel, jsondata, splistenUS_browser, html_output)
             # Metro: same searchplugins folder
-            extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "metro", "en-US", channel, jsondata, splistenUS_browser)
+            extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "metro", "en-US", channel, jsondata, splistenUS_browser, html_output)
             if clp12n:
-                extract_p12n_product(path + "browser/locales/en-US/en-US/chrome/browser-region/region.properties", "browser", "en-US", channel, jsondata)
+                extract_p12n_product(path + "browser/locales/en-US/en-US/chrome/browser-region/region.properties", "browser", "en-US", channel, jsondata, html_output)
 
         if (clproduct=="all") or (clproduct=="mobile"):
             splistenUS_mobile = []
             extract_splist_enUS(path + "mobile/locales/en-US/en-US/searchplugins/", splistenUS_mobile)
-            extract_sp_product(path + "mobile/locales/en-US/en-US/searchplugins/", "mobile", "en-US", channel, jsondata, splistenUS_mobile)
+            extract_sp_product(path + "mobile/locales/en-US/en-US/searchplugins/", "mobile", "en-US", channel, jsondata, splistenUS_mobile, html_output)
             if clp12n:
-                extract_p12n_product(path + "mobile/locales/en-US/en-US/chrome/region.properties", "mobile", "en-US", channel, jsondata)
+                extract_p12n_product(path + "mobile/locales/en-US/en-US/chrome/region.properties", "mobile", "en-US", channel, jsondata, html_output)
 
         if (clproduct=="all") or (clproduct=="mail"):
             splistenUS_mail = []
             extract_splist_enUS(path + "mail/locales/en-US/en-US/searchplugins/", splistenUS_mail)
-            extract_sp_product(path + "mail/locales/en-US/en-US/searchplugins/", "mail", "en-US", channel, jsondata, splistenUS_mail)
+            extract_sp_product(path + "mail/locales/en-US/en-US/searchplugins/", "mail", "en-US", channel, jsondata, splistenUS_mail, html_output)
             if clp12n:
-                extract_p12n_product(path + "mail/locales/en-US/en-US/chrome/messenger-region/region.properties", "mail", "en-US", channel, jsondata)
+                extract_p12n_product(path + "mail/locales/en-US/en-US/chrome/messenger-region/region.properties", "mail", "en-US", channel, jsondata, html_output)
 
         if (clproduct=="all") or (clproduct=="suite"):
             splistenUS_suite = []
             extract_splist_enUS(path + "suite/locales/en-US/en-US/searchplugins/", splistenUS_suite)
-            extract_sp_product(path + "suite/locales/en-US/en-US/searchplugins/", "suite", "en-US", channel, jsondata, splistenUS_suite)
+            extract_sp_product(path + "suite/locales/en-US/en-US/searchplugins/", "suite", "en-US", channel, jsondata, splistenUS_suite, html_output)
             if clp12n:
-                extract_p12n_product(path + "suite/locales/en-US/en-US/chrome/browser/region.properties", "suite", "en-US", channel, jsondata)
+                extract_p12n_product(path + "suite/locales/en-US/en-US/chrome/browser/region.properties", "suite", "en-US", channel, jsondata, html_output)
 
         locale_list = open(localeslist, "r").read().splitlines()
         for locale in locale_list:
-            print "\nLocale: " + locale + " (" + channel.upper() + ")"
+            html_output.append("<h2>Locale: <a id='" + locale + "' href='#" + locale + "'>" + locale + " (" + channel.upper() + ")</a></h2>")
             path = pathl10n + locale + "/"
             if (clproduct=="all") or (clproduct=="browser"):
-                extract_sp_product(path + "browser/searchplugins/", "browser", locale, channel, jsondata, splistenUS_browser)
+                extract_sp_product(path + "browser/searchplugins/", "browser", locale, channel, jsondata, splistenUS_browser, html_output)
                 if clp12n:
-                    extract_p12n_product(path + "browser/chrome/browser-region/region.properties", "browser", locale, channel, jsondata)
+                    extract_p12n_product(path + "browser/chrome/browser-region/region.properties", "browser", locale, channel, jsondata, html_output)
             if (clproduct=="all") or (clproduct=="mobile"):
-                extract_sp_product(path + "mobile/searchplugins/", "mobile", locale, channel, jsondata, splistenUS_mobile)
+                extract_sp_product(path + "mobile/searchplugins/", "mobile", locale, channel, jsondata, splistenUS_mobile, html_output)
                 if clp12n:
-                    extract_p12n_product(path + "mobile/chrome/region.properties", "mobile", locale, channel, jsondata)
+                    extract_p12n_product(path + "mobile/chrome/region.properties", "mobile", locale, channel, jsondata, html_output)
             if (clproduct=="all") or (clproduct=="mail"):
-                extract_sp_product(path + "mail/searchplugins/", "mail", locale, channel, jsondata, splistenUS_mail)
+                extract_sp_product(path + "mail/searchplugins/", "mail", locale, channel, jsondata, splistenUS_mail, html_output)
                 if clp12n:
-                    extract_p12n_product(path + "mail/chrome/messenger-region/region.properties", "mail", locale, channel, jsondata)
+                    extract_p12n_product(path + "mail/chrome/messenger-region/region.properties", "mail", locale, channel, jsondata, html_output)
             if (clproduct=="all") or (clproduct=="suite"):
-                extract_sp_product(path + "suite/searchplugins/", "suite", locale, channel, jsondata, splistenUS_suite)
+                extract_sp_product(path + "suite/searchplugins/", "suite", locale, channel, jsondata, splistenUS_suite, html_output)
                 if clp12n:
-                    extract_p12n_product(path + "suite/chrome/browser/region.properties", "suite", locale, channel, jsondata)
+                    extract_p12n_product(path + "suite/chrome/browser/region.properties", "suite", locale, channel, jsondata, html_output)
     except Exception as e:
         print "Error reading list of locales from " + localeslist
         if (outputlevel > 0):
@@ -554,17 +554,37 @@ def main():
     jsonfilename = "web/searchplugins.json"
     jsondata = {}
 
-    print "Last update: " + strftime("%Y-%m-%d %H:%M:%S", gmtime())
-    print "Analyzing product: " + clproduct + " - " + "branch: " + clbranch + "\n"
+
+    htmlfilename = "web/p12n.html"
+    html_output = ['''<!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset=utf-8>
+            <title>p12n status</title>
+            <style type="text/css">
+                body {background-color: #FFF; font-family: Arial, Verdana; font-size: 14px; padding: 10px;}
+                p {margin-top: 2px;}
+                span.warning {color: orange; font-weight: bold;}
+                span.error {color: red; font-weight: bold;}
+                span.metro {color: blue; font-weight: bold;}
+                span.code {font-family: monospace; font-size: 12px; background-color: #CCC;}
+            </style>
+        </head>
+
+        <body>
+        ''']
+    html_output.append("<p>Last update: " + strftime("%Y-%m-%d %H:%M:%S", gmtime()) + "</p>")
+    html_output.append("<p>Analyzing product: " + clproduct + "</p>")
+    html_output.append("<p>Branch: " + clbranch + "</p>")
 
     if (clbranch=="all") or (clbranch=="release"):
-        extract_p12n_channel(clproduct, release_source, release_l10n, release_locales, "release", jsondata, clp12n)
+        extract_p12n_channel(clproduct, release_source, release_l10n, release_locales, "release", jsondata, clp12n, html_output)
     if (clbranch=="all") or (clbranch=="beta"):
-        extract_p12n_channel(clproduct, beta_source, beta_l10n, beta_locales, "beta", jsondata, clp12n)
+        extract_p12n_channel(clproduct, beta_source, beta_l10n, beta_locales, "beta", jsondata, clp12n, html_output)
     if (clbranch=="all") or (clbranch=="aurora"):
-        extract_p12n_channel(clproduct, aurora_source, aurora_l10n, aurora_locales, "aurora", jsondata, clp12n)
+        extract_p12n_channel(clproduct, aurora_source, aurora_l10n, aurora_locales, "aurora", jsondata, clp12n, html_output)
     if (clbranch=="all") or (clbranch=="trunk"):
-        extract_p12n_channel(clproduct, trunk_source, trunk_l10n, trunk_locales, "trunk", jsondata, clp12n)
+        extract_p12n_channel(clproduct, trunk_source, trunk_l10n, trunk_locales, "trunk", jsondata, clp12n, html_output)
 
     if (clbranch=="all") and (clp12n):
         p12n_differences(jsondata)
@@ -573,6 +593,13 @@ def main():
     jsonfile = open(jsonfilename, "w")
     jsonfile.write(json.dumps(jsondata, indent=4, sort_keys=True))
     jsonfile.close()
+
+    # Finalize and write html
+    html_output.append("</body>")
+    html_code = "\n".join(html_output)
+    html_file = open(htmlfilename, "w")
+    html_file.write(html_code)
+    html_file.close()
 
 
 
