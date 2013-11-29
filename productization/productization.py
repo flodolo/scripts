@@ -17,7 +17,7 @@ from xml.dom import minidom
 # Output detail level
 # 0: print only actions performed and errors extracting data from searchplugins
 # 1: print errors about missing list.txt and the complete Python's error message
-outputlevel = 0
+outputlevel = 1
 
 
 
@@ -25,22 +25,27 @@ outputlevel = 0
 def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, html_output):
     global outputlevel
     try:
+        sp_list = []
         if locale != "en-US":
-            # Read the list of searchplugins from list.txt
+            # Read the list of searchplugins
             if (product != "metro"):
-                sp_list = open(path + "list.txt", "r").read().splitlines()
+                file_list = path + "list.txt"
             else:
-                sp_list = open(path + "metrolist.txt", "r").read().splitlines()
-            # Remove empty lines
-            sp_list = filter(bool, sp_list)
-            # Check for duplicates
-            if (len(sp_list) != len(set(sp_list))):
-                # set(sp_list) remove duplicates. If I'm here, there are
-                # duplicated elements in list.txt, which is an error
-                duplicated_items = [x for x, y in collections.Counter(sp_list).items() if y > 1]
-                duplicated_items_str =  ", ".join(duplicated_items)
-                html_output.append("<p><span class='error'>Error:</span> there are duplicated items (" + duplicated_items_str + ") in list.txt (" + locale + ", " + product + ", " + channel + ").</p>")
+                file_list = path + "metrolist.txt"
 
+            if os.path.isfile(file_list):
+                sp_list = open(file_list, "r").read().splitlines()
+                # Remove empty lines
+                sp_list = filter(bool, sp_list)
+                # Check for duplicates
+                if (len(sp_list) != len(set(sp_list))):
+                    # set(sp_list) remove duplicates. If I'm here, there are
+                    # duplicated elements in list.txt, which is an error
+                    duplicated_items = [x for x, y in collections.Counter(sp_list).items() if y > 1]
+                    duplicated_items_str =  ", ".join(duplicated_items)
+                    html_output.append("<p><span class='error'>Error:</span> there are duplicated items (" +
+                                        duplicated_items_str + ") in list.txt (" + locale +
+                                        ", " + product + ", " + channel + ").</p>")
         else:
             # en-US is different: I must analyze all xml files in the folder,
             # since some searchplugins are not used in en-US but from other
@@ -49,7 +54,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
 
         output = ""
 
-        if locale != "en-US":
+        if (locale != "en-US" and len(sp_list)>0):
             # Get a list of all files inside path
             for singlefile in glob.glob(path+"*"):
                 # Remove extension
@@ -58,11 +63,14 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                 if (filename_noext in splist_enUS):
                     # There's a problem: file exists but has the same name of an
                     # en-US searchplugin. Warn about this
-                    html_output.append("<p><span class='error'>Error:</span> file " + filename + " should not exist in the locale folder, same name of en-US searchplugin (" + locale + ", " + product + ", " + channel + ").</p>")
+                    html_output.append("<p><span class='error'>Error:</span> file " + filename +
+                        " should not exist in the locale folder, same name of en-US searchplugin (" +
+                        locale + ", " + product + ", " + channel + ").</p>")
                 else:
                     # File is not in use, should be removed
                     if (filename_noext not in sp_list) & (filename != "list.txt") & (filename != "metrolist.txt"):
-                        html_output.append("<p><span class='error'>Error:</span> file " + filename + " not in list.txt (" + locale + ", " + product + ", " + channel + ")")
+                        html_output.append("<p><span class='error'>Error:</span> [" + product + "]file " + filename +
+                        " not in list.txt")
 
         # For each searchplugin check if the file exists (localized version) or
         # not (using en-US version)
@@ -100,15 +108,19 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                                 # Line is ok, adding it to newspcontent
                                 newspcontent = newspcontent + line
                         if preprocessor:
-                            html_output.append("<p><span class='warning'>Warning:</span> searchplugin contains preprocessor instructions (e.g. #define, #if) that have been stripped in order to parse the XML " + searchplugin_info + "</p>")
+                            html_output.append("<p><span class='warning'>Warning:</span> searchplugin contains " +
+                                    "preprocessor instructions (e.g. #define, #if) that have been stripped in order " +
+                                    "to parse the XML " + searchplugin_info + "</p>")
                             try:
                                 xmldoc = minidom.parse(StringIO.StringIO(newspcontent))
                             except Exception as e:
-                                html_output.append("<p><span class='error'>Error:</span> problem parsing XML for searchplugin " + searchplugin_info + "</p>")
+                                html_output.append("<p><span class='error'>Error:</span> problem parsing XML for " +
+                                "searchplugin " + searchplugin_info + "</p>")
                                 if (outputlevel > 0):
                                     print e
                         else:
-                            html_output.append("<p><span class='error'>Error:</span> problem parsing XML for searchplugin " + searchplugin_info + "</p>")
+                            html_output.append("<p><span class='error'>Error:</span> problem parsing XML for "+
+                                "searchplugin " + searchplugin_info + "</p>")
                             if (outputlevel > 0):
                                 print e
 
@@ -119,7 +131,8 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                             node = xmldoc.getElementsByTagName("os:ShortName")
                         name = node[0].childNodes[0].nodeValue
                     except Exception as e:
-                        html_output.append("<p><span class='error'>Error:</span> problem extracting name from searchplugin " + searchplugin_info + "</p>")
+                        html_output.append("<p><span class='error'>Error:</span> problem extracting name from " +
+                            "searchplugin " + searchplugin_info + "</p>")
                         name = "not available"
 
                     try:
@@ -147,7 +160,8 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                         if p.match(url):
                             secure = 1
                     except Exception as e:
-                        html_output.append("<p><span class='error'>Error:</span> problem extracting url from searchplugin " + searchplugin_info + "</p>")
+                        html_output.append("<p><span class='error'>Error:</span> problem extracting url from " +
+                            "searchplugin " + searchplugin_info + "</p>")
                         url = "not available"
 
                     try:
@@ -163,11 +177,25 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                             # On mobile we can't have % characters, see for example bug 850984. Print a warning in this case
                             if (product == "mobile"):
                                 if ("%" in image):
-                                    html_output.append("<p><span class='warning'>Warning:</span> searchplugin's image on mobile can't contain % character " + searchplugin_info + "</p>")
+                                    html_output.append("<p><span class='warning'>Warning:</span> searchplugin's image " +
+                                        "on mobile can't contain % character " + searchplugin_info + "</p>")
 
                     except Exception as e:
-                        html_output.append("<p><span class='error'>Error:</span> problem extracting image from searchplugin " + searchplugin_info + "</p>")
-                        images.append("data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC/0lEQVR4XoWSbUiTexjG7x6d0OZW4FD3IigqaFEfJHRMt7WVGLQ9CZpR8pSiHwIZHHGdzbmzovl2tjnb8WjzBe2NCCnMFzycJ578kktwUZRDkCKhVDgouJdEn9n+/Sssy+Rc8Ptwc3FxX/z/NzQBwIBMxpsZHBx51d9fheddNeVwwHRLywV/b+/Yzfz8eMAixDicRVEPuBsbun1crkfR1FT5q/BTHI4EApQwPr53P0Inc8vLh27I5fHwyGKx+Lu60OvubuTF+Pr6WK/V+kOTKacTJs3mCn9rKzvndKL3PT1o0eOJ+qzWK8R/U1Pu8OLio/lgEDbX1mBvKMSJSUz05DU0fGkyabfD+srK+b0cTg8KhzkxsbHwMRRCywsLE3NerwuwwC2VcseNRtpnsyGmuRn9g/E6HCxjNFZjKp+YTOxkTQ2awb6/sTH6rL6e6UxP58F23dJo+KN1dfT9+npEWyzoMYax2SK0wcCOURSa0OvRc7M56jUYmNsajWArtwe26ZpYzE0rKXm4trpayBEKgWBZWF9aAi72eCkpKAowMTc8TOrn5z/AbhpQqfjXjh9/UScUotYjR9BfhYXoXnEx+levfzmgVAp+DhDbh/GGBoCEhNJ3s7MHgsvL8Mbng7fT0xAJhyGyuZklyM4+veudjJpM4CkpOX9RImGrANBn9ASBfo+JQUbM1YMH0ShFRUaqq3feyZDBAF0kWfGbWMwW4+AZTGVsbNSlVjN/HztGV3E46A8A1B4Xh9qzs9nbOt33O3lQWwsdJEmViURsKQ5SmDKCiLaqVEy3TCbokcv5nWo1fRm3qMWeFXNDJIrcJcmvTdpJsqwGh09iQ405jTe3KJWMSyr99s9tSUlcl0pFX8JNnADIjvkzOZm9c+rUWXBrtYpzaWmBMmxo8WazQsFcz83d8dqevDy+R6mkrbiJAQB1pKYGbmq1R7+YHTqdojwzc/VKfj7TJpHwYBc5ExO5bQUFtCMjI9i/Fd7CXVR0yJ6TI4D/kSMnh3/9xInDW/MnJPlM3rrfgeYAAAAASUVORK5CYII=")
+                        html_output.append("<p><span class='error'>Error:</span> problem extracting image from searchplugin " +
+                            searchplugin_info + "</p>")
+                        images.append('''data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC/0lEQVR
+                            4XoWSbUiTexjG7x6d0OZW4FD3IigqaFEfJHRMt7WVGLQ9CZpR8pSiHwIZHHGdzbmzovl2tjnb8WjzBe2NCCnMFzycJ578
+                            kktwUZRDkCKhVDgouJdEn9n+/Sssy+Rc8Ptwc3FxX/z/NzQBwIBMxpsZHBx51d9fheddNeVwwHRLywV/b+/Yzfz8eMAix
+                            DicRVEPuBsbun1crkfR1FT5q/BTHI4EApQwPr53P0Inc8vLh27I5fHwyGKx+Lu60OvubuTF+Pr6WK/V+kOTKacTJs3mCn
+                            9rKzvndKL3PT1o0eOJ+qzWK8R/U1Pu8OLio/lgEDbX1mBvKMSJSUz05DU0fGkyabfD+srK+b0cTg8KhzkxsbHwMRRCyws
+                            LE3NerwuwwC2VcseNRtpnsyGmuRn9g/E6HCxjNFZjKp+YTOxkTQ2awb6/sTH6rL6e6UxP58F23dJo+KN1dfT9+npEWyzo
+                            MYax2SK0wcCOURSa0OvRc7M56jUYmNsajWArtwe26ZpYzE0rKXm4trpayBEKgWBZWF9aAi72eCkpKAowMTc8TOrn5z/Ab
+                            hpQqfjXjh9/UScUotYjR9BfhYXoXnEx+levfzmgVAp+DhDbh/GGBoCEhNJ3s7MHgsvL8Mbng7fT0xAJhyGyuZklyM4+ve
+                            udjJpM4CkpOX9RImGrANBn9ASBfo+JQUbM1YMH0ShFRUaqq3feyZDBAF0kWfGbWMwW4+AZTGVsbNSlVjN/HztGV3E46A8
+                            A1B4Xh9qzs9nbOt33O3lQWwsdJEmViURsKQ5SmDKCiLaqVEy3TCbokcv5nWo1fRm3qMWeFXNDJIrcJcmvTdpJsqwGh09i
+                            Q405jTe3KJWMSyr99s9tSUlcl0pFX8JNnADIjvkzOZm9c+rUWXBrtYpzaWmBMmxo8WazQsFcz83d8dqevDy+R6mkrbiJA
+                            QB1pKYGbmq1R7+YHTqdojwzc/VKfj7TJpHwYBc5ExO5bQUFtCMjI9i/Fd7CXVR0yJ6TI4D/kSMnh3/9xInDW/MnJPlM3r
+                            rfgeYAAAAASUVORK5CYII=''')
 
                     # Check if node for locale already exists
                     if (locale not in jsondata):
@@ -189,7 +217,8 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                     }
 
                 except Exception as e:
-                    html_output.append("<p><span class='error'>Error:</span> problem analyzing searchplugin " + searchplugin_info + "</p>")
+                    html_output.append("<p><span class='error'>Error:</span> problem analyzing searchplugin " +
+                        searchplugin_info + "</p>")
                     if (outputlevel > 0):
                         print e
             else:
@@ -220,13 +249,14 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                     # File does not exist but we don't have the en-US either.
                     # This means that list.txt references a non existing
                     # plugin, which will cause the build to fail
-                    html_output.append("<p><span class='error'>Error:</span> file referenced in list.txt but not available (" + locale + ", " + product + ", " + channel + ", " + sp + ".xml)</p>")
+                    html_output.append("<p><span class='error'>Error:</span> file referenced in list.txt but not available (" +
+                        locale + ", " + product + ", " + channel + ", " + sp + ".xml)</p>")
                     if (outputlevel > 0):
                         print e
 
     except Exception as e:
         if (outputlevel > 0):
-            html_output.append("<p><span class='error'>Error:</span> problem reading  (" + locale + ")" + path + "list.txt</p>")
+            html_output.append("<p><span class='error'>Error:</span> [" + locale + "] problem reading " + file_list + "</p>")
 
 
 
@@ -257,11 +287,13 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
                                 # Remove whitespaces, some locales use key = value instead of key=value
                                 values[key.strip()] = value.strip()
                             except Exception as e:
-                                html_output.append("<p><span class='error'>Error:</span> problem parsing " + source + " (" + locale + ", " + product + ", " + channel + ")</p>")
+                                html_output.append("<p><span class='error'>Error:</span> problem parsing " + source +
+                                    " (" + locale + ", " + product + ", " + channel + ")</p>")
                                 if (outputlevel > 0):
                                     print e
                 except Exception as e:
-                    html_output.append("<p><span class='error'>Error:</span> problem reading " + source + " (" + locale + ", " + product + ", " + channel + ")</p>")
+                    html_output.append("<p><span class='error'>Error:</span> problem reading " + source + " (" +
+                        locale + ", " + product + ", " + channel + ")</p>")
                     if (outputlevel > 0):
                         print e
 
@@ -291,7 +323,9 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
                         lineok = True
                         defaultenginename = values["browser.search.defaultenginename"]
                         if (unicode(defaultenginename, "utf-8") not in available_searchplugins):
-                            html_output.append("<p><span class='error'>Error:</span> " + currentproductstring + " " + defaultenginename + " is set as default but not available in searchplugins (check if the name is spelled correctly)</p>")
+                            html_output.append("<p><span class='error'>Error:</span> " + currentproductstring + " " +
+                                defaultenginename + " is set as default but not available in searchplugins (check if " +
+                                "the name is spelled correctly)</p>")
 
                     # Search engines order. Example:
                     # browser.search.order.1=Google
@@ -299,7 +333,13 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
                         lineok = True
                         searchorder[key[-1:]] = value
                         if (unicode(value, "utf-8") not in available_searchplugins):
-                            html_output.append("<p><span class='error'>Error:</span> " + currentproductstring + " " + value + " is defined in searchorder but not available in searchplugins (check if the name is spelled correctly)</p>")
+                            if (value != ""):
+                                html_output.append("<p><span class='error'>Error:</span> [" + product + "] <span class='code'>" +
+                                    value + "</span> is defined in searchorder but not available in searchplugins " +
+                                    "(check if the name is spelled correctly)</p>")
+                            else:
+                                html_output.append("<p><span class='error'>Error:</span> [" + product + "] <span class='code'>" +
+                                    key + "</span> is empty")
 
                     # Feed handlers. Example:
                     # browser.contentHandlers.types.0.title=My Yahoo!
@@ -313,7 +353,8 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
                             feedhandlers[feedhandler_number]["title"] = value
                             # Print warning for Google Reader
                             if (value.lower() == 'google'):
-                                html_output.append("<p><span class='warning'>Warning:</span> " + currentproductstring + " Google Reader has been dismissed, see bug 882093 (" + key + ")</p>")
+                                html_output.append("<p><span class='warning'>Warning:</span> [" + product + "] Google Reader " +
+                                    "has been dismissed, see bug 882093 (<span class='code'>" + key + "</span>)</p>")
                         if key.endswith('.uri'):
                             feedhandler_number = key[-5:-4]
                             if (feedhandler_number not in feedhandlers):
@@ -352,7 +393,9 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
 
                     # Unrecognized line, print warning
                     if (not lineok):
-                        html_output.append("<p><span class='warning'>Warning:</span> unknown key in region.properties: " + locale + ", " + product + ", " + channel + "." + key + "=" + value + "</p>")
+                        html_output.append("<p><span class='warning'>Warning:</span> [" + product +
+                                           "] unknown key in region.properties</p>")
+                        html_output.append("<p><span class='code'>" + key + " = " + value + "</span></p>")
 
                 try:
                     jsondata[locale][product][channel]["p12n"] = {
@@ -363,13 +406,15 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
                         "contenthandlers": contenthandlers
                     }
                 except Exception as e:
-                    html_output.append("<p><span class='error'>Error:</span> problem saving data into json from " + source + " (" + locale + ", " + product + ", " + channel + ")</p>")
+                    html_output.append("<p><span class='error'>Error:</span> problem saving data into json from " +
+                        source + " (" + locale + ", " + product + ", " + channel + ")</p>")
 
             else:
                 if (outputlevel > 0):
-                    html_output.append("<p><span class='warning'>Warning:</span> file does not exist " + source + " (" + locale + ", " + product + ", " + channel + ")</p>")
+                    html_output.append("<p><span class='warning'>Warning:</span> file does not exist " + source
+                        + " (" + locale + ", " + product + ", " + channel + ")</p>")
     except Exception as e:
-        html_output.append("<p>[" + product + ', ' + channel + "] No searchplugins available for this locale</p>")
+        html_output.append("<p>[" + product + "] No searchplugins available for this locale</p>")
 
 
 
@@ -432,6 +477,84 @@ def p12n_differences (jsondata):
 
 
 
+
+def check_p12nmetro(locale, channel, jsondata, html_output):
+    # Compare Metro and Desktop list of searchplugin
+    try:
+        metro_searchplugins = []
+        desktop_searchplugins = []
+        if ("metro" in jsondata[locale]):
+            for sp in jsondata[locale]["metro"][channel]:
+                if (sp != "p12n"):
+                    element = jsondata[locale]["metro"][channel][sp]
+                    if (element["file"] == "google.xml"):
+                        html_output.append("<p><span class='metro'>Metro:</span> use googlemetrofx.xml instead of google.xml</p>")
+                    if (element["file"] == "bing.xml"):
+                        html_output.append("<p><span class='metro'>Metro:</span> use bingmetrofx.xml instead of bing.xml</p>")
+
+                    # Strip .xml from the filename
+                    searchplugin_name = element["file"][:-4]
+                    # If it's a Metro version, strip "metro" from the name
+                    if (searchplugin_name in ["googlemetrofx", "bingmetrofx"]):
+                        searchplugin_name = searchplugin_name[:-7]
+                    metro_searchplugins.append(searchplugin_name)
+                    metro_searchplugins.sort()
+
+            for sp in jsondata[locale]["desktop"][channel]:
+                if (sp != "p12n"):
+                    element = jsondata[locale]["desktop"][channel][sp]
+                    # Strip .xml from the filename
+                    searchplugin_name = element["file"][:-4]
+                    desktop_searchplugins.append(searchplugin_name)
+                    desktop_searchplugins.sort()
+
+            differences = diff(metro_searchplugins, desktop_searchplugins)
+            if differences:
+                html_output.append("<p><span class='metro'>Metro:</span> there are differences between the searchplugins " +
+                    "used in Metro and Desktop</p>")
+                html_output.append("<p>Metro searchplugins: ")
+                for element in metro_searchplugins:
+                    html_output.append(element + " ")
+                html_output.append("</p>")
+
+                html_output.append("<p>Desktop searchplugins: ")
+                for element in desktop_searchplugins:
+                    html_output.append(element + " ")
+                html_output.append("</p>")
+    except Exception as e:
+        print e
+
+    # Check Metro status for region.properties
+    try:
+        if ("metro" in jsondata[locale]):
+            if ("p12n" in jsondata[locale]["metro"][channel]):
+                # I have p12n for Metro
+                default_metro = jsondata[locale]["metro"][channel]["p12n"]["defaultenginename"]
+                default_desktop = jsondata[locale]["desktop"][channel]["p12n"]["defaultenginename"]
+                if (default_desktop != default_metro):
+                    html_output.append("<p><span class='metro'>Metro:</span> default engine on Desktop (" + default_desktop +
+                        ") is different from default engine on Metro (" + default_metro + ")</p>")
+
+                order_metro = jsondata[locale]["metro"][channel]["p12n"]["searchorder"]
+                order_desktop = jsondata[locale]["desktop"][channel]["p12n"]["searchorder"]
+                if (default_desktop != default_metro):
+                    html_output.append("<p><span class='metro'>Metro:</span> search engine order on Metro is different from Desktop.</p>")
+                    html_output.append("<p>Desktop:</p>")
+                    html_output.append("  <ul>")
+                    for number in sorted(order_desktop.iterkeys()):
+                        html_output.append("    <li>" + number + ":" + order_desktop[number] + "</li>")
+                    html_output.append("  </ul>")
+                    html_output.append("<p>Metro:</p>")
+                    html_output.append("  <ul>")
+                    for number in sorted(order_metro.iterkeys()):
+                        html_output.append("    <li>" + number + ":" + order_metro[number] + "</li>")
+                    html_output.append("  </ul>")
+    except Exception as e:
+        print e
+
+
+
+
 def extract_splist_enUS (pathsource, splist_enUS):
     # Create a list of en-US searchplugins in pathsource, store this data in
     # splist_enUS
@@ -462,10 +585,11 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
         # one (e.g. "google"), this will have precedence. Therefore a file with
         # this name should not exist in the locale folder
         if (clproduct=="all") or (clproduct=="browser"):
+            # Get a list of all .xml files in the en-US searchplugins folder (both Metro and Desktop)
             splistenUS_browser = []
             extract_splist_enUS(path + "browser/locales/en-US/en-US/searchplugins/", splistenUS_browser)
+
             extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "browser", "en-US", channel, jsondata, splistenUS_browser, html_output)
-            # Metro: same searchplugins folder
             extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "metro", "en-US", channel, jsondata, splistenUS_browser, html_output)
             if clp12n:
                 extract_p12n_product(path + "browser/locales/en-US/en-US/chrome/browser-region/region.properties", "browser", "en-US", channel, jsondata, html_output)
@@ -502,6 +626,8 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
                 if clp12n:
                     extract_p12n_product(path + "browser/chrome/browser-region/region.properties", "browser", locale, channel, jsondata, html_output)
                     extract_p12n_product(path + "browser/metro/chrome/region.properties", "metro", locale, channel, jsondata, html_output)
+                # Do checks specific for Metro
+                check_p12nmetro(locale, channel, jsondata, html_output)
             if (clproduct=="all") or (clproduct=="mobile"):
                 extract_sp_product(path + "mobile/searchplugins/", "mobile", locale, channel, jsondata, splistenUS_mobile, html_output)
                 if clp12n:
