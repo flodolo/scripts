@@ -40,17 +40,8 @@
     $products = array('browser', 'mobile');
     $productnames = array('Firefox Desktop', 'Firefox Mobile (Android)');
 
-    $locales = array('ach', 'af', 'ak', 'an', 'ar', 'as', 'ast', 'be', 'bg', 'bn-BD',
-        'bn-IN', 'br', 'bs', 'ca', 'cs', 'csb', 'cy', 'da', 'de', 'el',
-        'en-GB', 'en-US', 'en-ZA', 'eo', 'es-AR', 'es-CL', 'es-ES', 'es-MX', 'et', 'eu', 'fa',
-        'ff', 'fi', 'fr', 'fy-NL', 'ga-IE', 'gd', 'gl', 'gu-IN', 'he', 'hi-IN',
-        'hr', 'hu', 'hy-AM', 'id', 'is', 'it', 'ja', 'ja-JP-mac', 'ka', 'kk',
-        'km', 'kn', 'ko', 'ku', 'lg', 'lij', 'lt', 'lv', 'mai', 'mk', 'ml', 'mr',
-        'ms', 'my', 'nb-NO', 'ne-NP', 'nl', 'nn-NO', 'nr', 'nso', 'oc', 'or',
-        'pa-IN', 'pl', 'pt-BR', 'pt-PT', 'rm', 'ro', 'ru', 'rw', 'si', 'sk',
-        'sl', 'son', 'sq', 'sr', 'ss', 'st', 'sv-SE', 'sw', 'ta', 'ta-LK', 'te',
-        'th', 'tn', 'tr', 'ts', 'uk', 've', 'vi', 'wo', 'xh', 'zh-CN', 'zh-TW',
-        'zu');
+    include_once('locales.inc');
+
     $html_output = '';
     foreach ($products as $i=>$product) {
         $channel = "aurora";
@@ -71,52 +62,60 @@
         foreach ($locales as $locale) {
             if (array_key_exists($product, $jsonarray[$locale])) {
                 // I have searchplugin for this locale
-                foreach ($jsonarray[$locale][$product][$channel] as $singlesp) {
-                    $spfilename = strtolower($singlesp['file']);
-                    if (strpos($spfilename, 'yahoo') !== false
-                        || strpos($spfilename, 'bing')!== false
-                        || strpos($spfilename, 'ebay')!== false) {
-                        // Print only Yahoo and Bing
+                foreach ($jsonarray[$locale][$product][$channel] as $key => $singlesp) {
+                    if ($key != 'p12n') {
+                        $spfilename = strtolower($singlesp['file']);
+                        if (strpos($spfilename, 'yahoo') !== false
+                            || strpos($spfilename, 'bing')!== false
+                            || strpos($spfilename, 'ebay')!== false) {
+                            // Print only Yahoo and Bing
 
-                        // Increment counters
-                        if (strpos($spfilename, 'yahoo') !== false) {
-                            // It's Yahoo
-                            $yahoo_total++;
-                            if (strpos($singlesp['description'], 'en-US') !== false) {
-                                // It's the en-US version
-                                $yahoo_enUS++;
+                            // Increment counters
+                            if (strpos($spfilename, 'yahoo') !== false) {
+                                // It's Yahoo
+                                $yahoo_total++;
+                                if (strpos($singlesp['description'], 'en-US') !== false) {
+                                    // It's the en-US version
+                                    $yahoo_enUS++;
+                                }
                             }
-                        }
-                        if (strpos($spfilename, 'bing') !== false) {
-                            // It's Bing
-                            $bing_total++;
-                            if (strpos($singlesp['description'], 'en-US') !== false) {
-                                // It's the en-US version
-                                $bing_enUS++;
+                            if (strpos($spfilename, 'bing') !== false) {
+                                // It's Bing
+                                $bing_total++;
+                                if (strpos($singlesp['description'], 'en-US') !== false) {
+                                    // It's the en-US version
+                                    $bing_enUS++;
+                                }
                             }
-                        }
-                        if (strpos($spfilename, 'ebay') !== false) {
-                            // It's eBay
-                            $ebay_total++;
-                            if (strpos($singlesp['description'], 'en-US') !== false) {
-                                // It's the en-US version
-                                $ebay_enUS++;
+                            if (strpos($spfilename, 'ebay') !== false) {
+                                // It's eBay
+                                $ebay_total++;
+                                if (strpos($singlesp['description'], 'en-US') !== false) {
+                                    // It's the en-US version
+                                    $ebay_enUS++;
+                                }
                             }
-                        }
 
-                        $html_output .= '                   <tr>
-                      <td>' . $locale . '</td>
-                      <td><img src="' . $singlesp['image'] . '" alt="searchplugin icon" /></td>' . "\n";
-                        if ( $singlesp['name'] == 'not available') {
-                            $html_output .=  '                      <td>' . $singlesp['name'] . ' (' . $singlesp['file'] . ")</td>\n";
-                        } else {
-                            $html_output .=  '                      <td>' . $singlesp['name'] . ' (' . $singlesp['file'] . ")</td>\n";
-                        }
-                        if ( strpos($singlesp['description'], 'not available')) {
-                            $html_output .=  '                      <td>' . $singlesp['description'] . "</td></tr>\n";
-                        } else {
-                            $html_output .=  '                      <td>' . $singlesp['description'] . "</td>
-                    </tr>\n";
+                            $html_output .= '                   <tr>
+                          <td>' . $locale . '</td>
+                          <td>';
+
+                            foreach ($singlesp['image'] as $image) {
+                                $html_output .= '<img src="' . $image . '" alt="searchplugin icon" />';
+                            }
+
+                            $html_output .='</td>' . "\n";
+                            if ( $singlesp['name'] == 'not available') {
+                                $html_output .=  '                      <td>' . $singlesp['name'] . ' (' . $singlesp['file'] . ")</td>\n";
+                            } else {
+                                $html_output .=  '                      <td>' . $singlesp['name'] . ' (' . $singlesp['file'] . ")</td>\n";
+                            }
+                            if ( strpos($singlesp['description'], 'not available')) {
+                                $html_output .=  '                      <td>' . $singlesp['description'] . "</td></tr>\n";
+                            } else {
+                                $html_output .=  '                      <td>' . $singlesp['description'] . "</td>
+                        </tr>\n";
+                            }
                         }
                     }
                 }

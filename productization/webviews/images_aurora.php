@@ -24,7 +24,7 @@
         table tbody tr:hover {background: #EAECEE; color: #111;}
         td.warnings {color: #F00; font-weight: bold;}
         td.warnings span {color: #FFC130;}
-        td.warnings image {float: left;}        
+        td.warnings image {float: left;}
     </style>
 </head>
 
@@ -39,21 +39,11 @@
     $products = array('browser', 'mobile');
     $productnames = array('Firefox Desktop', 'Firefox Mobile (Android)');
 
-    $locales = array('ach', 'af', 'ak', 'an', 'ar', 'as', 'ast', 'az', 
-        'be', 'bg', 'bn-BD', 'bn-IN', 'br', 'bs', 'ca', 'cs', 'csb', 
-        'cy', 'da', 'de', 'el', 'en-GB', 'en-ZA', 'eo', 'es-AR', 'es-CL', 
-        'es-ES', 'es-MX', 'et', 'eu', 'fa', 'ff', 'fi', 'fr', 'fy-NL', 
-        'ga-IE', 'gd', 'gl', 'gu-IN', 'he', 'hi-IN', 'hr', 'hu', 'hy-AM', 
-        'id', 'is', 'it', 'ja', 'ja-JP-mac', 'ka', 'kk', 'km', 'kn', 'ko', 
-        'ku', 'lg', 'lij', 'lt', 'lv', 'mai', 'mk', 'ml', 'mn', 'mr', 'ms', 
-        'my', 'nb-NO', 'nl', 'nn-NO', 'nso', 'oc', 'or', 'pa-IN', 'pl', 
-        'pt-BR', 'pt-PT', 'rm', 'ro', 'ru', 'rw', 'sah', 'si', 'sk', 'sl', 
-        'son', 'sq', 'sr', 'sv-SE', 'sw', 'ta', 'ta-LK', 'te', 'th', 'tn', 
-        'tr', 'uk', 'ur', 'vi', 'wo', 'xh', 'zh-CN', 'zh-TW', 'zu');
+    include_once('locales.inc');
 
     $html_output = '';
     foreach ($products as $i=>$product) {
-        $channel = "aurora";
+        $channel = 'aurora';
         $html_output .= "<h1>" . $productnames[$i] . ' (' . $channel . ")</h1>\n";
 
         $html_output .= '<table>
@@ -69,9 +59,9 @@
                 <tbody>' . "\n";
 
         foreach ($locales as $locale) {
-            if (array_key_exists($product, $jsonarray[$locale])) {                
+            if (array_key_exists($product, $jsonarray[$locale])) {
                 // I have searchplugins for this locale
-                foreach ($jsonarray[$locale][$product][$channel] as $key => $singlesp) {                    
+                foreach ($jsonarray[$locale][$product][$channel] as $key => $singlesp) {
                     if ($key != 'p12n') {
                         $warnings = '';
                         $keyname = '';
@@ -88,9 +78,9 @@
                             $keyname = 'wikipedia_' . $product;
                             if ((strpos($singlesp['description'], '(en-US)') === false) && ($locale != 'en-US') &&
                                 ((strpos($singlesp['url'], 'Special:Search') !== false) || (strpos($singlesp['url'], ':Search') !== false))) {
-                                # If locales is not en-US, or locale is not using en-US wikipedia                            
-                                    $warnings .= '<span>Could be using a non localized search URL (check ' . 
-                                                 '<a href="' . $singlesp['url'] . '">URL</a>).</span><br/>';                                
+                                # If locales is not en-US, or locale is not using en-US wikipedia
+                                    $warnings .= '<span>Could be using a non localized search URL (check ' .
+                                                 '<a href="' . $singlesp['url'] . '">URL</a>).</span><br/>';
                             }
                             if (strpos($singlesp['url'], '%')) {
                                 $warnings .= 'Searchplugin should use UTF-8 URL.<br/>';
@@ -101,14 +91,22 @@
                         }
 
                         if ($keyname != '') {
-                            if ($singlesp['image'] != $enUS_images[$keyname]) {
-                                $warnings .= '<img src="' . $enUS_images[$keyname] . '" alt="" title="Reference Logo" /> Image is outdated.';
+                            foreach ($singlesp['image'] as $image) {
+                                if ($image != $enUS_images[$keyname]) {
+                                    $warnings .= '<img src="' . $enUS_images[$keyname] . '" alt="" title="Reference Logo" /> Image is outdated.';
+                                }
                             }
                         }
 
                         $html_output .= '                   <tr>
                           <td>' . $locale . '</td>
-                          <td><img src="' . $singlesp['image'] . '" alt="searchplugin icon" /></td>' . "\n";
+                          <td>';
+
+                        foreach ($singlesp['image'] as $image) {
+                            $html_output .= '<img src="' . $image . '" alt="searchplugin icon" />';
+                        }
+
+                        $html_output .='</td>' . "\n";
                             if ( $singlesp['name'] == 'not available') {
                                 $html_output .=  '                      <td>' . $singlesp['name'] . ' (' . $singlesp['file'] . ")</td>\n";
                             } else {

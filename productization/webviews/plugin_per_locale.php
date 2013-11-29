@@ -77,24 +77,14 @@
 
 <?php
 
-    $jsondata = file_get_contents("searchplugins.json");
+    $jsondata = file_get_contents("../searchplugins.json");
     $jsonarray = json_decode($jsondata, true);
 
     $channels = array('release', 'beta', 'aurora', 'trunk');
     $products = array('browser', 'mobile', 'mail', 'suite');
     $productnames = array('Firefox', 'Firefox for Android', 'Thunderbird', 'SeaMonkey');
 
-    $locales = array('ach', 'af', 'ak', 'an', 'ar', 'as', 'ast', 'be', 'bg', 'bn-BD',
-        'bn-IN', 'br', 'bs', 'ca', 'cs', 'csb', 'cy', 'da', 'de', 'el',
-        'en-GB', 'en-ZA', 'eo', 'es-AR', 'es-CL', 'es-ES', 'es-MX', 'et', 'eu', 'fa',
-        'ff', 'fi', 'fr', 'fy-NL', 'ga-IE', 'gd', 'gl', 'gu-IN', 'he', 'hi-IN',
-        'hr', 'hu', 'hy-AM', 'id', 'is', 'it', 'ja', 'ja-JP-mac', 'ka', 'kk',
-        'km', 'kn', 'ko', 'ku', 'lg', 'lij', 'lt', 'lv', 'mai', 'mk', 'ml', 'mr',
-        'ms', 'my', 'nb-NO', 'ne-NP', 'nl', 'nn-NO', 'nr', 'nso', 'oc', 'or',
-        'pa-IN', 'pl', 'pt-BR', 'pt-PT', 'rm', 'ro', 'ru', 'rw', 'si', 'sk',
-        'sl', 'son', 'sq', 'sr', 'ss', 'st', 'sv-SE', 'sw', 'ta', 'ta-LK', 'te',
-        'th', 'tn', 'tr', 'ts', 'uk', 've', 'vi', 'wo', 'xh', 'zh-CN', 'zh-TW',
-        'zu');
+    include_once('locales.inc');
 
     # Single locale
     $locale = !empty($_REQUEST['locale']) ? $_REQUEST['locale'] : 'en-US';
@@ -116,31 +106,36 @@
                     <h3>$channel</h3>
                  ";
             $printeditems = 0;
-            foreach ($jsonarray[$locale][$product][$channel] as $singlesp) {
-                echo '<div class="searchplugin">';
-                echo '<img src="' . $singlesp['image'] . '" alt="searchplugin icon" />';
+            foreach ($jsonarray[$locale][$product][$channel] as $key => $singlesp) {
+                if ($key != 'p12n') {
+                    echo '<div class="searchplugin">';
 
-                if ( $singlesp['name'] == 'not available') {
-                    echo '<p class="error"><strong>' . $singlesp['name'] . '</strong> (' . $singlesp['file'] . ')</p>';
-                } else {
-                    echo '<p><strong>' . $singlesp['name'] . '</strong> (' . $singlesp['file'] . ')</p>';
+                    foreach ($singlesp['image'] as $image) {
+                        echo '<img src="' . $image . '" alt="searchplugin icon" />';
+                    }
+
+                    if ( $singlesp['name'] == 'not available') {
+                        echo '<p class="error"><strong>' . $singlesp['name'] . '</strong> (' . $singlesp['file'] . ')</p>';
+                    } else {
+                        echo '<p><strong>' . $singlesp['name'] . '</strong> (' . $singlesp['file'] . ')</p>';
+                    }
+
+                    if ( strpos($singlesp['description'], 'not available')) {
+                        echo '<p class="error">' . $singlesp['description'] . '</p>';
+                    } else {
+                        echo '<p>' . $singlesp['description'] . '</p>';
+                    }
+
+                    echo '<p>Locale: ' . $locale . '</p>';
+
+                    if ($singlesp['secure']) {
+                        echo '<p class="https" title="Connection over https">URL: <a href="' . $singlesp['url'] . '">link</a></p>';
+                    } else {
+                        echo '<p class="http" title="Connection over http">URL: <a href="' . $singlesp['url'] . '">link</a></p>';
+                    }
+                    echo '</div>';
+                    $printeditems++;
                 }
-
-                if ( strpos($singlesp['description'], 'not available')) {
-                    echo '<p class="error">' . $singlesp['description'] . '</p>';
-                } else {
-                    echo '<p>' . $singlesp['description'] . '</p>';
-                }
-
-                echo '<p>Locale: ' . $locale . '</p>';
-
-                if ($singlesp['secure']) {
-                    echo '<p class="https" title="Connection over https">URL: <a href="' . $singlesp['url'] . '">link</a></p>';
-                } else {
-                    echo '<p class="http" title="Connection over http">URL: <a href="' . $singlesp['url'] . '">link</a></p>';
-                }
-                echo '</div>';
-                $printeditems++;
             }
             if ($printeditems == 0) {
                 echo "<div class='searchplugin'>
