@@ -469,6 +469,7 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
             extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "metro", "en-US", channel, jsondata, splistenUS_browser, html_output)
             if clp12n:
                 extract_p12n_product(path + "browser/locales/en-US/en-US/chrome/browser-region/region.properties", "browser", "en-US", channel, jsondata, html_output)
+                extract_p12n_product(path + "browser/metro/locales/en-US/en-US/chrome/region.properties", "metro", "en-US", channel, jsondata, html_output)
 
         if (clproduct=="all") or (clproduct=="mobile"):
             splistenUS_mobile = []
@@ -497,8 +498,10 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
             path = pathl10n + locale + "/"
             if (clproduct=="all") or (clproduct=="browser"):
                 extract_sp_product(path + "browser/searchplugins/", "browser", locale, channel, jsondata, splistenUS_browser, html_output)
+                extract_sp_product(path + "browser/searchplugins/", "metro", locale, channel, jsondata, splistenUS_browser, html_output)
                 if clp12n:
                     extract_p12n_product(path + "browser/chrome/browser-region/region.properties", "browser", locale, channel, jsondata, html_output)
+                    extract_p12n_product(path + "browser/metro/chrome/region.properties", "metro", locale, channel, jsondata, html_output)
             if (clproduct=="all") or (clproduct=="mobile"):
                 extract_sp_product(path + "mobile/searchplugins/", "mobile", locale, channel, jsondata, splistenUS_mobile, html_output)
                 if clp12n:
