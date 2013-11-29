@@ -151,20 +151,23 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                         url = "not available"
 
                     try:
-                        # Since bug 900137,
-                        node = xmldoc.getElementsByTagName("Image")
-                        if (len(node) == 0):
-                            node = xmldoc.getElementsByTagName("os:Image")
-                        image = node[0].childNodes[0].nodeValue
+                        # Since bug 900137, searchplugins can have multiple images
+                        images = []
+                        nodes = xmldoc.getElementsByTagName("Image")
+                        if (len(nodes) == 0):
+                            nodes = xmldoc.getElementsByTagName("os:Image")
+                        for node in nodes:
+                            image = node.childNodes[0].nodeValue
+                            images.append(image)
 
-                        # On mobile we can't have % characters, see for example bug 850984. Print a warning in this case
-                        if (product == "mobile"):
-                            if ("%" in image):
-                                html_output.append("<p><span class='warning'>Warning:</span> searchplugin's image on mobile can't contain % character " + searchplugin_info + "</p>")
+                            # On mobile we can't have % characters, see for example bug 850984. Print a warning in this case
+                            if (product == "mobile"):
+                                if ("%" in image):
+                                    html_output.append("<p><span class='warning'>Warning:</span> searchplugin's image on mobile can't contain % character " + searchplugin_info + "</p>")
 
                     except Exception as e:
                         html_output.append("<p><span class='error'>Error:</span> problem extracting image from searchplugin " + searchplugin_info + "</p>")
-                        image = "data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC/0lEQVR4XoWSbUiTexjG7x6d0OZW4FD3IigqaFEfJHRMt7WVGLQ9CZpR8pSiHwIZHHGdzbmzovl2tjnb8WjzBe2NCCnMFzycJ578kktwUZRDkCKhVDgouJdEn9n+/Sssy+Rc8Ptwc3FxX/z/NzQBwIBMxpsZHBx51d9fheddNeVwwHRLywV/b+/Yzfz8eMAixDicRVEPuBsbun1crkfR1FT5q/BTHI4EApQwPr53P0Inc8vLh27I5fHwyGKx+Lu60OvubuTF+Pr6WK/V+kOTKacTJs3mCn9rKzvndKL3PT1o0eOJ+qzWK8R/U1Pu8OLio/lgEDbX1mBvKMSJSUz05DU0fGkyabfD+srK+b0cTg8KhzkxsbHwMRRCywsLE3NerwuwwC2VcseNRtpnsyGmuRn9g/E6HCxjNFZjKp+YTOxkTQ2awb6/sTH6rL6e6UxP58F23dJo+KN1dfT9+npEWyzoMYax2SK0wcCOURSa0OvRc7M56jUYmNsajWArtwe26ZpYzE0rKXm4trpayBEKgWBZWF9aAi72eCkpKAowMTc8TOrn5z/AbhpQqfjXjh9/UScUotYjR9BfhYXoXnEx+levfzmgVAp+DhDbh/GGBoCEhNJ3s7MHgsvL8Mbng7fT0xAJhyGyuZklyM4+veudjJpM4CkpOX9RImGrANBn9ASBfo+JQUbM1YMH0ShFRUaqq3feyZDBAF0kWfGbWMwW4+AZTGVsbNSlVjN/HztGV3E46A8A1B4Xh9qzs9nbOt33O3lQWwsdJEmViURsKQ5SmDKCiLaqVEy3TCbokcv5nWo1fRm3qMWeFXNDJIrcJcmvTdpJsqwGh09iQ405jTe3KJWMSyr99s9tSUlcl0pFX8JNnADIjvkzOZm9c+rUWXBrtYpzaWmBMmxo8WazQsFcz83d8dqevDy+R6mkrbiJAQB1pKYGbmq1R7+YHTqdojwzc/VKfj7TJpHwYBc5ExO5bQUFtCMjI9i/Fd7CXVR0yJ6TI4D/kSMnh3/9xInDW/MnJPlM3rrfgeYAAAAASUVORK5CYII="
+                        images.append("data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC/0lEQVR4XoWSbUiTexjG7x6d0OZW4FD3IigqaFEfJHRMt7WVGLQ9CZpR8pSiHwIZHHGdzbmzovl2tjnb8WjzBe2NCCnMFzycJ578kktwUZRDkCKhVDgouJdEn9n+/Sssy+Rc8Ptwc3FxX/z/NzQBwIBMxpsZHBx51d9fheddNeVwwHRLywV/b+/Yzfz8eMAixDicRVEPuBsbun1crkfR1FT5q/BTHI4EApQwPr53P0Inc8vLh27I5fHwyGKx+Lu60OvubuTF+Pr6WK/V+kOTKacTJs3mCn9rKzvndKL3PT1o0eOJ+qzWK8R/U1Pu8OLio/lgEDbX1mBvKMSJSUz05DU0fGkyabfD+srK+b0cTg8KhzkxsbHwMRRCywsLE3NerwuwwC2VcseNRtpnsyGmuRn9g/E6HCxjNFZjKp+YTOxkTQ2awb6/sTH6rL6e6UxP58F23dJo+KN1dfT9+npEWyzoMYax2SK0wcCOURSa0OvRc7M56jUYmNsajWArtwe26ZpYzE0rKXm4trpayBEKgWBZWF9aAi72eCkpKAowMTc8TOrn5z/AbhpQqfjXjh9/UScUotYjR9BfhYXoXnEx+levfzmgVAp+DhDbh/GGBoCEhNJ3s7MHgsvL8Mbng7fT0xAJhyGyuZklyM4+veudjJpM4CkpOX9RImGrANBn9ASBfo+JQUbM1YMH0ShFRUaqq3feyZDBAF0kWfGbWMwW4+AZTGVsbNSlVjN/HztGV3E46A8A1B4Xh9qzs9nbOt33O3lQWwsdJEmViURsKQ5SmDKCiLaqVEy3TCbokcv5nWo1fRm3qMWeFXNDJIrcJcmvTdpJsqwGh09iQ405jTe3KJWMSyr99s9tSUlcl0pFX8JNnADIjvkzOZm9c+rUWXBrtYpzaWmBMmxo8WazQsFcz83d8dqevDy+R6mkrbiJAQB1pKYGbmq1R7+YHTqdojwzc/VKfj7TJpHwYBc5ExO5bQUFtCMjI9i/Fd7CXVR0yJ6TI4D/kSMnh3/9xInDW/MnJPlM3rrfgeYAAAAASUVORK5CYII=")
 
                     # Check if node for locale already exists
                     if (locale not in jsondata):
@@ -182,7 +185,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                         "description": description,
                         "url": url,
                         "secure": secure,
-                        "image": image,
+                        "image": images,
                     }
 
                 except Exception as e:
@@ -451,7 +454,7 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
     global outputlevel
     try:
         # Analyze en-US searchplugins
-        print "\nLocale: en-US (" + channel.upper() + ")"
+        html_output.append("<h2>Locale: <a id='en-US' href='#en-US'>en-US (" + channel.upper() + ")</a></h2>")
         path = pathsource + "COMMUN/"
 
         # Create a list of en-US searchplugins for each channel. If list.txt
