@@ -478,6 +478,13 @@ def p12n_differences (jsondata):
 
 
 
+def diff(a, b):
+    b = set(b)
+    return [aa for aa in a if aa not in b]
+
+
+
+
 def check_p12nmetro(locale, channel, jsondata, html_output):
     # Compare Metro and Desktop list of searchplugin
     try:
@@ -498,15 +505,15 @@ def check_p12nmetro(locale, channel, jsondata, html_output):
                     if (searchplugin_name in ["googlemetrofx", "bingmetrofx"]):
                         searchplugin_name = searchplugin_name[:-7]
                     metro_searchplugins.append(searchplugin_name)
-                    metro_searchplugins.sort()
+            metro_searchplugins.sort()
 
-            for sp in jsondata[locale]["desktop"][channel]:
+            for sp in jsondata[locale]["browser"][channel]:
                 if (sp != "p12n"):
-                    element = jsondata[locale]["desktop"][channel][sp]
+                    element = jsondata[locale]["browser"][channel][sp]
                     # Strip .xml from the filename
                     searchplugin_name = element["file"][:-4]
                     desktop_searchplugins.append(searchplugin_name)
-                    desktop_searchplugins.sort()
+            desktop_searchplugins.sort()
 
             differences = diff(metro_searchplugins, desktop_searchplugins)
             if differences:
@@ -522,7 +529,7 @@ def check_p12nmetro(locale, channel, jsondata, html_output):
                     html_output.append(element + " ")
                 html_output.append("</p>")
     except Exception as e:
-        print e
+        print "(check_p12metro) Error analyzing " + locale + " " + channel
 
     # Check Metro status for region.properties
     try:
@@ -530,13 +537,13 @@ def check_p12nmetro(locale, channel, jsondata, html_output):
             if ("p12n" in jsondata[locale]["metro"][channel]):
                 # I have p12n for Metro
                 default_metro = jsondata[locale]["metro"][channel]["p12n"]["defaultenginename"]
-                default_desktop = jsondata[locale]["desktop"][channel]["p12n"]["defaultenginename"]
+                default_desktop = jsondata[locale]["browser"][channel]["p12n"]["defaultenginename"]
                 if (default_desktop != default_metro):
                     html_output.append("<p><span class='metro'>Metro:</span> default engine on Desktop (" + default_desktop +
                         ") is different from default engine on Metro (" + default_metro + ")</p>")
 
                 order_metro = jsondata[locale]["metro"][channel]["p12n"]["searchorder"]
-                order_desktop = jsondata[locale]["desktop"][channel]["p12n"]["searchorder"]
+                order_desktop = jsondata[locale]["browser"][channel]["p12n"]["searchorder"]
                 if (default_desktop != default_metro):
                     html_output.append("<p><span class='metro'>Metro:</span> search engine order on Metro is different from Desktop.</p>")
                     html_output.append("<p>Desktop:</p>")
@@ -550,7 +557,7 @@ def check_p12nmetro(locale, channel, jsondata, html_output):
                         html_output.append("    <li>" + number + ":" + order_metro[number] + "</li>")
                     html_output.append("  </ul>")
     except Exception as e:
-        print e
+        print "(check_p12metro) Error analyzing " + locale + " " + channel
 
 
 
