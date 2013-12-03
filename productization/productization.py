@@ -125,12 +125,12 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                                 xmldoc = minidom.parse(StringIO.StringIO(newspcontent))
                             except Exception as e:
                                 html_output.append("<p><span class='error'>Error:</span> problem parsing XML for " +
-                                "searchplugin " + searchplugin_info + "</p>")
-                                print e
+                                "searchplugin " + searchplugin_info + "<br/>")
+                            html_output.append("<span class='code'>" + str(e) + "</span></p>")
                         else:
                             html_output.append("<p><span class='error'>Error:</span> problem parsing XML for "+
-                                "searchplugin " + searchplugin_info + "</p>")
-                            print e
+                                "searchplugin " + searchplugin_info + "<br/>")
+                            html_output.append("<span class='code'>" + str(e) + "</span></p>")
 
                     # Some searchplugins use the form <tag>, others <os:tag>
                     try:
@@ -226,8 +226,8 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
 
                 except Exception as e:
                     html_output.append("<p><span class='error'>Error:</span> problem analyzing searchplugin " +
-                        searchplugin_info + "</p>")
-                    print e
+                        searchplugin_info + "<br/>")
+                    html_output.append("<span class='code'>" + str(e) + "</span></p>")
             else:
                 # File does not exists, locale is using the same plugin of en-
                 # US, I have to retrieve it from the dictionary
@@ -258,7 +258,6 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                     # plugin, which will cause the build to fail
                     html_output.append("<p><span class='error'>Error:</span> file referenced in list.txt but not available (" +
                         locale + ", " + product + ", " + channel + ", " + sp + ".xml)</p>")
-                    print e
 
     except Exception as e:
         html_output.append("<p><span class='error'>Error:</span> [" + locale + "] problem reading " + file_list + "</p>")
@@ -292,11 +291,9 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
                             except Exception as e:
                                 html_output.append("<p><span class='error'>Error:</span> problem parsing " + source +
                                     " (" + locale + ", " + product + ", " + channel + ")</p>")
-                                print e
                 except Exception as e:
                     html_output.append("<p><span class='error'>Error:</span> problem reading " + source + " (" +
                         locale + ", " + product + ", " + channel + ")</p>")
-                    print e
 
                 # Check if node for locale already exists
                 if (locale not in jsondata):
@@ -573,7 +570,6 @@ def extract_splist_enUS (pathsource, splist_enUS):
 
     except Exception as e:
         print " Error: problem reading list of en-US searchplugins from " + pathsource
-        print e
 
 
 
@@ -648,7 +644,6 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
                     extract_p12n_product(path + "suite/chrome/browser/region.properties", "suite", locale, channel, jsondata, html_output)
     except Exception as e:
         print "Error reading list of locales from " + localeslist
-        print e
 
 
 
