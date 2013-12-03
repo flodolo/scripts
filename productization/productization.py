@@ -15,9 +15,23 @@ from time import gmtime, strftime
 from xml.dom import minidom
 
 
+images_list = ['''data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC/0lEQVR
+                4XoWSbUiTexjG7x6d0OZW4FD3IigqaFEfJHRMt7WVGLQ9CZpR8pSiHwIZHHGdzbmzovl2tjnb8WjzBe2NCCnMFzycJ578
+                kktwUZRDkCKhVDgouJdEn9n+/Sssy+Rc8Ptwc3FxX/z/NzQBwIBMxpsZHBx51d9fheddNeVwwHRLywV/b+/Yzfz8eMAix
+                DicRVEPuBsbun1crkfR1FT5q/BTHI4EApQwPr53P0Inc8vLh27I5fHwyGKx+Lu60OvubuTF+Pr6WK/V+kOTKacTJs3mCn
+                9rKzvndKL3PT1o0eOJ+qzWK8R/U1Pu8OLio/lgEDbX1mBvKMSJSUz05DU0fGkyabfD+srK+b0cTg8KhzkxsbHwMRRCyws
+                LE3NerwuwwC2VcseNRtpnsyGmuRn9g/E6HCxjNFZjKp+YTOxkTQ2awb6/sTH6rL6e6UxP58F23dJo+KN1dfT9+npEWyzo
+                MYax2SK0wcCOURSa0OvRc7M56jUYmNsajWArtwe26ZpYzE0rKXm4trpayBEKgWBZWF9aAi72eCkpKAowMTc8TOrn5z/Ab
+                hpQqfjXjh9/UScUotYjR9BfhYXoXnEx+levfzmgVAp+DhDbh/GGBoCEhNJ3s7MHgsvL8Mbng7fT0xAJhyGyuZklyM4+ve
+                udjJpM4CkpOX9RImGrANBn9ASBfo+JQUbM1YMH0ShFRUaqq3feyZDBAF0kWfGbWMwW4+AZTGVsbNSlVjN/HztGV3E46A8
+                A1B4Xh9qzs9nbOt33O3lQWwsdJEmViURsKQ5SmDKCiLaqVEy3TCbokcv5nWo1fRm3qMWeFXNDJIrcJcmvTdpJsqwGh09i
+                Q405jTe3KJWMSyr99s9tSUlcl0pFX8JNnADIjvkzOZm9c+rUWXBrtYpzaWmBMmxo8WazQsFcz83d8dqevDy+R6mkrbiJA
+                QB1pKYGbmq1R7+YHTqdojwzc/VKfj7TJpHwYBc5ExO5bQUFtCMjI9i/Fd7CXVR0yJ6TI4D/kSMnh3/9xInDW/MnJPlM3r
+                rfgeYAAAAASUVORK5CYII=''']
 
 
 def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, html_output):
+    global images
     try:
         sp_list = []
         if locale != "en-US":
@@ -180,7 +194,13 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                             nodes = xmldoc.getElementsByTagName("os:Image")
                         for node in nodes:
                             image = node.childNodes[0].nodeValue
-                            images.append(image)
+                            if image in images_list:
+                                # Image already stored. In the json record store only the index
+                                images.append(images_list.index(image))
+                            else:
+                                # Store image in images_list, get index and store in json
+                                images_list.append(image)
+                                images.append(len(images_list)-1)
 
                             # On mobile we can't have % characters, see for example bug 850984. Print a warning in this case
                             if (product == "mobile"):
@@ -191,19 +211,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                     except Exception as e:
                         html_output.append("<p><span class='error'>Error:</span> problem extracting image from searchplugin " +
                             searchplugin_info + "</p>")
-                        images.append('''data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC/0lEQVR
-                            4XoWSbUiTexjG7x6d0OZW4FD3IigqaFEfJHRMt7WVGLQ9CZpR8pSiHwIZHHGdzbmzovl2tjnb8WjzBe2NCCnMFzycJ578
-                            kktwUZRDkCKhVDgouJdEn9n+/Sssy+Rc8Ptwc3FxX/z/NzQBwIBMxpsZHBx51d9fheddNeVwwHRLywV/b+/Yzfz8eMAix
-                            DicRVEPuBsbun1crkfR1FT5q/BTHI4EApQwPr53P0Inc8vLh27I5fHwyGKx+Lu60OvubuTF+Pr6WK/V+kOTKacTJs3mCn
-                            9rKzvndKL3PT1o0eOJ+qzWK8R/U1Pu8OLio/lgEDbX1mBvKMSJSUz05DU0fGkyabfD+srK+b0cTg8KhzkxsbHwMRRCyws
-                            LE3NerwuwwC2VcseNRtpnsyGmuRn9g/E6HCxjNFZjKp+YTOxkTQ2awb6/sTH6rL6e6UxP58F23dJo+KN1dfT9+npEWyzo
-                            MYax2SK0wcCOURSa0OvRc7M56jUYmNsajWArtwe26ZpYzE0rKXm4trpayBEKgWBZWF9aAi72eCkpKAowMTc8TOrn5z/Ab
-                            hpQqfjXjh9/UScUotYjR9BfhYXoXnEx+levfzmgVAp+DhDbh/GGBoCEhNJ3s7MHgsvL8Mbng7fT0xAJhyGyuZklyM4+ve
-                            udjJpM4CkpOX9RImGrANBn9ASBfo+JQUbM1YMH0ShFRUaqq3feyZDBAF0kWfGbWMwW4+AZTGVsbNSlVjN/HztGV3E46A8
-                            A1B4Xh9qzs9nbOt33O3lQWwsdJEmViURsKQ5SmDKCiLaqVEy3TCbokcv5nWo1fRm3qMWeFXNDJIrcJcmvTdpJsqwGh09i
-                            Q405jTe3KJWMSyr99s9tSUlcl0pFX8JNnADIjvkzOZm9c+rUWXBrtYpzaWmBMmxo8WazQsFcz83d8dqevDy+R6mkrbiJA
-                            QB1pKYGbmq1R7+YHTqdojwzc/VKfj7TJpHwYBc5ExO5bQUFtCMjI9i/Fd7CXVR0yJ6TI4D/kSMnh3/9xInDW/MnJPlM3r
-                            rfgeYAAAAASUVORK5CYII=''')
+                        images.append(images_list[0])
 
                     # Check if node for locale already exists
                     if (locale not in jsondata):
@@ -686,7 +694,6 @@ def main():
     jsonfilename = "web/searchplugins.json"
     jsondata = {}
 
-
     htmlfilename = "web/p12n.html"
     html_output = ['''<!DOCTYPE html>
         <html lang="en">
@@ -723,9 +730,16 @@ def main():
         #p12n_differences(jsondata)
         pass
 
+    # Create images json structure and save it to file
+    image_data = {}
+    for index, value in enumerate(images_list):
+        image_data[index] = value
+    jsondata["images"] = image_data
+
     # Write back updated json data
     jsonfile = open(jsonfilename, "w")
-    jsonfile.write(json.dumps(jsondata, indent=4, sort_keys=True))
+    #jsonfile.write(json.dumps(jsondata, indent=4, sort_keys=True))
+    jsonfile.write(json.dumps(jsondata))
     jsonfile.close()
 
     # Finalize and write html
