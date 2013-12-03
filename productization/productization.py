@@ -490,7 +490,7 @@ def check_p12nmetro(locale, channel, jsondata, html_output):
     try:
         metro_searchplugins = []
         desktop_searchplugins = []
-        if ("metro" in jsondata[locale]):
+        if (("metro" in jsondata[locale]) and (channel in jsondata[locale]["metro"])):
             for sp in jsondata[locale]["metro"][channel]:
                 if (sp != "p12n"):
                     element = jsondata[locale]["metro"][channel][sp]
@@ -533,7 +533,7 @@ def check_p12nmetro(locale, channel, jsondata, html_output):
 
     # Check Metro status for region.properties
     try:
-        if ("metro" in jsondata[locale]):
+        if (("metro" in jsondata[locale]) and (channel in jsondata[locale]["metro"])):
             if ("p12n" in jsondata[locale]["metro"][channel]):
                 # I have p12n for Metro
                 default_metro = jsondata[locale]["metro"][channel]["p12n"]["defaultenginename"]
@@ -632,8 +632,8 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
                 if clp12n:
                     extract_p12n_product(path + "browser/chrome/browser-region/region.properties", "browser", locale, channel, jsondata, html_output)
                     extract_p12n_product(path + "browser/metro/chrome/region.properties", "metro", locale, channel, jsondata, html_output)
-                # Do checks specific for Metro
-                check_p12nmetro(locale, channel, jsondata, html_output)
+                    # Do checks specific for Metro
+                    check_p12nmetro(locale, channel, jsondata, html_output)
             if (clproduct=="all") or (clproduct=="mobile"):
                 extract_sp_product(path + "mobile/searchplugins/", "mobile", locale, channel, jsondata, splistenUS_mobile, html_output)
                 if clp12n:
