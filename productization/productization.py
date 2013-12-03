@@ -700,14 +700,14 @@ def main():
     html_output.append("<p>Analyzing product: " + clproduct + "</p>")
     html_output.append("<p>Branch: " + clbranch + "</p>")
 
-    if (clbranch=="all") or (clbranch=="release"):
-        extract_p12n_channel(clproduct, release_source, release_l10n, release_locales, "release", jsondata, clp12n, html_output)
-    if (clbranch=="all") or (clbranch=="beta"):
-        extract_p12n_channel(clproduct, beta_source, beta_l10n, beta_locales, "beta", jsondata, clp12n, html_output)
-    if (clbranch=="all") or (clbranch=="aurora"):
-        extract_p12n_channel(clproduct, aurora_source, aurora_l10n, aurora_locales, "aurora", jsondata, clp12n, html_output)
     if (clbranch=="all") or (clbranch=="trunk"):
         extract_p12n_channel(clproduct, trunk_source, trunk_l10n, trunk_locales, "trunk", jsondata, clp12n, html_output)
+    if (clbranch=="all") or (clbranch=="aurora"):
+        extract_p12n_channel(clproduct, aurora_source, aurora_l10n, aurora_locales, "aurora", jsondata, clp12n, html_output)
+    if (clbranch=="all") or (clbranch=="beta"):
+        extract_p12n_channel(clproduct, beta_source, beta_l10n, beta_locales, "beta", jsondata, clp12n, html_output)
+    if (clbranch=="all") or (clbranch=="release"):
+        extract_p12n_channel(clproduct, release_source, release_l10n, release_locales, "release", jsondata, clp12n, html_output)
 
     if (clbranch=="all") and (clp12n):
         p12n_differences(jsondata)
