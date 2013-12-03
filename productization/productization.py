@@ -15,23 +15,7 @@ from time import gmtime, strftime
 from xml.dom import minidom
 
 
-images_list = ['''data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC/0lEQVR
-                4XoWSbUiTexjG7x6d0OZW4FD3IigqaFEfJHRMt7WVGLQ9CZpR8pSiHwIZHHGdzbmzovl2tjnb8WjzBe2NCCnMFzycJ578
-                kktwUZRDkCKhVDgouJdEn9n+/Sssy+Rc8Ptwc3FxX/z/NzQBwIBMxpsZHBx51d9fheddNeVwwHRLywV/b+/Yzfz8eMAix
-                DicRVEPuBsbun1crkfR1FT5q/BTHI4EApQwPr53P0Inc8vLh27I5fHwyGKx+Lu60OvubuTF+Pr6WK/V+kOTKacTJs3mCn
-                9rKzvndKL3PT1o0eOJ+qzWK8R/U1Pu8OLio/lgEDbX1mBvKMSJSUz05DU0fGkyabfD+srK+b0cTg8KhzkxsbHwMRRCyws
-                LE3NerwuwwC2VcseNRtpnsyGmuRn9g/E6HCxjNFZjKp+YTOxkTQ2awb6/sTH6rL6e6UxP58F23dJo+KN1dfT9+npEWyzo
-                MYax2SK0wcCOURSa0OvRc7M56jUYmNsajWArtwe26ZpYzE0rKXm4trpayBEKgWBZWF9aAi72eCkpKAowMTc8TOrn5z/Ab
-                hpQqfjXjh9/UScUotYjR9BfhYXoXnEx+levfzmgVAp+DhDbh/GGBoCEhNJ3s7MHgsvL8Mbng7fT0xAJhyGyuZklyM4+ve
-                udjJpM4CkpOX9RImGrANBn9ASBfo+JQUbM1YMH0ShFRUaqq3feyZDBAF0kWfGbWMwW4+AZTGVsbNSlVjN/HztGV3E46A8
-                A1B4Xh9qzs9nbOt33O3lQWwsdJEmViURsKQ5SmDKCiLaqVEy3TCbokcv5nWo1fRm3qMWeFXNDJIrcJcmvTdpJsqwGh09i
-                Q405jTe3KJWMSyr99s9tSUlcl0pFX8JNnADIjvkzOZm9c+rUWXBrtYpzaWmBMmxo8WazQsFcz83d8dqevDy+R6mkrbiJA
-                QB1pKYGbmq1R7+YHTqdojwzc/VKfj7TJpHwYBc5ExO5bQUFtCMjI9i/Fd7CXVR0yJ6TI4D/kSMnh3/9xInDW/MnJPlM3r
-                rfgeYAAAAASUVORK5CYII=''']
-
-
-def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, html_output):
-    global images
+def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, images_list, html_output):
     try:
         sp_list = []
         if locale != "en-US":
@@ -582,7 +566,7 @@ def extract_splist_enUS (pathsource, splist_enUS):
 
 
 
-def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, jsondata, clp12n, html_output):
+def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, jsondata, clp12n, images_list, html_output):
     try:
         # Analyze en-US searchplugins
         html_output.append("<h2>Repository: <a id='" + channel + "-" + "' href='#" + channel + "'>" + channel + "</a></h2>")
@@ -598,8 +582,8 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
             splistenUS_browser = []
             extract_splist_enUS(path + "browser/locales/en-US/en-US/searchplugins/", splistenUS_browser)
 
-            extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "browser", "en-US", channel, jsondata, splistenUS_browser, html_output)
-            extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "metro", "en-US", channel, jsondata, splistenUS_browser, html_output)
+            extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "browser", "en-US", channel, jsondata, splistenUS_browser, images_list, html_output)
+            extract_sp_product(path + "browser/locales/en-US/en-US/searchplugins/", "metro", "en-US", channel, jsondata, splistenUS_browser, images_list, html_output)
             if clp12n:
                 extract_p12n_product(path + "browser/locales/en-US/en-US/chrome/browser-region/region.properties", "browser", "en-US", channel, jsondata, html_output)
                 extract_p12n_product(path + "browser/metro/locales/en-US/en-US/chrome/region.properties", "metro", "en-US", channel, jsondata, html_output)
@@ -607,21 +591,21 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
         if (clproduct=="all") or (clproduct=="mobile"):
             splistenUS_mobile = []
             extract_splist_enUS(path + "mobile/locales/en-US/en-US/searchplugins/", splistenUS_mobile)
-            extract_sp_product(path + "mobile/locales/en-US/en-US/searchplugins/", "mobile", "en-US", channel, jsondata, splistenUS_mobile, html_output)
+            extract_sp_product(path + "mobile/locales/en-US/en-US/searchplugins/", "mobile", "en-US", channel, jsondata, splistenUS_mobile, images_list, html_output)
             if clp12n:
                 extract_p12n_product(path + "mobile/locales/en-US/en-US/chrome/region.properties", "mobile", "en-US", channel, jsondata, html_output)
 
         if (clproduct=="all") or (clproduct=="mail"):
             splistenUS_mail = []
             extract_splist_enUS(path + "mail/locales/en-US/en-US/searchplugins/", splistenUS_mail)
-            extract_sp_product(path + "mail/locales/en-US/en-US/searchplugins/", "mail", "en-US", channel, jsondata, splistenUS_mail, html_output)
+            extract_sp_product(path + "mail/locales/en-US/en-US/searchplugins/", "mail", "en-US", channel, jsondata, splistenUS_mail, images_list, html_output)
             if clp12n:
                 extract_p12n_product(path + "mail/locales/en-US/en-US/chrome/messenger-region/region.properties", "mail", "en-US", channel, jsondata, html_output)
 
         if (clproduct=="all") or (clproduct=="suite"):
             splistenUS_suite = []
             extract_splist_enUS(path + "suite/locales/en-US/en-US/searchplugins/", splistenUS_suite)
-            extract_sp_product(path + "suite/locales/en-US/en-US/searchplugins/", "suite", "en-US", channel, jsondata, splistenUS_suite, html_output)
+            extract_sp_product(path + "suite/locales/en-US/en-US/searchplugins/", "suite", "en-US", channel, jsondata, splistenUS_suite, images_list, html_output)
             if clp12n:
                 extract_p12n_product(path + "suite/locales/en-US/en-US/chrome/browser/region.properties", "suite", "en-US", channel, jsondata, html_output)
 
@@ -631,27 +615,28 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
             html_output.append("<h3>Locale: <a id='" + anchor_id + "' href='#" + anchor_id + "'>" + locale + "</a> (" + channel + ")</h3>")
             path = pathl10n + locale + "/"
             if (clproduct=="all") or (clproduct=="browser"):
-                extract_sp_product(path + "browser/searchplugins/", "browser", locale, channel, jsondata, splistenUS_browser, html_output)
-                extract_sp_product(path + "browser/searchplugins/", "metro", locale, channel, jsondata, splistenUS_browser, html_output)
+                extract_sp_product(path + "browser/searchplugins/", "browser", locale, channel, jsondata, splistenUS_browser, images_list, html_output)
+                extract_sp_product(path + "browser/searchplugins/", "metro", locale, channel, jsondata, splistenUS_browser, images_list, html_output)
                 if clp12n:
                     extract_p12n_product(path + "browser/chrome/browser-region/region.properties", "browser", locale, channel, jsondata, html_output)
                     extract_p12n_product(path + "browser/metro/chrome/region.properties", "metro", locale, channel, jsondata, html_output)
                     # Do checks specific for Metro
                     check_p12nmetro(locale, channel, jsondata, html_output)
             if (clproduct=="all") or (clproduct=="mobile"):
-                extract_sp_product(path + "mobile/searchplugins/", "mobile", locale, channel, jsondata, splistenUS_mobile, html_output)
+                extract_sp_product(path + "mobile/searchplugins/", "mobile", locale, channel, jsondata, splistenUS_mobile, images_list, html_output)
                 if clp12n:
                     extract_p12n_product(path + "mobile/chrome/region.properties", "mobile", locale, channel, jsondata, html_output)
             if (clproduct=="all") or (clproduct=="mail"):
-                extract_sp_product(path + "mail/searchplugins/", "mail", locale, channel, jsondata, splistenUS_mail, html_output)
+                extract_sp_product(path + "mail/searchplugins/", "mail", locale, channel, jsondata, splistenUS_mail, images_list, html_output)
                 if clp12n:
                     extract_p12n_product(path + "mail/chrome/messenger-region/region.properties", "mail", locale, channel, jsondata, html_output)
             if (clproduct=="all") or (clproduct=="suite"):
-                extract_sp_product(path + "suite/searchplugins/", "suite", locale, channel, jsondata, splistenUS_suite, html_output)
+                extract_sp_product(path + "suite/searchplugins/", "suite", locale, channel, jsondata, splistenUS_suite, images_list, html_output)
                 if clp12n:
                     extract_p12n_product(path + "suite/chrome/browser/region.properties", "suite", locale, channel, jsondata, html_output)
     except Exception as e:
         print "Error reading list of locales from " + localeslist
+        print e
 
 
 
@@ -717,14 +702,29 @@ def main():
     html_output.append("<p>Analyzing product: " + clproduct + "</p>")
     html_output.append("<p>Branch: " + clbranch + "</p>")
 
+
+    images_list = ['''data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC/0lEQVR
+                4XoWSbUiTexjG7x6d0OZW4FD3IigqaFEfJHRMt7WVGLQ9CZpR8pSiHwIZHHGdzbmzovl2tjnb8WjzBe2NCCnMFzycJ578
+                kktwUZRDkCKhVDgouJdEn9n+/Sssy+Rc8Ptwc3FxX/z/NzQBwIBMxpsZHBx51d9fheddNeVwwHRLywV/b+/Yzfz8eMAix
+                DicRVEPuBsbun1crkfR1FT5q/BTHI4EApQwPr53P0Inc8vLh27I5fHwyGKx+Lu60OvubuTF+Pr6WK/V+kOTKacTJs3mCn
+                9rKzvndKL3PT1o0eOJ+qzWK8R/U1Pu8OLio/lgEDbX1mBvKMSJSUz05DU0fGkyabfD+srK+b0cTg8KhzkxsbHwMRRCyws
+                LE3NerwuwwC2VcseNRtpnsyGmuRn9g/E6HCxjNFZjKp+YTOxkTQ2awb6/sTH6rL6e6UxP58F23dJo+KN1dfT9+npEWyzo
+                MYax2SK0wcCOURSa0OvRc7M56jUYmNsajWArtwe26ZpYzE0rKXm4trpayBEKgWBZWF9aAi72eCkpKAowMTc8TOrn5z/Ab
+                hpQqfjXjh9/UScUotYjR9BfhYXoXnEx+levfzmgVAp+DhDbh/GGBoCEhNJ3s7MHgsvL8Mbng7fT0xAJhyGyuZklyM4+ve
+                udjJpM4CkpOX9RImGrANBn9ASBfo+JQUbM1YMH0ShFRUaqq3feyZDBAF0kWfGbWMwW4+AZTGVsbNSlVjN/HztGV3E46A8
+                A1B4Xh9qzs9nbOt33O3lQWwsdJEmViURsKQ5SmDKCiLaqVEy3TCbokcv5nWo1fRm3qMWeFXNDJIrcJcmvTdpJsqwGh09i
+                Q405jTe3KJWMSyr99s9tSUlcl0pFX8JNnADIjvkzOZm9c+rUWXBrtYpzaWmBMmxo8WazQsFcz83d8dqevDy+R6mkrbiJA
+                QB1pKYGbmq1R7+YHTqdojwzc/VKfj7TJpHwYBc5ExO5bQUFtCMjI9i/Fd7CXVR0yJ6TI4D/kSMnh3/9xInDW/MnJPlM3r
+                rfgeYAAAAASUVORK5CYII=''']
+
     if (clbranch=="all") or (clbranch=="trunk"):
-        extract_p12n_channel(clproduct, trunk_source, trunk_l10n, trunk_locales, "trunk", jsondata, clp12n, html_output)
+        extract_p12n_channel(clproduct, trunk_source, trunk_l10n, trunk_locales, "trunk", jsondata, clp12n, images_list, html_output)
     if (clbranch=="all") or (clbranch=="aurora"):
-        extract_p12n_channel(clproduct, aurora_source, aurora_l10n, aurora_locales, "aurora", jsondata, clp12n, html_output)
+        extract_p12n_channel(clproduct, aurora_source, aurora_l10n, aurora_locales, "aurora", jsondata, clp12n, images_list, html_output)
     if (clbranch=="all") or (clbranch=="beta"):
-        extract_p12n_channel(clproduct, beta_source, beta_l10n, beta_locales, "beta", jsondata, clp12n, html_output)
+        extract_p12n_channel(clproduct, beta_source, beta_l10n, beta_locales, "beta", jsondata, clp12n, images_list, html_output)
     if (clbranch=="all") or (clbranch=="release"):
-        extract_p12n_channel(clproduct, release_source, release_l10n, release_locales, "release", jsondata, clp12n, html_output)
+        extract_p12n_channel(clproduct, release_source, release_l10n, release_locales, "release", jsondata, clp12n, images_list, html_output)
 
     if (clbranch=="all") and (clp12n):
         #p12n_differences(jsondata)
