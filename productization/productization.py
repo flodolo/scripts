@@ -31,6 +31,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                 sp_list = open(file_list, "r").read().splitlines()
                 # Remove empty lines
                 sp_list = filter(bool, sp_list)
+
                 # Check for duplicates
                 if (len(sp_list) != len(set(sp_list))):
                     # set(sp_list) remove duplicates. If I'm here, there are
@@ -38,7 +39,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                     duplicated_items = [x for x, y in collections.Counter(sp_list).items() if y > 1]
                     duplicated_items_str =  ", ".join(duplicated_items)
                     html_output.append("<p><span class='error'>Error:</span> there are duplicated items (" +
-                                        duplicated_items_str + ") in list.txt (" + locale +
+                                        duplicated_items_str + ") in the list (" + locale +
                                         ", " + product + ", " + channel + ").</p>")
         else:
             # en-US is different: I must analyze all xml files in the folder,
@@ -62,7 +63,22 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                         locale + ", " + product + ", " + channel + ").</p>")
                 else:
                     # File is not in use, should be removed
-                    if (filename_noext not in sp_list) & (filename != "list.txt") & (filename != "metrolist.txt"):
+                    sp_list_extended = sp_list
+
+                    # For browser I need to check both "metro" and "browser" for missing files
+                    if (product == "metro" or product == "browser"):
+                        if (product == "metro"):
+                            file_list = path + "list.txt"
+                        else:
+                            file_list = path + "metrolist.txt"
+                        if os.path.isfile(file_list):
+                            sp_list_secondary = open(file_list, "r").read().splitlines()
+                            # Remove empty lines
+                            sp_list_secondary = filter(bool, sp_list_secondary)
+                            # Create a unique list, remove duplicates
+                            sp_list_extended = list(set(sp_list + sp_list_secondary))
+
+                    if (filename_noext not in sp_list_extended) & (filename != "list.txt") & (filename != "metrolist.txt"):
                         html_output.append("<p><span class='error'>Error:</span> [" + product + "] file " + filename +
                         " not in list.txt")
 
@@ -298,7 +314,6 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
                 handlerversion = '-'
                 contenthandlers = {}
 
-                currentproductstring = '   [' + product + ', ' + channel + '] ';
                 for key, value in values.iteritems():
                     lineok = False
 
@@ -308,7 +323,7 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
                         lineok = True
                         defaultenginename = values["browser.search.defaultenginename"]
                         if (unicode(defaultenginename, "utf-8") not in available_searchplugins):
-                            html_output.append("<p><span class='error'>Error:</span> " + currentproductstring + " " +
+                            html_output.append("<p><span class='error'>Error:</span> [" + product + "] " +
                                 defaultenginename + " is set as default but not available in searchplugins (check if " +
                                 "the name is spelled correctly)</p>")
 
@@ -710,7 +725,8 @@ def main():
         extract_p12n_channel(clproduct, release_source, release_l10n, release_locales, "release", jsondata, clp12n, html_output)
 
     if (clbranch=="all") and (clp12n):
-        p12n_differences(jsondata)
+        #p12n_differences(jsondata)
+        pass
 
     # Write back updated json data
     jsonfile = open(jsonfilename, "w")
