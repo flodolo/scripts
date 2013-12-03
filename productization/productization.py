@@ -213,7 +213,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, im
                         "description": description,
                         "url": url,
                         "secure": secure,
-                        "image": images,
+                        "images": images,
                     }
 
                 except Exception as e:
@@ -242,7 +242,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, im
                         "description": "(en-US) " + searchplugin_enUS["description"],
                         "url": searchplugin_enUS["url"],
                         "secure": searchplugin_enUS["secure"],
-                        "image": searchplugin_enUS["image"]
+                        "images": searchplugin_enUS["image"]
                     }
                 except Exception as e:
                     # File does not exist but we don't have the en-US either.
