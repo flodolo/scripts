@@ -14,16 +14,10 @@ from optparse import OptionParser
 from time import gmtime, strftime
 from xml.dom import minidom
 
-# Output detail level
-# 0: print only actions performed and errors extracting data from searchplugins
-# 1: print errors about missing list.txt and the complete Python's error message
-outputlevel = 1
-
 
 
 
 def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, html_output):
-    global outputlevel
     try:
         sp_list = []
         if locale != "en-US":
@@ -69,7 +63,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                 else:
                     # File is not in use, should be removed
                     if (filename_noext not in sp_list) & (filename != "list.txt") & (filename != "metrolist.txt"):
-                        html_output.append("<p><span class='error'>Error:</span> [" + product + "]file " + filename +
+                        html_output.append("<p><span class='error'>Error:</span> [" + product + "] file " + filename +
                         " not in list.txt")
 
         # For each searchplugin check if the file exists (localized version) or
@@ -116,13 +110,11 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                             except Exception as e:
                                 html_output.append("<p><span class='error'>Error:</span> problem parsing XML for " +
                                 "searchplugin " + searchplugin_info + "</p>")
-                                if (outputlevel > 0):
-                                    print e
+                                print e
                         else:
                             html_output.append("<p><span class='error'>Error:</span> problem parsing XML for "+
                                 "searchplugin " + searchplugin_info + "</p>")
-                            if (outputlevel > 0):
-                                print e
+                            print e
 
                     # Some searchplugins use the form <tag>, others <os:tag>
                     try:
@@ -219,8 +211,7 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                 except Exception as e:
                     html_output.append("<p><span class='error'>Error:</span> problem analyzing searchplugin " +
                         searchplugin_info + "</p>")
-                    if (outputlevel > 0):
-                        print e
+                    print e
             else:
                 # File does not exists, locale is using the same plugin of en-
                 # US, I have to retrieve it from the dictionary
@@ -251,19 +242,15 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, ht
                     # plugin, which will cause the build to fail
                     html_output.append("<p><span class='error'>Error:</span> file referenced in list.txt but not available (" +
                         locale + ", " + product + ", " + channel + ", " + sp + ".xml)</p>")
-                    if (outputlevel > 0):
-                        print e
+                    print e
 
     except Exception as e:
-        if (outputlevel > 0):
-            html_output.append("<p><span class='error'>Error:</span> [" + locale + "] problem reading " + file_list + "</p>")
+        html_output.append("<p><span class='error'>Error:</span> [" + locale + "] problem reading " + file_list + "</p>")
 
 
 
 
 def extract_p12n_product(source, product, locale, channel, jsondata, html_output):
-    global outputlevel
-
     # Use jsondata to create a list of all Searchplugins' descriptions
     try:
         available_searchplugins = []
@@ -289,13 +276,11 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
                             except Exception as e:
                                 html_output.append("<p><span class='error'>Error:</span> problem parsing " + source +
                                     " (" + locale + ", " + product + ", " + channel + ")</p>")
-                                if (outputlevel > 0):
-                                    print e
+                                print e
                 except Exception as e:
                     html_output.append("<p><span class='error'>Error:</span> problem reading " + source + " (" +
                         locale + ", " + product + ", " + channel + ")</p>")
-                    if (outputlevel > 0):
-                        print e
+                    print e
 
                 # Check if node for locale already exists
                 if (locale not in jsondata):
@@ -387,7 +372,8 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
                     if (product == "suite") or (product == "mail"):
                         ignored_keys = ['mail.addr_book.mapit_url.format', 'mailnews.messageid_browser.url', 'mailnews.localizedRe',
                                         'browser.translation.service', 'browser.search.defaulturl', 'browser.throbber.url',
-                                        'startup.homepage_override_url', 'browser.startup.homepage', 'browser.translation.serviceDomain']
+                                        'startup.homepage_override_url', 'browser.startup.homepage', 'browser.translation.serviceDomain',
+                                        'browser.validate.html.service']
                         if key in ignored_keys:
                             lineok = True
 
@@ -410,8 +396,7 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
                         source + " (" + locale + ", " + product + ", " + channel + ")</p>")
 
             else:
-                if (outputlevel > 0):
-                    html_output.append("<p><span class='warning'>Warning:</span> file does not exist " + source
+                html_output.append("<p><span class='warning'>Warning:</span> file does not exist " + source
                         + " (" + locale + ", " + product + ", " + channel + ")</p>")
     except Exception as e:
         html_output.append("<p>[" + product + "] No searchplugins available for this locale</p>")
@@ -565,7 +550,6 @@ def check_p12nmetro(locale, channel, jsondata, html_output):
 def extract_splist_enUS (pathsource, splist_enUS):
     # Create a list of en-US searchplugins in pathsource, store this data in
     # splist_enUS
-    global outputlevel
     try:
         for singlefile in glob.glob(pathsource+"*.xml"):
             filename = os.path.basename(singlefile)
@@ -574,17 +558,16 @@ def extract_splist_enUS (pathsource, splist_enUS):
 
     except Exception as e:
         print " Error: problem reading list of en-US searchplugins from " + pathsource
-        if (outputlevel > 0):
-            print e
+        print e
 
 
 
 
 def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, jsondata, clp12n, html_output):
-    global outputlevel
     try:
         # Analyze en-US searchplugins
-        html_output.append("<h2>Locale: <a id='en-US' href='#en-US'>en-US (" + channel.upper() + ")</a></h2>")
+        html_output.append("<h2>Repository: <a id='" + channel + "-" + "' href='#" + channel + "'>" + channel + "</a></h2>")
+        html_output.append("<h3>Locale: <a id='en-US-" + channel + "' href='#en-US-" + channel + "'>en-US</a> (" + channel + ")</h3>")
         path = pathsource + "COMMUN/"
 
         # Create a list of en-US searchplugins for each channel. If list.txt
@@ -625,7 +608,8 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
 
         locale_list = open(localeslist, "r").read().splitlines()
         for locale in locale_list:
-            html_output.append("<h2>Locale: <a id='" + locale + "' href='#" + locale + "'>" + locale + " (" + channel.upper() + ")</a></h2>")
+            anchor_id = locale + "-" + channel
+            html_output.append("<h3>Locale: <a id='" + anchor_id + "' href='#" + anchor_id + "'>" + locale + "</a> (" + channel + ")</h3>")
             path = pathl10n + locale + "/"
             if (clproduct=="all") or (clproduct=="browser"):
                 extract_sp_product(path + "browser/searchplugins/", "browser", locale, channel, jsondata, splistenUS_browser, html_output)
@@ -649,8 +633,7 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
                     extract_p12n_product(path + "suite/chrome/browser/region.properties", "suite", locale, channel, jsondata, html_output)
     except Exception as e:
         print "Error reading list of locales from " + localeslist
-        if (outputlevel > 0):
-            print e
+        print e
 
 
 
@@ -711,6 +694,7 @@ def main():
         </head>
 
         <body>
+            <h1>Productization analysis</h1>
         ''']
     html_output.append("<p>Last update: " + strftime("%Y-%m-%d %H:%M:%S", gmtime()) + "</p>")
     html_output.append("<p>Analyzing product: " + clproduct + "</p>")
