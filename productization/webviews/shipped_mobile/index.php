@@ -55,7 +55,7 @@
     $channel = !empty($_REQUEST['channel']) ? $_REQUEST['channel'] : 'aurora';
 
     $html_output = "<h1>Searchplugin Images Analysis - " . $channel . "</h1>\n";
-    $html_output .= '<p id="update">Last update: ' . date ("Y-m-d H:i", filemtime($filename)) . "</p>\n";
+    $html_output .= '<p id="update">Last update: ' . $jsonarray["creation_date"] . "</p>\n";
     $html_output .= '<div class="navigation">
     <p>Switch to a different branch</p>
     <ul class="switcher">

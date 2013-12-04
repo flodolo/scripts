@@ -22,6 +22,7 @@
         line-height: 1.7em;
         font-size: 16px;
         width: 800px;
+        margin-bottom: 20px;
     }
 
     div.searchplugin {
@@ -107,6 +108,8 @@
     }
     echo "  </p>
           </div>";
+
+    echo '<p id="update">Last update: ' . $jsonarray["creation_date"] . "</p>\n";
 
     foreach ($products as $i=>$product) {
         echo "<div class='product'>

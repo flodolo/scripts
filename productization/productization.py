@@ -11,7 +11,7 @@ import re
 import StringIO
 from ConfigParser import SafeConfigParser
 from optparse import OptionParser
-from time import gmtime, strftime
+from time import strftime, gmtime
 from xml.dom import minidom
 
 
@@ -735,6 +735,8 @@ def main():
     for index, value in enumerate(images_list):
         image_data[index] = value
     jsondata["images"] = image_data
+    jsondata["creation_date"] = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+
 
     # Write back updated json data
     jsonfile = open(jsonfilename, "w")
