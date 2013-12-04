@@ -27,7 +27,7 @@
 
     div.searchplugin {
         background-color: #FAFAFA;
-        min-height: 100px;
+        min-height: 130px;
         margin-top: 6px;
         border: 1px solid #555;
         border-radius: 8px;
@@ -51,7 +51,7 @@
     }
 
     div.searchplugin p {
-        margin-left: 30px;
+        margin: 2px 6px;
     }
 
     div.product h2 {
@@ -82,6 +82,10 @@
     p.https {
         color: #35B01C;
     }
+
+    div.searchplugin p.emptysp {
+        margin-top: 24px;
+    }
     </style>
 </head>
 
@@ -100,69 +104,68 @@
     # Single locale
     $locale = !empty($_REQUEST['locale']) ? $_REQUEST['locale'] : 'en-US';
 
-    echo "<h1>Current locale: $locale</h1>\n";
-    echo "<div id='localelist'>
-            <p>Available locales <br/>";
+    echo "  <h1>Current locale: $locale</h1>\n";
+    echo "  <div id='localelist'>
+    <p>Available locales <br/>\n";
     foreach ($locales as $localecode) {
-        echo '<a href="?locale=' . $localecode . '">' . $localecode . '</a>&nbsp; ';
+        echo '      <a href="?locale=' . $localecode . '">' . $localecode . "</a> \n";
     }
-    echo "  </p>
-          </div>";
+    echo "    </p>
+  </div>\n\n";
 
-    echo '<p id="update">Last update: ' . $jsonarray["creation_date"] . "</p>\n";
+    echo '  <p id="update">Last update: ' . $jsonarray["creation_date"] . "</p>\n";
 
     foreach ($products as $i=>$product) {
-        echo "<div class='product'>
-                <h2><a href='#" . $productnames[$i] ."' id='" . $productnames[$i] ."' >" . $productnames[$i] ."</a></h2>\n";
+        echo "  <div class='product'>
+    <h2><a href='#" . $productnames[$i] ."' id='" . $productnames[$i] ."' >" . $productnames[$i] ."</a></h2>\n";
         if (array_key_exists($product, $jsonarray[$locale])) {
             # This product exists in locale
             foreach ($channels as $channel) {
-                echo "<div class='channel'>
-                        <h3>$channel</h3>
-                     ";
+                echo "      <div class='channel'>
+        <h3>$channel</h3>\n";
                 if (array_key_exists($channel, $jsonarray[$locale][$product])) {
                     foreach ($jsonarray[$locale][$product][$channel] as $key => $singlesp) {
                         if ($key != 'p12n') {
-                            echo '<div class="searchplugin">';
-                            echo '<div class="image">';
+                            echo '        <div class="searchplugin">' . "\n";
+                            echo '          <div class="image">' . "\n";
                             foreach ($singlesp['images'] as $imageindex) {
-                                echo '<img src="' . $jsonarray['images'][$imageindex] . '" alt="searchplugin icon" />';
+                                echo '            <img src="' . $jsonarray['images'][$imageindex] . '" alt="searchplugin icon" />' . "\n";
                             }
-                            echo '</div>';
+                            echo "          </div>\n";
 
-                            echo '<div class="info">';
+                            echo '          <div class="info">' . "\n";
                             if ( $singlesp['name'] == 'not available') {
-                                echo '<p class="error"><strong>' . $singlesp['name'] . '</strong> (' . $singlesp['file'] . ')</p>';
+                                echo '            <p class="error"><strong>' . $singlesp['name'] . '</strong> (' . $singlesp['file'] . ')</p>' . "\n";
                             } else {
-                                echo '<p><strong>' . $singlesp['name'] . '</strong> (' . $singlesp['file'] . ')</p>';
+                                echo '            <p><strong>' . $singlesp['name'] . '</strong> (' . $singlesp['file'] . ')</p>' . "\n";
                             }
 
                             if ( strpos($singlesp['description'], 'not available')) {
-                                echo '<p class="error">' . $singlesp['description'] . '</p>';
+                                echo '            <p class="error">' . $singlesp['description'] . '</p>' . "\n";
                             } else {
-                                echo '<p>' . $singlesp['description'] . '</p>';
+                                echo '            <p>' . $singlesp['description'] . '</p>' . "\n";
                             }
 
-                            echo '<p>Locale: ' . $locale . '</p>';
+                            echo '            <p>Locale: ' . $locale . '</p>' . "\n";
 
                             if ($singlesp['secure']) {
-                                echo '<p class="https" title="Connection over https">URL: <a href="' . $singlesp['url'] . '">link</a></p>';
+                                echo '            <p class="https" title="Connection over https">URL: <a href="' . $singlesp['url'] . '">link</a></p>' . "\n";
                             } else {
-                                echo '<p class="http" title="Connection over http">URL: <a href="' . $singlesp['url'] . '">link</a></p>';
+                                echo '            <p class="http" title="Connection over http">URL: <a href="' . $singlesp['url'] . '">link</a></p>' . "\n";
                             }
-                            echo '</div>
-                            </div>';                        }
+                            echo "          </div>
+        </div>\n";                        }
                     }
                 } else {
                     # Product exists, but not on this channel
-                    echo "<div class='searchplugin'>
-                        <p>No plugin available for the selected locale on this channel.</p>
-                      </div>\n";
+                    echo "      <div class='searchplugin'>
+        <p class='emptysp'>No plugin available for the selected locale on this channel.</p>
+      </div>\n";
                 }
-                echo "</div>\n";
+                echo "      </div>\n";
             }
         } else {
-            echo "<p>This product is not available for this locale.</p>";
+            echo "    <p>This product is not available for this locale.</p>\n";
         }
-        echo "</div>\n";
+        echo "  </div>\n";
     }
