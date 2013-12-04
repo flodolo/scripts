@@ -3,6 +3,5 @@ Productization
 
 productization.py: extract data from searchplugins and save them in a json file
 
-index.php: display searchplugins for locale using the json file
-
-Both files can be used on an existing Transvision installation (https://github.com/mozfr/transvision). A demo is currently available at http://flod.org/searchplugins/
+This file can be used on an existing Transvision installation (https://github.com/mozfr/transvision).
+All view are visible at http://l10n.mozilla-community.org/~flod/p12n/
