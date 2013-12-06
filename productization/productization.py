@@ -124,7 +124,6 @@ def extract_sp_product(path, product, locale, channel, jsondata, splist_enUS, im
                             except Exception as e:
                                 html_output.append("<p><span class='error'>Error:</span> problem parsing XML for " +
                                 "searchplugin " + searchplugin_info + "<br/>")
-                            html_output.append("<span class='code'>" + str(e) + "</span></p>")
                         else:
                             html_output.append("<p><span class='error'>Error:</span> problem parsing XML for "+
                                 "searchplugin " + searchplugin_info + "<br/>")
@@ -569,7 +568,7 @@ def extract_splist_enUS (pathsource, splist_enUS):
 def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, jsondata, clp12n, images_list, html_output):
     try:
         # Analyze en-US searchplugins
-        html_output.append("<h2>Repository: <a id='" + channel + "-" + "' href='#" + channel + "'>" + channel + "</a></h2>")
+        html_output.append("<h2>Repository: <a id='" + channel + "' href='#" + channel + "'>" + channel + "</a></h2>")
         html_output.append("<h3>Locale: <a id='en-US-" + channel + "' href='#en-US-" + channel + "'>en-US</a> (" + channel + ")</h3>")
         path = pathsource + "COMMUN/"
 
@@ -688,19 +687,24 @@ def main():
             <style type="text/css">
                 body {background-color: #FFF; font-family: Arial, Verdana; font-size: 14px; padding: 10px;}
                 p {margin-top: 2px;}
-                span.warning {color: orange; font-weight: bold;}
-                span.error {color: red; font-weight: bold;}
-                span.metro {color: blue; font-weight: bold;}
+                span.warning {color: #FFBF00; font-weight: bold;}
+                span.error {color: #FF0000; font-weight: bold;}
+                span.metro {color: #AE00FF; font-weight: bold;}
                 span.code {font-family: monospace; font-size: 12px; background-color: #CCC;}
+                h2 {clear: both;}
+                div.navigation {width: 100%; clear: both;}
+                ul.switcher {float: left;}
+                ul.switcher li {float: left; display: block; margin: 0 5px; width: 80px; text-align: center; padding: 10px 5px; background-color: #DCDCDC; text-transform: uppercase; border: 1px solid #000; list-style: none;}
+                ul.switcher li a {text-decoration: none;}
             </style>
         </head>
 
         <body>
             <h1>Productization analysis</h1>
         ''']
-    html_output.append("<p>Last update: " + strftime("%Y-%m-%d %H:%M:%S", gmtime()) + "</p>")
-    html_output.append("<p>Analyzing product: " + clproduct + "</p>")
-    html_output.append("<p>Branch: " + clbranch + "</p>")
+    html_output.append("<p>Last update: " + strftime("%Y-%m-%d %H:%M:%S", gmtime()) + "<br/>")
+    html_output.append("Analyzing product: " + clproduct + "<br/>")
+    html_output.append("Branch: " + clbranch + "</p>")
 
 
     images_list = ['''data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC/0lEQVR
@@ -716,6 +720,16 @@ def main():
                 Q405jTe3KJWMSyr99s9tSUlcl0pFX8JNnADIjvkzOZm9c+rUWXBrtYpzaWmBMmxo8WazQsFcz83d8dqevDy+R6mkrbiJA
                 QB1pKYGbmq1R7+YHTqdojwzc/VKfj7TJpHwYBc5ExO5bQUFtCMjI9i/Fd7CXVR0yJ6TI4D/kSMnh3/9xInDW/MnJPlM3r
                 rfgeYAAAAASUVORK5CYII=''']
+
+    html_output.append('''
+    <div class="navigation">
+        <ul class="switcher">
+            <li><a href="#trunk">Trunk</a></li>
+            <li><a href="#aurora">Aurora</a></li>
+            <li><a href="#beta">Beta</a></li>
+            <li><a href="#release">Release</a></li>
+        </ul>
+    </div>''')
 
     if (clbranch=="all") or (clbranch=="trunk"):
         extract_p12n_channel(clproduct, trunk_source, trunk_l10n, trunk_locales, "trunk", jsondata, clp12n, images_list, html_output)
