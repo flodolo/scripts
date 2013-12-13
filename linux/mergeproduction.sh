@@ -1,8 +1,6 @@
 #! /usr/bin/env bash
-
-# Original script by Pascal Chevrel (https://github.com/pascalchevrel)
-
 # Merge stage to production for mozilla.org
+# Usage: one optional parameter (revision number)
 
 production=/home/flodolo/mozilla/svn/mozilla.com/tags/production/
 stage=/home/flodolo/mozilla/svn/mozilla.com/tags/stage/
@@ -11,8 +9,14 @@ tag=PRODUCTION
 cd $production
 echo "----------------"
 echo "Merge a revision to $tag tag for mozilla.org"
-read -p "Which revision do you want to merge? " revision
 read -p "Do you want to svn update the repo (y/n, default yes)? " -n 1 updatesvn
+if (( $# == 1 ))
+  then
+    revision=$1
+  else
+  	read -p "Which revision do you want to merge? " revision
+  	echo ""
+fi
 echo "----------------"
 if [ "$updatesvn" == 'y' ] || [ "$updatesvn" == '' ]
 then
@@ -30,6 +34,7 @@ svn status
 
 echo "----------------"
 read -p "Do you want to commit your changes (y/n, default no)? " -n 1 commitsvn
+echo ""
 echo "----------------"
 if [ "$commitsvn" == 'y' ]
 then
