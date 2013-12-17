@@ -120,7 +120,7 @@
 
                             if ($keyname != '') {
                                 foreach ($singlesp['images'] as $imageindex) {
-                                    if ($jsonarray['images'][$imageindex] != $enUS_images[$keyname]) {
+                                    if ($jsonarray['images'][$imageindex]!=$enUS_images[$keyname] && $product!='metro') {
                                         $warnings .= '<p><img src="' . $enUS_images[$keyname] . '" alt="" title="Reference Logo" /> Image is outdated.</p>';
                                     }
                                 }
