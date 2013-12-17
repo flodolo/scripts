@@ -23,8 +23,8 @@ if $updatelocale
 then
 	echo "-----------------------"
 	echo "Updating Gaia"
-	git checkout v1.2
 	git reset --hard
+	git checkout v1.2
 	git pull
 	echo ""
 	echo "-----------------------"
