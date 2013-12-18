@@ -28,7 +28,7 @@ def write_html(json, products, filename):
             table .lastsection:last-child {border-right: 0};
             table tbody, table thead {border-left: 1px solid #DDD; border-right: 1px solid #DDD;}
             table tbody {border-bottom: 1px solid #DDD;}
-            table tbody td, table tbody th {padding: 5px 20px; text-align: left;}
+            table tbody td, table tbody th {padding: 5px 10px; text-align: left;}
             table tbody td {border-bottom: 1px solid #DDD}
             table tbody tr {background: #F5F5F5;}
             table tbody tr.odd {background: #F0F2F4;}
@@ -47,7 +47,7 @@ def write_html(json, products, filename):
 
     for product in products:
         html_code = html_code + '''
-                    <th colspan="4">''' + product + '''</th>
+                    <th colspan="3">''' + product + '''</th>
         '''
 
     html_code = html_code + '''<tr>
@@ -56,7 +56,6 @@ def write_html(json, products, filename):
     for product in products:
         html_code = html_code + '''<th class="firstsection">trans.</th>
                     <th>not trans.</th>
-                    <th>fuzzy</th>
                     <th class="lastsection">%</th>
     '''
 
@@ -70,7 +69,6 @@ def write_html(json, products, filename):
             try:
                 html_code = html_code + "  <td class='firstsection'>" + str(json[locale][product]['translated']) + "</td>\n"
                 html_code = html_code + "  <td>" + str(json[locale][product]['untranslated']) + "</td>\n"
-                html_code = html_code + "  <td>" + str(json[locale][product]['fuzzy']) + "</td>\n"
                 if (json[locale][product]['complete']):
                     css_class="class='lastsection complete'"
                 else:
@@ -78,7 +76,6 @@ def write_html(json, products, filename):
                 html_code = html_code + "  <td " + css_class + ">" + str(json[locale][product]['percentage']) + "</td>\n"
             except Exception as e:
                 html_code = html_code + '''  <td class='firstsection'>&nbsp;</td>
-                <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td class='lastsection'>&nbsp;</td>
                 '''
