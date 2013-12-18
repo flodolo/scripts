@@ -49,7 +49,6 @@
         foreach (array_keys($json_array) as $locale_code) {
             $available_locales[$locale_code] = $locale_code;
         }
-        sort($available_locales);
         $available_products = array();
         $available_products['all'] = 'All Products';
         foreach ($available_locales as $locale_code) {
@@ -59,7 +58,6 @@
                 }
             }
         }
-        sort($available_products);
         $file_content = '<?php' . PHP_EOL;
         $file_content .= '$available_locales = ' . var_export($available_locales, true) . ';' . PHP_EOL;
         $file_content .= '$available_products = ' . var_export($available_products, true) . ';' . PHP_EOL;

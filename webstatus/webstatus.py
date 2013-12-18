@@ -297,7 +297,7 @@ def main():
 
     # Write back updated json data
     json_file = open(json_filename, 'w')
-    json_file.write(json.dumps(json_data))
+    json_file.write(json.dumps(json_data, sort_keys=True))
     json_file.close()
 
 if __name__ == '__main__':
