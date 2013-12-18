@@ -117,6 +117,15 @@ def main():
         'po_file': 'LC_MESSAGES/messages.po',
         'locale_folder': 'locale'
     }
+    products['stats'] = {
+        'repository_name': 'marketplace-stats',
+        'product_name': 'marketplace-stats',
+        'displayed_name': 'Marketplace Stats',
+        'repository_type': 'git',
+        'repository_url': 'https://github.com/mozilla/marketplace-stats',
+        'po_file': 'LC_MESSAGES/messages.po',
+        'locale_folder': 'locale'
+    }
     products['webpay'] = {
         'repository_name': 'webpay',
         'product_name': 'webpay',
@@ -288,7 +297,7 @@ def main():
 
     # Write back updated json data
     json_file = open(json_filename, 'w')
-    json_file.write(json.dumps(json_data, indent=4, sort_keys=True))
+    json_file.write(json.dumps(json_data))
     json_file.close()
 
 if __name__ == '__main__':
