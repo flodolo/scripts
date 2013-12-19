@@ -72,11 +72,11 @@ def main():
     for locale in sorted(os.listdir(locales_folder)):
         if not locale.startswith('.'):
             stats[locale] = {
-                "global": { "count" : 0, "avg_chars": 0, "avg_perc": 0 },
-                "short": { "count" : 0, "avg_chars": 0, "avg_perc": 0 },
-                "middle": { "count" : 0, "avg_chars": 0, "avg_perc": 0 },
-                "long": { "count" : 0, "avg_chars": 0, "avg_perc": 0 },
-                "sentence": { "count" : 0, "avg_chars": 0, "avg_perc": 0 }
+                "global": { "count" : 0, "avg_chars": 0, "avg_perc": 0, "max_diff": 0, "min_diff": 0, "max_diff_id" : "", "min_diff_id" : "" },
+                "short": { "count" : 0, "avg_chars": 0, "avg_perc": 0, "max_diff": 0, "min_diff": 0, "max_diff_id" : "", "min_diff_id" : "" },
+                "middle": { "count" : 0, "avg_chars": 0, "avg_perc": 0 , "max_diff": 0, "min_diff": 0, "max_diff_id" : "", "min_diff_id" : ""},
+                "long": { "count" : 0, "avg_chars": 0, "avg_perc": 0, "max_diff": 0, "min_diff": 0, "max_diff_id" : "", "min_diff_id" : "" },
+                "sentence": { "count" : 0, "avg_chars": 0, "avg_perc": 0, "max_diff": 0, "min_diff": 0, "max_diff_id" : "", "min_diff_id" : "" }
             }
             print "Analyzing " + locale
 
@@ -113,9 +113,9 @@ def main():
                         perc_difference = 100 * (difference/float(len(original)))
 
                         # General stats
-                        stats[locale]['global']['count'] +=  1
-                        stats[locale]['global']['avg_chars'] +=  difference
-                        stats[locale]['global']['avg_perc'] +=  perc_difference
+                        stats[locale]['global']['count'] += 1
+                        stats[locale]['global']['avg_chars'] += difference
+                        stats[locale]['global']['avg_perc'] += perc_difference
 
                         # Specific bucket stats
                         if (len(original)<6):
@@ -129,6 +129,22 @@ def main():
                         stats[locale][bucket]['count'] +=  1
                         stats[locale][bucket]['avg_chars'] +=  difference
                         stats[locale][bucket]['avg_perc'] +=  perc_difference
+
+                        # Store max_diff and min_diff for specific bucket
+                        if (difference > stats[locale][bucket]['max_diff']):
+                            stats[locale][bucket]['max_diff'] = difference
+                            stats[locale][bucket]['max_diff_id'] = entity
+                        if (difference < stats[locale][bucket]['min_diff']):
+                            stats[locale][bucket]['min_diff'] = difference
+                            stats[locale][bucket]['min_diff_id'] = entity
+
+                        # Store max_diff and min_diff for global
+                        if (difference > stats[locale]['global']['max_diff']):
+                            stats[locale]['global']['max_diff'] = difference
+                            stats[locale]['global']['max_diff_id'] = entity
+                        if (difference < stats[locale]['global']['min_diff']):
+                            stats[locale]['global']['min_diff'] = difference
+                            stats[locale]['global']['min_diff_id'] = entity
 
                 except Exception as e:
                     print e

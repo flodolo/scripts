@@ -30,30 +30,40 @@
     $html_output = '<table id="maintable" class="tablesorter">
                 <thead>
                     <tr>
-                        <th class="sorter-false">Locale</th>
-                        <th class="sorter-false" colspan="3">Global</th>
-                        <th class="sorter-false" colspan="3">Short<br/>(length&lt;5)</th>
-                        <th class="sorter-false" colspan="3">Middle<br/>(6&lt;length&lt;11)</th>
-                        <th class="sorter-false" colspan="3">Long<br/>(11&lt;length&lt;21)</th>
-                        <th class="sorter-false" colspan="3">Sentence<br/>(length&gt;20)</th>
+                        <th class="sorter-false">&nbsp;</th>
+                        <th class="sorter-false" colspan="5">Global</th>
+                        <th class="sorter-false" colspan="5">Short<br/>(length&lt;5)</th>
+                        <th class="sorter-false" colspan="5">Middle<br/>(6&lt;length&lt;11)</th>
+                        <th class="sorter-false" colspan="5">Long<br/>(11&lt;length&lt;21)</th>
+                        <th class="sorter-false" colspan="5">Sentence<br/>(length&gt;20)</th>
                     </tr>
                     <tr>
-                        <th>&nbsp;</th>
+                        <th>Locale</th>
                         <th title="number of strings analyzed">strings</th>
                         <th title="average difference in chars">avg<br/>diff<br/>chars</th>
                         <th title="average difference in percentage">avg<br/>diff<br/>%</th>
+                        <th title="maximum difference in chars">max<br/>diff<br/>chars</th>
+                        <th title="minimum difference in chars">min<br/>diff<br/>chars</th>
                         <th title="number of strings analyzed">strings</th>
                         <th title="average difference in chars">avg<br/>diff<br/>chars</th>
                         <th title="average difference in percentage">avg<br/>diff<br/>%</th>
+                        <th title="maximum difference in chars">max<br/>diff<br/>chars</th>
+                        <th title="minimum difference in chars">min<br/>diff<br/>chars</th>
                         <th title="number of strings analyzed">strings</th>
                         <th title="average difference in chars">avg<br/>diff<br/>chars</th>
                         <th title="average difference in percentage">avg<br/>diff<br/>%</th>
+                        <th title="maximum difference in chars">max<br/>diff<br/>chars</th>
+                        <th title="minimum difference in chars">min<br/>diff<br/>chars</th>
                         <th title="number of strings analyzed">strings</th>
                         <th title="average difference in chars">avg<br/>diff<br/>chars</th>
                         <th title="average difference in percentage">avg<br/>diff<br/>%</th>
+                        <th title="maximum difference in chars">max<br/>diff<br/>chars</th>
+                        <th title="minimum difference in chars">min<br/>diff<br/>chars</th>
                         <th title="number of strings analyzed">strings</th>
                         <th title="average difference in chars">avg<br/>diff<br/>chars</th>
                         <th title="average difference in percentage">avg<br/>diff<br/>%</th>
+                        <th title="maximum difference in chars">max<br/>diff<br/>chars</th>
+                        <th title="minimum difference in chars">min<br/>diff<br/>chars</th>
                     </tr>
                 </thead>
                 <tbody>' . "\n";
@@ -65,7 +75,10 @@
         foreach ($buckets as $bucket) {
             $html_output .= '<td>' . $locale[$bucket]['count'] .'</td>
                              <td>' . sprintf("%01.2f", $locale[$bucket]['avg_chars']) . '</td>
-                             <td>' . sprintf("%01.2f", $locale[$bucket]['avg_perc']) . '</td>';
+                             <td>' . sprintf("%01.2f", $locale[$bucket]['avg_perc']) . '</td>
+                             <td title="' . $locale[$bucket]['max_diff_id'] . '">' . $locale[$bucket]['max_diff'] . '</td>
+                             <td title="' . $locale[$bucket]['min_diff_id'] . '">' . $locale[$bucket]['min_diff'] . '</td>';
+
         }
         $html_output .= '</tr>';
     }
