@@ -1,0 +1,2972 @@
+{
+    "ach": {
+        "global": {
+            "avg_chars": -1.46, 
+            "avg_perc": 5.6618, 
+            "count": 6833
+        }, 
+        "long": {
+            "avg_chars": 1.1072, 
+            "avg_perc": 7.7831, 
+            "count": 1744
+        }, 
+        "middle": {
+            "avg_chars": 0.9173, 
+            "avg_perc": 11.7347, 
+            "count": 1414
+        }, 
+        "sentence": {
+            "avg_chars": -4.7169, 
+            "avg_perc": -4.6103, 
+            "count": 2949
+        }, 
+        "short": {
+            "avg_chars": 0.9725, 
+            "avg_perc": 30.4637, 
+            "count": 726
+        }
+    }, 
+    "af": {
+        "global": {
+            "avg_chars": 1.8638, 
+            "avg_perc": 10.1617, 
+            "count": 10354
+        }, 
+        "long": {
+            "avg_chars": 1.5331, 
+            "avg_perc": 10.0601, 
+            "count": 2776
+        }, 
+        "middle": {
+            "avg_chars": 0.7856, 
+            "avg_perc": 10.117, 
+            "count": 2248
+        }, 
+        "sentence": {
+            "avg_chars": 2.9434, 
+            "avg_perc": 6.5745, 
+            "count": 4132
+        }, 
+        "short": {
+            "avg_chars": 0.9299, 
+            "avg_perc": 22.8534, 
+            "count": 1198
+        }
+    }, 
+    "ak": {
+        "global": {
+            "avg_chars": -0.7806, 
+            "avg_perc": 4.8613, 
+            "count": 6332
+        }, 
+        "long": {
+            "avg_chars": 1.1191, 
+            "avg_perc": 7.6152, 
+            "count": 1696
+        }, 
+        "middle": {
+            "avg_chars": 0.6719, 
+            "avg_perc": 8.3106, 
+            "count": 1411
+        }, 
+        "sentence": {
+            "avg_chars": -3.3008, 
+            "avg_perc": -2.0906, 
+            "count": 2500
+        }, 
+        "short": {
+            "avg_chars": 0.6386, 
+            "avg_perc": 15.6782, 
+            "count": 725
+        }
+    }, 
+    "an": {
+        "global": {
+            "avg_chars": 2.8632, 
+            "avg_perc": 12.9755, 
+            "count": 17864
+        }, 
+        "long": {
+            "avg_chars": 2.2714, 
+            "avg_perc": 15.3205, 
+            "count": 4986
+        }, 
+        "middle": {
+            "avg_chars": 0.9431, 
+            "avg_perc": 11.4526, 
+            "count": 3676
+        }, 
+        "sentence": {
+            "avg_chars": 4.7416, 
+            "avg_perc": 10.322, 
+            "count": 7358
+        }, 
+        "short": {
+            "avg_chars": 0.7956, 
+            "avg_perc": 20.2585, 
+            "count": 1844
+        }
+    }, 
+    "ar": {
+        "global": {
+            "avg_chars": -3.9781, 
+            "avg_perc": -3.6296, 
+            "count": 11917
+        }, 
+        "long": {
+            "avg_chars": -0.4033, 
+            "avg_perc": -2.227, 
+            "count": 3285
+        }, 
+        "middle": {
+            "avg_chars": -0.1005, 
+            "avg_perc": -1.4734, 
+            "count": 2548
+        }, 
+        "sentence": {
+            "avg_chars": -9.8241, 
+            "avg_perc": -13.1778, 
+            "count": 4775
+        }, 
+        "short": {
+            "avg_chars": 0.8281, 
+            "avg_perc": 23.4836, 
+            "count": 1309
+        }
+    }, 
+    "as": {
+        "global": {
+            "avg_chars": 0.7394, 
+            "avg_perc": 12.4237, 
+            "count": 8332
+        }, 
+        "long": {
+            "avg_chars": 2.0218, 
+            "avg_perc": 13.8971, 
+            "count": 2157
+        }, 
+        "middle": {
+            "avg_chars": 1.5228, 
+            "avg_perc": 19.3462, 
+            "count": 1691
+        }, 
+        "sentence": {
+            "avg_chars": -0.5874, 
+            "avg_perc": 1.9472, 
+            "count": 3645
+        }, 
+        "short": {
+            "avg_chars": 1.6281, 
+            "avg_perc": 40.1986, 
+            "count": 839
+        }
+    }, 
+    "ast": {
+        "global": {
+            "avg_chars": 4.6032, 
+            "avg_perc": 22.9364, 
+            "count": 11354
+        }, 
+        "long": {
+            "avg_chars": 4.4332, 
+            "avg_perc": 29.5406, 
+            "count": 3015
+        }, 
+        "middle": {
+            "avg_chars": 1.7852, 
+            "avg_perc": 22.5604, 
+            "count": 2328
+        }, 
+        "sentence": {
+            "avg_chars": 6.7893, 
+            "avg_perc": 15.23, 
+            "count": 4851
+        }, 
+        "short": {
+            "avg_chars": 1.5586, 
+            "avg_perc": 38.7529, 
+            "count": 1160
+        }
+    }, 
+    "az": {
+        "global": {
+            "avg_chars": 0, 
+            "avg_perc": 0, 
+            "count": 0
+        }, 
+        "long": {
+            "avg_chars": 0, 
+            "avg_perc": 0, 
+            "count": 0
+        }, 
+        "middle": {
+            "avg_chars": 0, 
+            "avg_perc": 0, 
+            "count": 0
+        }, 
+        "sentence": {
+            "avg_chars": 0, 
+            "avg_perc": 0, 
+            "count": 0
+        }, 
+        "short": {
+            "avg_chars": 0, 
+            "avg_perc": 0, 
+            "count": 0
+        }
+    }, 
+    "be": {
+        "global": {
+            "avg_chars": 2.7771, 
+            "avg_perc": 18.0156, 
+            "count": 17598
+        }, 
+        "long": {
+            "avg_chars": 2.8072, 
+            "avg_perc": 18.6618, 
+            "count": 4921
+        }, 
+        "middle": {
+            "avg_chars": 1.8033, 
+            "avg_perc": 23.0546, 
+            "count": 3614
+        }, 
+        "sentence": {
+            "avg_chars": 3.4872, 
+            "avg_perc": 8.6621, 
+            "count": 7254
+        }, 
+        "short": {
+            "avg_chars": 1.7938, 
+            "avg_perc": 43.6982, 
+            "count": 1809
+        }
+    }, 
+    "bg": {
+        "global": {
+            "avg_chars": 3.2662, 
+            "avg_perc": 22.7421, 
+            "count": 11392
+        }, 
+        "long": {
+            "avg_chars": 4.1957, 
+            "avg_perc": 28.1479, 
+            "count": 3020
+        }, 
+        "middle": {
+            "avg_chars": 2.1235, 
+            "avg_perc": 26.9373, 
+            "count": 2356
+        }, 
+        "sentence": {
+            "avg_chars": 3.5724, 
+            "avg_perc": 11.6371, 
+            "count": 4848
+        }, 
+        "short": {
+            "avg_chars": 1.8964, 
+            "avg_perc": 46.3955, 
+            "count": 1168
+        }
+    }, 
+    "bn-BD": {
+        "global": {
+            "avg_chars": 3.0346, 
+            "avg_perc": 24.0235, 
+            "count": 11361
+        }, 
+        "long": {
+            "avg_chars": 3.549, 
+            "avg_perc": 24.1539, 
+            "count": 3009
+        }, 
+        "middle": {
+            "avg_chars": 2.4346, 
+            "avg_perc": 31.2975, 
+            "count": 2393
+        }, 
+        "sentence": {
+            "avg_chars": 3.1453, 
+            "avg_perc": 9.3789, 
+            "count": 4707
+        }, 
+        "short": {
+            "avg_chars": 2.5288, 
+            "avg_perc": 64.8642, 
+            "count": 1252
+        }
+    }, 
+    "bn-IN": {
+        "global": {
+            "avg_chars": 2.3287, 
+            "avg_perc": 13.2049, 
+            "count": 15535
+        }, 
+        "long": {
+            "avg_chars": 2.2353, 
+            "avg_perc": 14.9691, 
+            "count": 4289
+        }, 
+        "middle": {
+            "avg_chars": 1.181, 
+            "avg_perc": 14.583, 
+            "count": 3326
+        }, 
+        "sentence": {
+            "avg_chars": 3.3092, 
+            "avg_perc": 7.4866, 
+            "count": 6284
+        }, 
+        "short": {
+            "avg_chars": 1.1406, 
+            "avg_perc": 27.7425, 
+            "count": 1636
+        }
+    }, 
+    "br": {
+        "global": {
+            "avg_chars": 5.4715, 
+            "avg_perc": 24.9745, 
+            "count": 11907
+        }, 
+        "long": {
+            "avg_chars": 4.4421, 
+            "avg_perc": 29.4284, 
+            "count": 3171
+        }, 
+        "middle": {
+            "avg_chars": 1.8612, 
+            "avg_perc": 22.8492, 
+            "count": 2443
+        }, 
+        "sentence": {
+            "avg_chars": 8.7734, 
+            "avg_perc": 18.4536, 
+            "count": 5058
+        }, 
+        "short": {
+            "avg_chars": 1.7328, 
+            "avg_perc": 44.4494, 
+            "count": 1235
+        }
+    }, 
+    "bs": {
+        "global": {
+            "avg_chars": 2.0409, 
+            "avg_perc": 11.9091, 
+            "count": 7049
+        }, 
+        "long": {
+            "avg_chars": 2.2433, 
+            "avg_perc": 15.09, 
+            "count": 1788
+        }, 
+        "middle": {
+            "avg_chars": 0.9791, 
+            "avg_perc": 12.0165, 
+            "count": 1435
+        }, 
+        "sentence": {
+            "avg_chars": 2.5894, 
+            "avg_perc": 6.4431, 
+            "count": 3149
+        }, 
+        "short": {
+            "avg_chars": 1.2053, 
+            "avg_perc": 28.7051, 
+            "count": 677
+        }
+    }, 
+    "ca": {
+        "global": {
+            "avg_chars": 6.4427, 
+            "avg_perc": 29.4416, 
+            "count": 17862
+        }, 
+        "long": {
+            "avg_chars": 5.6085, 
+            "avg_perc": 37.5523, 
+            "count": 4986
+        }, 
+        "middle": {
+            "avg_chars": 2.2739, 
+            "avg_perc": 27.8434, 
+            "count": 3676
+        }, 
+        "sentence": {
+            "avg_chars": 10.3332, 
+            "avg_perc": 22.7709, 
+            "count": 7358
+        }, 
+        "short": {
+            "avg_chars": 1.4794, 
+            "avg_perc": 37.3236, 
+            "count": 1842
+        }
+    }, 
+    "cs": {
+        "global": {
+            "avg_chars": 1.4035, 
+            "avg_perc": 14.8453, 
+            "count": 17859
+        }, 
+        "long": {
+            "avg_chars": 1.9611, 
+            "avg_perc": 13.281, 
+            "count": 4984
+        }, 
+        "middle": {
+            "avg_chars": 1.5595, 
+            "avg_perc": 19.9075, 
+            "count": 3675
+        }, 
+        "sentence": {
+            "avg_chars": 0.809, 
+            "avg_perc": 4.9024, 
+            "count": 7357
+        }, 
+        "short": {
+            "avg_chars": 1.9577, 
+            "avg_perc": 48.6716, 
+            "count": 1843
+        }
+    }, 
+    "csb": {
+        "global": {
+            "avg_chars": 1.445, 
+            "avg_perc": 15.4406, 
+            "count": 7486
+        }, 
+        "long": {
+            "avg_chars": 3.3434, 
+            "avg_perc": 22.3594, 
+            "count": 1913
+        }, 
+        "middle": {
+            "avg_chars": 1.5888, 
+            "avg_perc": 20.1309, 
+            "count": 1515
+        }, 
+        "sentence": {
+            "avg_chars": 0.2508, 
+            "avg_perc": 3.8984, 
+            "count": 3321
+        }, 
+        "short": {
+            "avg_chars": 1.6024, 
+            "avg_perc": 39.8507, 
+            "count": 737
+        }
+    }, 
+    "cy": {
+        "global": {
+            "avg_chars": 1.6399, 
+            "avg_perc": 10.9002, 
+            "count": 12745
+        }, 
+        "long": {
+            "avg_chars": 1.8626, 
+            "avg_perc": 12.7643, 
+            "count": 3414
+        }, 
+        "middle": {
+            "avg_chars": 0.9254, 
+            "avg_perc": 11.6273, 
+            "count": 2615
+        }, 
+        "sentence": {
+            "avg_chars": 1.9786, 
+            "avg_perc": 5.049, 
+            "count": 5384
+        }, 
+        "short": {
+            "avg_chars": 1.1029, 
+            "avg_perc": 28.3458, 
+            "count": 1332
+        }
+    }, 
+    "da": {
+        "global": {
+            "avg_chars": 1.5035, 
+            "avg_perc": 9.7243, 
+            "count": 12746
+        }, 
+        "long": {
+            "avg_chars": 1.4593, 
+            "avg_perc": 9.4817, 
+            "count": 3414
+        }, 
+        "middle": {
+            "avg_chars": 0.8535, 
+            "avg_perc": 11.0873, 
+            "count": 2615
+        }, 
+        "sentence": {
+            "avg_chars": 1.9898, 
+            "avg_perc": 5.6029, 
+            "count": 5386
+        }, 
+        "short": {
+            "avg_chars": 0.9256, 
+            "avg_perc": 24.3464, 
+            "count": 1331
+        }
+    }, 
+    "de": {
+        "global": {
+            "avg_chars": 6.8846, 
+            "avg_perc": 28.1141, 
+            "count": 17862
+        }, 
+        "long": {
+            "avg_chars": 3.7896, 
+            "avg_perc": 25.4437, 
+            "count": 4985
+        }, 
+        "middle": {
+            "avg_chars": 2.3817, 
+            "avg_perc": 30.982, 
+            "count": 3676
+        }, 
+        "sentence": {
+            "avg_chars": 12.3799, 
+            "avg_perc": 21.2005, 
+            "count": 7358
+        }, 
+        "short": {
+            "avg_chars": 2.2984, 
+            "avg_perc": 57.2192, 
+            "count": 1843
+        }
+    }, 
+    "el": {
+        "global": {
+            "avg_chars": 5.1629, 
+            "avg_perc": 26.1148, 
+            "count": 12011
+        }, 
+        "long": {
+            "avg_chars": 4.3765, 
+            "avg_perc": 29.2759, 
+            "count": 3158
+        }, 
+        "middle": {
+            "avg_chars": 2.3478, 
+            "avg_perc": 29.5829, 
+            "count": 2458
+        }, 
+        "sentence": {
+            "avg_chars": 7.7074, 
+            "avg_perc": 16.3206, 
+            "count": 5157
+        }, 
+        "short": {
+            "avg_chars": 2.1583, 
+            "avg_perc": 51.9642, 
+            "count": 1238
+        }
+    }, 
+    "en-GB": {
+        "global": {
+            "avg_chars": 0.0, 
+            "avg_perc": 0.0, 
+            "count": 17862
+        }, 
+        "long": {
+            "avg_chars": 0.0, 
+            "avg_perc": 0.0, 
+            "count": 4983
+        }, 
+        "middle": {
+            "avg_chars": 0.0, 
+            "avg_perc": 0.0, 
+            "count": 3676
+        }, 
+        "sentence": {
+            "avg_chars": 0.0, 
+            "avg_perc": 0.0, 
+            "count": 7358
+        }, 
+        "short": {
+            "avg_chars": 0.0, 
+            "avg_perc": 0.0, 
+            "count": 1845
+        }
+    }, 
+    "en-ZA": {
+        "global": {
+            "avg_chars": -0.2844, 
+            "avg_perc": -0.2915, 
+            "count": 11378
+        }, 
+        "long": {
+            "avg_chars": -0.0212, 
+            "avg_perc": -0.15, 
+            "count": 3016
+        }, 
+        "middle": {
+            "avg_chars": -0.0126, 
+            "avg_perc": -0.2033, 
+            "count": 2381
+        }, 
+        "sentence": {
+            "avg_chars": -0.6628, 
+            "avg_perc": -0.5749, 
+            "count": 4763
+        }, 
+        "short": {
+            "avg_chars": 0.0123, 
+            "avg_perc": 0.2942, 
+            "count": 1218
+        }
+    }, 
+    "eo": {
+        "global": {
+            "avg_chars": 2.0433, 
+            "avg_perc": 13.4953, 
+            "count": 7575
+        }, 
+        "long": {
+            "avg_chars": 2.5247, 
+            "avg_perc": 16.9108, 
+            "count": 1942
+        }, 
+        "middle": {
+            "avg_chars": 1.0914, 
+            "avg_perc": 13.2886, 
+            "count": 1542
+        }, 
+        "sentence": {
+            "avg_chars": 2.3479, 
+            "avg_perc": 6.4876, 
+            "count": 3340
+        }, 
+        "short": {
+            "avg_chars": 1.3981, 
+            "avg_perc": 36.2539, 
+            "count": 751
+        }
+    }, 
+    "es-AR": {
+        "global": {
+            "avg_chars": 4.6507, 
+            "avg_perc": 22.8745, 
+            "count": 17859
+        }, 
+        "long": {
+            "avg_chars": 3.9771, 
+            "avg_perc": 26.7573, 
+            "count": 4986
+        }, 
+        "middle": {
+            "avg_chars": 1.8371, 
+            "avg_perc": 23.2553, 
+            "count": 3678
+        }, 
+        "sentence": {
+            "avg_chars": 7.2479, 
+            "avg_perc": 15.2598, 
+            "count": 7354
+        }, 
+        "short": {
+            "avg_chars": 1.7213, 
+            "avg_perc": 42.0152, 
+            "count": 1841
+        }
+    }, 
+    "es-CL": {
+        "global": {
+            "avg_chars": 5.5624, 
+            "avg_perc": 23.2056, 
+            "count": 8667
+        }, 
+        "long": {
+            "avg_chars": 4.0081, 
+            "avg_perc": 27.0992, 
+            "count": 2232
+        }, 
+        "middle": {
+            "avg_chars": 1.6233, 
+            "avg_perc": 20.313, 
+            "count": 1752
+        }, 
+        "sentence": {
+            "avg_chars": 9.2235, 
+            "avg_perc": 19.1223, 
+            "count": 3808
+        }, 
+        "short": {
+            "avg_chars": 1.4811, 
+            "avg_perc": 36.8362, 
+            "count": 875
+        }
+    }, 
+    "es-ES": {
+        "global": {
+            "avg_chars": 5.7362, 
+            "avg_perc": 26.6547, 
+            "count": 17864
+        }, 
+        "long": {
+            "avg_chars": 4.6457, 
+            "avg_perc": 31.175, 
+            "count": 4985
+        }, 
+        "middle": {
+            "avg_chars": 2.0511, 
+            "avg_perc": 25.8607, 
+            "count": 3676
+        }, 
+        "sentence": {
+            "avg_chars": 9.3039, 
+            "avg_perc": 19.6775, 
+            "count": 7358
+        }, 
+        "short": {
+            "avg_chars": 1.7967, 
+            "avg_perc": 43.8491, 
+            "count": 1845
+        }
+    }, 
+    "es-MX": {
+        "global": {
+            "avg_chars": 4.7975, 
+            "avg_perc": 22.2501, 
+            "count": 8409
+        }, 
+        "long": {
+            "avg_chars": 3.8683, 
+            "avg_perc": 26.0438, 
+            "count": 2187
+        }, 
+        "middle": {
+            "avg_chars": 1.5806, 
+            "avg_perc": 19.7468, 
+            "count": 1712
+        }, 
+        "sentence": {
+            "avg_chars": 7.5983, 
+            "avg_perc": 16.9601, 
+            "count": 3664
+        }, 
+        "short": {
+            "avg_chars": 1.5792, 
+            "avg_perc": 40.4196, 
+            "count": 846
+        }
+    }, 
+    "et": {
+        "global": {
+            "avg_chars": 1.3077, 
+            "avg_perc": 12.3063, 
+            "count": 12741
+        }, 
+        "long": {
+            "avg_chars": 2.1649, 
+            "avg_perc": 14.7187, 
+            "count": 3414
+        }, 
+        "middle": {
+            "avg_chars": 1.1382, 
+            "avg_perc": 14.3312, 
+            "count": 2613
+        }, 
+        "sentence": {
+            "avg_chars": 0.8189, 
+            "avg_perc": 3.7733, 
+            "count": 5383
+        }, 
+        "short": {
+            "avg_chars": 1.4185, 
+            "avg_perc": 36.6541, 
+            "count": 1331
+        }
+    }, 
+    "eu": {
+        "global": {
+            "avg_chars": 3.6093, 
+            "avg_perc": 23.1489, 
+            "count": 12744
+        }, 
+        "long": {
+            "avg_chars": 3.8676, 
+            "avg_perc": 26.3384, 
+            "count": 3414
+        }, 
+        "middle": {
+            "avg_chars": 2.2046, 
+            "avg_perc": 27.9018, 
+            "count": 2615
+        }, 
+        "sentence": {
+            "avg_chars": 4.5061, 
+            "avg_perc": 11.76, 
+            "count": 5382
+        }, 
+        "short": {
+            "avg_chars": 2.0825, 
+            "avg_perc": 51.6392, 
+            "count": 1333
+        }
+    }, 
+    "fa": {
+        "global": {
+            "avg_chars": 0.3878, 
+            "avg_perc": 7.388, 
+            "count": 9491
+        }, 
+        "long": {
+            "avg_chars": 1.138, 
+            "avg_perc": 7.667, 
+            "count": 2456
+        }, 
+        "middle": {
+            "avg_chars": 0.4376, 
+            "avg_perc": 4.8365, 
+            "count": 2178
+        }, 
+        "sentence": {
+            "avg_chars": -0.4184, 
+            "avg_perc": 0.1173, 
+            "count": 3738
+        }, 
+        "short": {
+            "avg_chars": 1.3378, 
+            "avg_perc": 36.0292, 
+            "count": 1119
+        }
+    }, 
+    "ff": {
+        "global": {
+            "avg_chars": -0.7099, 
+            "avg_perc": 4.9577, 
+            "count": 6536
+        }, 
+        "long": {
+            "avg_chars": 0.9351, 
+            "avg_perc": 6.6493, 
+            "count": 1788
+        }, 
+        "middle": {
+            "avg_chars": 0.6317, 
+            "avg_perc": 7.7413, 
+            "count": 1526
+        }, 
+        "sentence": {
+            "avg_chars": -3.2359, 
+            "avg_perc": -3.3539, 
+            "count": 2454
+        }, 
+        "short": {
+            "avg_chars": 0.8659, 
+            "avg_perc": 22.0464, 
+            "count": 768
+        }
+    }, 
+    "fi": {
+        "global": {
+            "avg_chars": 2.2225, 
+            "avg_perc": 18.3339, 
+            "count": 17860
+        }, 
+        "long": {
+            "avg_chars": 2.6497, 
+            "avg_perc": 17.9452, 
+            "count": 4984
+        }, 
+        "middle": {
+            "avg_chars": 1.8201, 
+            "avg_perc": 23.3991, 
+            "count": 3675
+        }, 
+        "sentence": {
+            "avg_chars": 2.1411, 
+            "avg_perc": 6.6946, 
+            "count": 7357
+        }, 
+        "short": {
+            "avg_chars": 2.1947, 
+            "avg_perc": 55.7276, 
+            "count": 1844
+        }
+    }, 
+    "fr": {
+        "global": {
+            "avg_chars": 7.6655, 
+            "avg_perc": 33.1534, 
+            "count": 17866
+        }, 
+        "long": {
+            "avg_chars": 5.6413, 
+            "avg_perc": 37.8089, 
+            "count": 4987
+        }, 
+        "middle": {
+            "avg_chars": 2.4948, 
+            "avg_perc": 31.0734, 
+            "count": 3676
+        }, 
+        "sentence": {
+            "avg_chars": 12.9603, 
+            "avg_perc": 24.7792, 
+            "count": 7358
+        }, 
+        "short": {
+            "avg_chars": 2.323, 
+            "avg_perc": 58.1111, 
+            "count": 1845
+        }
+    }, 
+    "fy-NL": {
+        "global": {
+            "avg_chars": 3.7016, 
+            "avg_perc": 19.0518, 
+            "count": 17628
+        }, 
+        "long": {
+            "avg_chars": 2.7167, 
+            "avg_perc": 18.0691, 
+            "count": 4854
+        }, 
+        "middle": {
+            "avg_chars": 1.7425, 
+            "avg_perc": 22.6561, 
+            "count": 3685
+        }, 
+        "sentence": {
+            "avg_chars": 5.8754, 
+            "avg_perc": 11.8771, 
+            "count": 7224
+        }, 
+        "short": {
+            "avg_chars": 1.7158, 
+            "avg_perc": 42.2788, 
+            "count": 1865
+        }
+    }, 
+    "ga-IE": {
+        "global": {
+            "avg_chars": 6.0815, 
+            "avg_perc": 27.4408, 
+            "count": 13214
+        }, 
+        "long": {
+            "avg_chars": 4.6591, 
+            "avg_perc": 31.1348, 
+            "count": 3532
+        }, 
+        "middle": {
+            "avg_chars": 2.3698, 
+            "avg_perc": 29.8538, 
+            "count": 2715
+        }, 
+        "sentence": {
+            "avg_chars": 9.8806, 
+            "avg_perc": 20.4097, 
+            "count": 5586
+        }, 
+        "short": {
+            "avg_chars": 1.6495, 
+            "avg_perc": 41.6896, 
+            "count": 1381
+        }
+    }, 
+    "gd": {
+        "global": {
+            "avg_chars": 10.563, 
+            "avg_perc": 44.6329, 
+            "count": 12741
+        }, 
+        "long": {
+            "avg_chars": 7.384, 
+            "avg_perc": 49.5087, 
+            "count": 3414
+        }, 
+        "middle": {
+            "avg_chars": 3.7043, 
+            "avg_perc": 46.9742, 
+            "count": 2614
+        }, 
+        "sentence": {
+            "avg_chars": 17.8631, 
+            "avg_perc": 34.3545, 
+            "count": 5382
+        }, 
+        "short": {
+            "avg_chars": 2.6687, 
+            "avg_perc": 69.0897, 
+            "count": 1331
+        }
+    }, 
+    "gl": {
+        "global": {
+            "avg_chars": 4.5109, 
+            "avg_perc": 23.5904, 
+            "count": 17358
+        }, 
+        "long": {
+            "avg_chars": 4.1764, 
+            "avg_perc": 28.1841, 
+            "count": 4796
+        }, 
+        "middle": {
+            "avg_chars": 1.8497, 
+            "avg_perc": 22.7666, 
+            "count": 3665
+        }, 
+        "sentence": {
+            "avg_chars": 6.8334, 
+            "avg_perc": 16.5594, 
+            "count": 7100
+        }, 
+        "short": {
+            "avg_chars": 1.655, 
+            "avg_perc": 40.7902, 
+            "count": 1797
+        }
+    }, 
+    "gu-IN": {
+        "global": {
+            "avg_chars": 7.0235, 
+            "avg_perc": 35.7752, 
+            "count": 11644
+        }, 
+        "long": {
+            "avg_chars": 5.1306, 
+            "avg_perc": 34.8049, 
+            "count": 3031
+        }, 
+        "middle": {
+            "avg_chars": 4.0246, 
+            "avg_perc": 52.8849, 
+            "count": 2436
+        }, 
+        "sentence": {
+            "avg_chars": 10.7377, 
+            "avg_perc": 22.4139, 
+            "count": 4986
+        }, 
+        "short": {
+            "avg_chars": 2.4257, 
+            "avg_perc": 59.1856, 
+            "count": 1191
+        }
+    }, 
+    "he": {
+        "global": {
+            "avg_chars": -4.9276, 
+            "avg_perc": -10.501, 
+            "count": 19738
+        }, 
+        "long": {
+            "avg_chars": -1.8724, 
+            "avg_perc": -12.1008, 
+            "count": 5328
+        }, 
+        "middle": {
+            "avg_chars": -0.7085, 
+            "avg_perc": -9.1471, 
+            "count": 4261
+        }, 
+        "sentence": {
+            "avg_chars": -10.7913, 
+            "avg_perc": -17.0009, 
+            "count": 7896
+        }, 
+        "short": {
+            "avg_chars": 0.4186, 
+            "avg_perc": 13.5013, 
+            "count": 2253
+        }
+    }, 
+    "hi-IN": {
+        "global": {
+            "avg_chars": 0.7858, 
+            "avg_perc": 8.2243, 
+            "count": 11685
+        }, 
+        "long": {
+            "avg_chars": 1.119, 
+            "avg_perc": 7.6326, 
+            "count": 3066
+        }, 
+        "middle": {
+            "avg_chars": 0.798, 
+            "avg_perc": 10.2561, 
+            "count": 2451
+        }, 
+        "sentence": {
+            "avg_chars": 0.4658, 
+            "avg_perc": 2.0015, 
+            "count": 4942
+        }, 
+        "short": {
+            "avg_chars": 1.2178, 
+            "avg_perc": 30.7259, 
+            "count": 1226
+        }
+    }, 
+    "hr": {
+        "global": {
+            "avg_chars": 2.2707, 
+            "avg_perc": 15.547, 
+            "count": 12076
+        }, 
+        "long": {
+            "avg_chars": 2.5014, 
+            "avg_perc": 16.9842, 
+            "count": 3211
+        }, 
+        "middle": {
+            "avg_chars": 1.3825, 
+            "avg_perc": 17.5172, 
+            "count": 2473
+        }, 
+        "sentence": {
+            "avg_chars": 2.707, 
+            "avg_perc": 7.71, 
+            "count": 5143
+        }, 
+        "short": {
+            "avg_chars": 1.6397, 
+            "avg_perc": 40.2215, 
+            "count": 1249
+        }
+    }, 
+    "hu": {
+        "global": {
+            "avg_chars": 3.7515, 
+            "avg_perc": 21.4248, 
+            "count": 17866
+        }, 
+        "long": {
+            "avg_chars": 3.3111, 
+            "avg_perc": 22.1326, 
+            "count": 4985
+        }, 
+        "middle": {
+            "avg_chars": 1.8137, 
+            "avg_perc": 23.2695, 
+            "count": 3677
+        }, 
+        "sentence": {
+            "avg_chars": 5.4021, 
+            "avg_perc": 11.4059, 
+            "count": 7361
+        }, 
+        "short": {
+            "avg_chars": 2.2165, 
+            "avg_perc": 55.8455, 
+            "count": 1843
+        }
+    }, 
+    "hy-AM": {
+        "global": {
+            "avg_chars": 1.3508, 
+            "avg_perc": 14.7906, 
+            "count": 12682
+        }, 
+        "long": {
+            "avg_chars": 2.5212, 
+            "avg_perc": 17.0396, 
+            "count": 3398
+        }, 
+        "middle": {
+            "avg_chars": 1.4265, 
+            "avg_perc": 18.5102, 
+            "count": 2619
+        }, 
+        "sentence": {
+            "avg_chars": 0.4798, 
+            "avg_perc": 4.5467, 
+            "count": 5334
+        }, 
+        "short": {
+            "avg_chars": 1.7047, 
+            "avg_perc": 42.7824, 
+            "count": 1331
+        }
+    }, 
+    "id": {
+        "global": {
+            "avg_chars": 2.4241, 
+            "avg_perc": 12.352, 
+            "count": 12588
+        }, 
+        "long": {
+            "avg_chars": 1.8494, 
+            "avg_perc": 12.8284, 
+            "count": 3347
+        }, 
+        "middle": {
+            "avg_chars": 0.945, 
+            "avg_perc": 11.5665, 
+            "count": 2600
+        }, 
+        "sentence": {
+            "avg_chars": 3.8286, 
+            "avg_perc": 7.9973, 
+            "count": 5315
+        }, 
+        "short": {
+            "avg_chars": 1.1448, 
+            "avg_perc": 30.1445, 
+            "count": 1326
+        }
+    }, 
+    "is": {
+        "global": {
+            "avg_chars": 0.2692, 
+            "avg_perc": 6.7557, 
+            "count": 11909
+        }, 
+        "long": {
+            "avg_chars": 0.8962, 
+            "avg_perc": 6.4075, 
+            "count": 3171
+        }, 
+        "middle": {
+            "avg_chars": 0.8162, 
+            "avg_perc": 10.5759, 
+            "count": 2443
+        }, 
+        "sentence": {
+            "avg_chars": -0.5951, 
+            "avg_perc": -0.4661, 
+            "count": 5058
+        }, 
+        "short": {
+            "avg_chars": 1.1156, 
+            "avg_perc": 29.6335, 
+            "count": 1237
+        }
+    }, 
+    "it": {
+        "global": {
+            "avg_chars": 5.9979, 
+            "avg_perc": 24.9958, 
+            "count": 17862
+        }, 
+        "long": {
+            "avg_chars": 4.0536, 
+            "avg_perc": 27.0959, 
+            "count": 4983
+        }, 
+        "middle": {
+            "avg_chars": 1.9521, 
+            "avg_perc": 24.2817, 
+            "count": 3676
+        }, 
+        "sentence": {
+            "avg_chars": 10.4119, 
+            "avg_perc": 19.8508, 
+            "count": 7358
+        }, 
+        "short": {
+            "avg_chars": 1.7062, 
+            "avg_perc": 41.2656, 
+            "count": 1845
+        }
+    }, 
+    "ja": {
+        "global": {
+            "avg_chars": -12.2014, 
+            "avg_perc": -32.907, 
+            "count": 17803
+        }, 
+        "long": {
+            "avg_chars": -5.3063, 
+            "avg_perc": -35.038, 
+            "count": 4963
+        }, 
+        "middle": {
+            "avg_chars": -2.4366, 
+            "avg_perc": -30.8562, 
+            "count": 3653
+        }, 
+        "sentence": {
+            "avg_chars": -24.654, 
+            "avg_perc": -37.8682, 
+            "count": 7339
+        }, 
+        "short": {
+            "avg_chars": -0.5682, 
+            "avg_perc": -11.5359, 
+            "count": 1848
+        }
+    }, 
+    "ja-JP-mac": {
+        "global": {
+            "avg_chars": -12.1967, 
+            "avg_perc": -32.9085, 
+            "count": 17798
+        }, 
+        "long": {
+            "avg_chars": -5.2998, 
+            "avg_perc": -34.9967, 
+            "count": 4963
+        }, 
+        "middle": {
+            "avg_chars": -2.4306, 
+            "avg_perc": -30.7792, 
+            "count": 3653
+        }, 
+        "sentence": {
+            "avg_chars": -24.643, 
+            "avg_perc": -37.8917, 
+            "count": 7339
+        }, 
+        "short": {
+            "avg_chars": -0.5638, 
+            "avg_perc": -11.6621, 
+            "count": 1843
+        }
+    }, 
+    "ka": {
+        "global": {
+            "avg_chars": 1.2678, 
+            "avg_perc": 15.8134, 
+            "count": 17293
+        }, 
+        "long": {
+            "avg_chars": 2.6215, 
+            "avg_perc": 17.9581, 
+            "count": 4822
+        }, 
+        "middle": {
+            "avg_chars": 1.5127, 
+            "avg_perc": 19.2633, 
+            "count": 3556
+        }, 
+        "sentence": {
+            "avg_chars": 0.0353, 
+            "avg_perc": 3.6875, 
+            "count": 7137
+        }, 
+        "short": {
+            "avg_chars": 2.054, 
+            "avg_perc": 51.7717, 
+            "count": 1778
+        }
+    }, 
+    "kk": {
+        "global": {
+            "avg_chars": 1.7697, 
+            "avg_perc": 16.1499, 
+            "count": 9717
+        }, 
+        "long": {
+            "avg_chars": 3.0103, 
+            "avg_perc": 20.557, 
+            "count": 2516
+        }, 
+        "middle": {
+            "avg_chars": 1.4002, 
+            "avg_perc": 17.6636, 
+            "count": 2134
+        }, 
+        "sentence": {
+            "avg_chars": 1.2478, 
+            "avg_perc": 6.3881, 
+            "count": 3950
+        }, 
+        "short": {
+            "avg_chars": 1.5264, 
+            "avg_perc": 37.8514, 
+            "count": 1117
+        }
+    }, 
+    "km": {
+        "global": {
+            "avg_chars": 3.9909, 
+            "avg_perc": 17.5436, 
+            "count": 12294
+        }, 
+        "long": {
+            "avg_chars": 2.8923, 
+            "avg_perc": 19.3429, 
+            "count": 3260
+        }, 
+        "middle": {
+            "avg_chars": 1.2048, 
+            "avg_perc": 15.0115, 
+            "count": 2529
+        }, 
+        "sentence": {
+            "avg_chars": 6.7103, 
+            "avg_perc": 13.2836, 
+            "count": 5192
+        }, 
+        "short": {
+            "avg_chars": 1.3313, 
+            "avg_perc": 34.7982, 
+            "count": 1313
+        }
+    }, 
+    "kn": {
+        "global": {
+            "avg_chars": 5.1718, 
+            "avg_perc": 24.7658, 
+            "count": 7556
+        }, 
+        "long": {
+            "avg_chars": 4.3175, 
+            "avg_perc": 28.8296, 
+            "count": 1981
+        }, 
+        "middle": {
+            "avg_chars": 2.1722, 
+            "avg_perc": 27.1946, 
+            "count": 1591
+        }, 
+        "sentence": {
+            "avg_chars": 8.0972, 
+            "avg_perc": 17.3759, 
+            "count": 3188
+        }, 
+        "short": {
+            "avg_chars": 1.5766, 
+            "avg_perc": 39.3949, 
+            "count": 796
+        }
+    }, 
+    "ko": {
+        "global": {
+            "avg_chars": -14.6031, 
+            "avg_perc": -43.6756, 
+            "count": 12744
+        }, 
+        "long": {
+            "avg_chars": -7.0489, 
+            "avg_perc": -46.7, 
+            "count": 3414
+        }, 
+        "middle": {
+            "avg_chars": -3.4572, 
+            "avg_perc": -44.0562, 
+            "count": 2616
+        }, 
+        "sentence": {
+            "avg_chars": -28.1304, 
+            "avg_perc": -46.2342, 
+            "count": 5384
+        }, 
+        "short": {
+            "avg_chars": -1.1571, 
+            "avg_perc": -24.8058, 
+            "count": 1330
+        }
+    }, 
+    "ku": {
+        "global": {
+            "avg_chars": 1.6476, 
+            "avg_perc": 18.7751, 
+            "count": 6113
+        }, 
+        "long": {
+            "avg_chars": 3.4416, 
+            "avg_perc": 23.3032, 
+            "count": 1576
+        }, 
+        "middle": {
+            "avg_chars": 1.6947, 
+            "avg_perc": 20.7602, 
+            "count": 1389
+        }, 
+        "sentence": {
+            "avg_chars": 0.3423, 
+            "avg_perc": 5.8841, 
+            "count": 2457
+        }, 
+        "short": {
+            "avg_chars": 2.1027, 
+            "avg_perc": 50.2943, 
+            "count": 691
+        }
+    }, 
+    "lg": {
+        "global": {
+            "avg_chars": 2.754, 
+            "avg_perc": 23.2763, 
+            "count": 6239
+        }, 
+        "long": {
+            "avg_chars": 4.3251, 
+            "avg_perc": 29.3885, 
+            "count": 1612
+        }, 
+        "middle": {
+            "avg_chars": 2.4136, 
+            "avg_perc": 30.4641, 
+            "count": 1349
+        }, 
+        "sentence": {
+            "avg_chars": 2.1318, 
+            "avg_perc": 8.3431, 
+            "count": 2579
+        }, 
+        "short": {
+            "avg_chars": 2.083, 
+            "avg_perc": 50.4053, 
+            "count": 699
+        }
+    }, 
+    "lij": {
+        "global": {
+            "avg_chars": 2.4365, 
+            "avg_perc": 15.8843, 
+            "count": 8614
+        }, 
+        "long": {
+            "avg_chars": 3.0045, 
+            "avg_perc": 20.1229, 
+            "count": 2217
+        }, 
+        "middle": {
+            "avg_chars": 1.4306, 
+            "avg_perc": 17.6084, 
+            "count": 1737
+        }, 
+        "sentence": {
+            "avg_chars": 2.8307, 
+            "avg_perc": 8.9037, 
+            "count": 3797
+        }, 
+        "short": {
+            "avg_chars": 1.2677, 
+            "avg_perc": 32.2383, 
+            "count": 863
+        }
+    }, 
+    "lt": {
+        "global": {
+            "avg_chars": 3.9409, 
+            "avg_perc": 28.815, 
+            "count": 17855
+        }, 
+        "long": {
+            "avg_chars": 4.2326, 
+            "avg_perc": 29.0241, 
+            "count": 4983
+        }, 
+        "middle": {
+            "avg_chars": 2.8092, 
+            "avg_perc": 36.7111, 
+            "count": 3674
+        }, 
+        "sentence": {
+            "avg_chars": 4.5098, 
+            "avg_perc": 12.2117, 
+            "count": 7354
+        }, 
+        "short": {
+            "avg_chars": 3.1383, 
+            "avg_perc": 78.7328, 
+            "count": 1844
+        }
+    }, 
+    "lv": {
+        "global": {
+            "avg_chars": 1.7546, 
+            "avg_perc": 15.1063, 
+            "count": 7574
+        }, 
+        "long": {
+            "avg_chars": 2.8477, 
+            "avg_perc": 19.2422, 
+            "count": 1943
+        }, 
+        "middle": {
+            "avg_chars": 1.4283, 
+            "avg_perc": 17.8989, 
+            "count": 1541
+        }, 
+        "sentence": {
+            "avg_chars": 1.2981, 
+            "avg_perc": 5.6576, 
+            "count": 3341
+        }, 
+        "short": {
+            "avg_chars": 1.6262, 
+            "avg_perc": 40.7788, 
+            "count": 749
+        }
+    }, 
+    "mai": {
+        "global": {
+            "avg_chars": 0.3356, 
+            "avg_perc": 5.4192, 
+            "count": 8063
+        }, 
+        "long": {
+            "avg_chars": 0.8117, 
+            "avg_perc": 5.4998, 
+            "count": 2061
+        }, 
+        "middle": {
+            "avg_chars": 0.555, 
+            "avg_perc": 7.1708, 
+            "count": 1636
+        }, 
+        "sentence": {
+            "avg_chars": -0.1705, 
+            "avg_perc": 0.5988, 
+            "count": 3571
+        }, 
+        "short": {
+            "avg_chars": 0.9233, 
+            "avg_perc": 23.2579, 
+            "count": 795
+        }
+    }, 
+    "mk": {
+        "global": {
+            "avg_chars": 2.5456, 
+            "avg_perc": 15.225, 
+            "count": 10409
+        }, 
+        "long": {
+            "avg_chars": 2.944, 
+            "avg_perc": 19.5316, 
+            "count": 2678
+        }, 
+        "middle": {
+            "avg_chars": 1.1858, 
+            "avg_perc": 14.9298, 
+            "count": 2201
+        }, 
+        "sentence": {
+            "avg_chars": 3.2699, 
+            "avg_perc": 8.9335, 
+            "count": 4475
+        }, 
+        "short": {
+            "avg_chars": 1.2986, 
+            "avg_perc": 31.5956, 
+            "count": 1055
+        }
+    }, 
+    "ml": {
+        "global": {
+            "avg_chars": 9.5546, 
+            "avg_perc": 47.7342, 
+            "count": 8290
+        }, 
+        "long": {
+            "avg_chars": 7.7341, 
+            "avg_perc": 51.9587, 
+            "count": 2136
+        }, 
+        "middle": {
+            "avg_chars": 4.6722, 
+            "avg_perc": 60.0476, 
+            "count": 1678
+        }, 
+        "sentence": {
+            "avg_chars": 14.31, 
+            "avg_perc": 30.9227, 
+            "count": 3626
+        }, 
+        "short": {
+            "avg_chars": 3.4824, 
+            "avg_perc": 84.5255, 
+            "count": 850
+        }
+    }, 
+    "mn": {
+        "global": {
+            "avg_chars": 1.3554, 
+            "avg_perc": 13.687, 
+            "count": 8626
+        }, 
+        "long": {
+            "avg_chars": 2.2282, 
+            "avg_perc": 15.2303, 
+            "count": 2204
+        }, 
+        "middle": {
+            "avg_chars": 1.157, 
+            "avg_perc": 14.3565, 
+            "count": 2051
+        }, 
+        "sentence": {
+            "avg_chars": 0.8805, 
+            "avg_perc": 4.4047, 
+            "count": 3231
+        }, 
+        "short": {
+            "avg_chars": 1.3711, 
+            "avg_perc": 35.807, 
+            "count": 1140
+        }
+    }, 
+    "mr": {
+        "global": {
+            "avg_chars": 0.211, 
+            "avg_perc": 7.7329, 
+            "count": 7048
+        }, 
+        "long": {
+            "avg_chars": 1.3022, 
+            "avg_perc": 8.7004, 
+            "count": 1790
+        }, 
+        "middle": {
+            "avg_chars": 0.7879, 
+            "avg_perc": 9.8633, 
+            "count": 1433
+        }, 
+        "sentence": {
+            "avg_chars": -0.905, 
+            "avg_perc": 0.8097, 
+            "count": 3148
+        }, 
+        "short": {
+            "avg_chars": 1.2939, 
+            "avg_perc": 32.8582, 
+            "count": 677
+        }
+    }, 
+    "ms": {
+        "global": {
+            "avg_chars": 2.6478, 
+            "avg_perc": 11.779, 
+            "count": 7664
+        }, 
+        "long": {
+            "avg_chars": 1.8499, 
+            "avg_perc": 12.7294, 
+            "count": 1965
+        }, 
+        "middle": {
+            "avg_chars": 0.8176, 
+            "avg_perc": 9.7577, 
+            "count": 1590
+        }, 
+        "sentence": {
+            "avg_chars": 4.3664, 
+            "avg_perc": 8.0086, 
+            "count": 3316
+        }, 
+        "short": {
+            "avg_chars": 1.1084, 
+            "avg_perc": 29.2434, 
+            "count": 793
+        }
+    }, 
+    "my": {
+        "global": {
+            "avg_chars": 5.2626, 
+            "avg_perc": 33.5064, 
+            "count": 7088
+        }, 
+        "long": {
+            "avg_chars": 5.5241, 
+            "avg_perc": 37.0298, 
+            "count": 1864
+        }, 
+        "middle": {
+            "avg_chars": 3.2067, 
+            "avg_perc": 41.1397, 
+            "count": 1524
+        }, 
+        "sentence": {
+            "avg_chars": 6.7746, 
+            "avg_perc": 17.5092, 
+            "count": 2933
+        }, 
+        "short": {
+            "avg_chars": 2.9296, 
+            "avg_perc": 70.9496, 
+            "count": 767
+        }
+    }, 
+    "nb-NO": {
+        "global": {
+            "avg_chars": 0.8211, 
+            "avg_perc": 8.1373, 
+            "count": 17859
+        }, 
+        "long": {
+            "avg_chars": 1.0945, 
+            "avg_perc": 7.3122, 
+            "count": 4985
+        }, 
+        "middle": {
+            "avg_chars": 0.7303, 
+            "avg_perc": 9.6939, 
+            "count": 3678
+        }, 
+        "sentence": {
+            "avg_chars": 0.5873, 
+            "avg_perc": 2.3763, 
+            "count": 7354
+        }, 
+        "short": {
+            "avg_chars": 1.196, 
+            "avg_perc": 30.2624, 
+            "count": 1842
+        }
+    }, 
+    "ne-NP": {
+        "global": {
+            "avg_chars": 3.02, 
+            "avg_perc": 27.0282, 
+            "count": 7803
+        }, 
+        "long": {
+            "avg_chars": 3.0998, 
+            "avg_perc": 20.597, 
+            "count": 2085
+        }, 
+        "middle": {
+            "avg_chars": 2.2891, 
+            "avg_perc": 30.9628, 
+            "count": 1916
+        }, 
+        "sentence": {
+            "avg_chars": 3.3365, 
+            "avg_perc": 9.7828, 
+            "count": 2832
+        }, 
+        "short": {
+            "avg_chars": 3.368, 
+            "avg_perc": 83.4296, 
+            "count": 970
+        }
+    }, 
+    "nl": {
+        "global": {
+            "avg_chars": 4.5894, 
+            "avg_perc": 22.0116, 
+            "count": 17857
+        }, 
+        "long": {
+            "avg_chars": 3.1607, 
+            "avg_perc": 21.0971, 
+            "count": 4984
+        }, 
+        "middle": {
+            "avg_chars": 2.0373, 
+            "avg_perc": 26.6083, 
+            "count": 3675
+        }, 
+        "sentence": {
+            "avg_chars": 7.4954, 
+            "avg_perc": 14.0916, 
+            "count": 7357
+        }, 
+        "short": {
+            "avg_chars": 1.9386, 
+            "avg_perc": 46.9609, 
+            "count": 1841
+        }
+    }, 
+    "nn-NO": {
+        "global": {
+            "avg_chars": 0.8935, 
+            "avg_perc": 7.9266, 
+            "count": 12714
+        }, 
+        "long": {
+            "avg_chars": 1.0483, 
+            "avg_perc": 7.0203, 
+            "count": 3414
+        }, 
+        "middle": {
+            "avg_chars": 0.7213, 
+            "avg_perc": 9.4435, 
+            "count": 2601
+        }, 
+        "sentence": {
+            "avg_chars": 0.8311, 
+            "avg_perc": 2.8965, 
+            "count": 5371
+        }, 
+        "short": {
+            "avg_chars": 1.0851, 
+            "avg_perc": 27.6293, 
+            "count": 1328
+        }
+    }, 
+    "nr": {
+        "global": {
+            "avg_chars": 4.3273, 
+            "avg_perc": 30.0036, 
+            "count": 7919
+        }, 
+        "long": {
+            "avg_chars": 4.4433, 
+            "avg_perc": 30.488, 
+            "count": 2107
+        }, 
+        "middle": {
+            "avg_chars": 2.8796, 
+            "avg_perc": 37.5264, 
+            "count": 1952
+        }, 
+        "sentence": {
+            "avg_chars": 5.946, 
+            "avg_perc": 16.2462, 
+            "count": 2873
+        }, 
+        "short": {
+            "avg_chars": 2.231, 
+            "avg_perc": 54.1371, 
+            "count": 987
+        }
+    }, 
+    "nso": {
+        "global": {
+            "avg_chars": 5.1679, 
+            "avg_perc": 25.7619, 
+            "count": 11744
+        }, 
+        "long": {
+            "avg_chars": 4.6192, 
+            "avg_perc": 31.3381, 
+            "count": 3046
+        }, 
+        "middle": {
+            "avg_chars": 2.264, 
+            "avg_perc": 28.1775, 
+            "count": 2462
+        }, 
+        "sentence": {
+            "avg_chars": 7.7098, 
+            "avg_perc": 15.9738, 
+            "count": 5027
+        }, 
+        "short": {
+            "avg_chars": 1.895, 
+            "avg_perc": 47.4924, 
+            "count": 1209
+        }
+    }, 
+    "oc": {
+        "global": {
+            "avg_chars": 6.4321, 
+            "avg_perc": 30.9699, 
+            "count": 10954
+        }, 
+        "long": {
+            "avg_chars": 5.4405, 
+            "avg_perc": 36.3548, 
+            "count": 2874
+        }, 
+        "middle": {
+            "avg_chars": 2.2936, 
+            "avg_perc": 29.0006, 
+            "count": 2384
+        }, 
+        "sentence": {
+            "avg_chars": 10.4191, 
+            "avg_perc": 22.2331, 
+            "count": 4486
+        }, 
+        "short": {
+            "avg_chars": 2.1595, 
+            "avg_perc": 54.4504, 
+            "count": 1210
+        }
+    }, 
+    "or": {
+        "global": {
+            "avg_chars": 4.4063, 
+            "avg_perc": 25.165, 
+            "count": 7574
+        }, 
+        "long": {
+            "avg_chars": 4.4217, 
+            "avg_perc": 29.8338, 
+            "count": 1942
+        }, 
+        "middle": {
+            "avg_chars": 2.3463, 
+            "avg_perc": 30.0424, 
+            "count": 1542
+        }, 
+        "sentence": {
+            "avg_chars": 5.8015, 
+            "avg_perc": 12.6693, 
+            "count": 3340
+        }, 
+        "short": {
+            "avg_chars": 2.388, 
+            "avg_perc": 58.6956, 
+            "count": 750
+        }
+    }, 
+    "pa-IN": {
+        "global": {
+            "avg_chars": -0.2786, 
+            "avg_perc": -0.2076, 
+            "count": 12708
+        }, 
+        "long": {
+            "avg_chars": -0.2355, 
+            "avg_perc": -1.614, 
+            "count": 3406
+        }, 
+        "middle": {
+            "avg_chars": -0.1585, 
+            "avg_perc": -2.3911, 
+            "count": 2600
+        }, 
+        "sentence": {
+            "avg_chars": -0.5262, 
+            "avg_perc": -1.0351, 
+            "count": 5369
+        }, 
+        "short": {
+            "avg_chars": 0.3736, 
+            "avg_perc": 10.9777, 
+            "count": 1333
+        }
+    }, 
+    "pl": {
+        "global": {
+            "avg_chars": 5.5863, 
+            "avg_perc": 25.8623, 
+            "count": 17860
+        }, 
+        "long": {
+            "avg_chars": 4.0062, 
+            "avg_perc": 27.078, 
+            "count": 4982
+        }, 
+        "middle": {
+            "avg_chars": 2.0949, 
+            "avg_perc": 26.2763, 
+            "count": 3677
+        }, 
+        "sentence": {
+            "avg_chars": 9.2796, 
+            "avg_perc": 18.3501, 
+            "count": 7360
+        }, 
+        "short": {
+            "avg_chars": 2.0706, 
+            "avg_perc": 51.778, 
+            "count": 1841
+        }
+    }, 
+    "pt-BR": {
+        "global": {
+            "avg_chars": 3.3138, 
+            "avg_perc": 19.3591, 
+            "count": 17305
+        }, 
+        "long": {
+            "avg_chars": 2.7076, 
+            "avg_perc": 18.3864, 
+            "count": 4785
+        }, 
+        "middle": {
+            "avg_chars": 1.787, 
+            "avg_perc": 22.8333, 
+            "count": 3629
+        }, 
+        "sentence": {
+            "avg_chars": 4.9101, 
+            "avg_perc": 11.9609, 
+            "count": 7078
+        }, 
+        "short": {
+            "avg_chars": 1.7375, 
+            "avg_perc": 43.8546, 
+            "count": 1813
+        }
+    }, 
+    "pt-PT": {
+        "global": {
+            "avg_chars": 4.1044, 
+            "avg_perc": 22.2997, 
+            "count": 17856
+        }, 
+        "long": {
+            "avg_chars": 3.7375, 
+            "avg_perc": 25.211, 
+            "count": 4983
+        }, 
+        "middle": {
+            "avg_chars": 2.0354, 
+            "avg_perc": 25.4825, 
+            "count": 3674
+        }, 
+        "sentence": {
+            "avg_chars": 5.974, 
+            "avg_perc": 13.6147, 
+            "count": 7356
+        }, 
+        "short": {
+            "avg_chars": 1.7591, 
+            "avg_perc": 42.7482, 
+            "count": 1843
+        }
+    }, 
+    "rm": {
+        "global": {
+            "avg_chars": 7.6087, 
+            "avg_perc": 31.7527, 
+            "count": 11356
+        }, 
+        "long": {
+            "avg_chars": 6.3469, 
+            "avg_perc": 42.2936, 
+            "count": 3027
+        }, 
+        "middle": {
+            "avg_chars": 2.2001, 
+            "avg_perc": 27.5967, 
+            "count": 2354
+        }, 
+        "sentence": {
+            "avg_chars": 12.5086, 
+            "avg_perc": 24.1481, 
+            "count": 4790
+        }, 
+        "short": {
+            "avg_chars": 1.7696, 
+            "avg_perc": 43.8214, 
+            "count": 1185
+        }
+    }, 
+    "ro": {
+        "global": {
+            "avg_chars": 3.8157, 
+            "avg_perc": 19.7116, 
+            "count": 17452
+        }, 
+        "long": {
+            "avg_chars": 3.0157, 
+            "avg_perc": 20.2721, 
+            "count": 4855
+        }, 
+        "middle": {
+            "avg_chars": 1.6558, 
+            "avg_perc": 21.1583, 
+            "count": 3643
+        }, 
+        "sentence": {
+            "avg_chars": 5.9847, 
+            "avg_perc": 12.5762, 
+            "count": 7146
+        }, 
+        "short": {
+            "avg_chars": 1.7428, 
+            "avg_perc": 43.4937, 
+            "count": 1808
+        }
+    }, 
+    "ru": {
+        "global": {
+            "avg_chars": 4.9595, 
+            "avg_perc": 25.6256, 
+            "count": 17859
+        }, 
+        "long": {
+            "avg_chars": 3.8489, 
+            "avg_perc": 25.8623, 
+            "count": 4982
+        }, 
+        "middle": {
+            "avg_chars": 2.2081, 
+            "avg_perc": 28.4124, 
+            "count": 3676
+        }, 
+        "sentence": {
+            "avg_chars": 7.7258, 
+            "avg_perc": 15.5794, 
+            "count": 7359
+        }, 
+        "short": {
+            "avg_chars": 2.4028, 
+            "avg_perc": 59.5594, 
+            "count": 1842
+        }
+    }, 
+    "rw": {
+        "global": {
+            "avg_chars": 1.5852, 
+            "avg_perc": 12.5771, 
+            "count": 8085
+        }, 
+        "long": {
+            "avg_chars": 1.6947, 
+            "avg_perc": 11.5869, 
+            "count": 2067
+        }, 
+        "middle": {
+            "avg_chars": 1.5773, 
+            "avg_perc": 20.5922, 
+            "count": 1644
+        }, 
+        "sentence": {
+            "avg_chars": 1.5463, 
+            "avg_perc": 4.3178, 
+            "count": 3573
+        }, 
+        "short": {
+            "avg_chars": 1.4919, 
+            "avg_perc": 35.5243, 
+            "count": 801
+        }
+    }, 
+    "sah": {
+        "global": {
+            "avg_chars": 0, 
+            "avg_perc": 0, 
+            "count": 0
+        }, 
+        "long": {
+            "avg_chars": 0, 
+            "avg_perc": 0, 
+            "count": 0
+        }, 
+        "middle": {
+            "avg_chars": 0, 
+            "avg_perc": 0, 
+            "count": 0
+        }, 
+        "sentence": {
+            "avg_chars": 0, 
+            "avg_perc": 0, 
+            "count": 0
+        }, 
+        "short": {
+            "avg_chars": 0, 
+            "avg_perc": 0, 
+            "count": 0
+        }
+    }, 
+    "si": {
+        "global": {
+            "avg_chars": 0.4554, 
+            "avg_perc": 9.5146, 
+            "count": 16083
+        }, 
+        "long": {
+            "avg_chars": 1.2394, 
+            "avg_perc": 8.5203, 
+            "count": 4416
+        }, 
+        "middle": {
+            "avg_chars": 1.065, 
+            "avg_perc": 13.7733, 
+            "count": 3523
+        }, 
+        "sentence": {
+            "avg_chars": -0.6751, 
+            "avg_perc": 1.0877, 
+            "count": 6371
+        }, 
+        "short": {
+            "avg_chars": 1.3542, 
+            "avg_perc": 33.8099, 
+            "count": 1773
+        }
+    }, 
+    "sk": {
+        "global": {
+            "avg_chars": 3.4995, 
+            "avg_perc": 22.675, 
+            "count": 17863
+        }, 
+        "long": {
+            "avg_chars": 3.4011, 
+            "avg_perc": 22.8398, 
+            "count": 4984
+        }, 
+        "middle": {
+            "avg_chars": 2.1917, 
+            "avg_perc": 27.8881, 
+            "count": 3677
+        }, 
+        "sentence": {
+            "avg_chars": 4.5577, 
+            "avg_perc": 11.882, 
+            "count": 7359
+        }, 
+        "short": {
+            "avg_chars": 2.1492, 
+            "avg_perc": 54.9249, 
+            "count": 1843
+        }
+    }, 
+    "sl": {
+        "global": {
+            "avg_chars": 1.5956, 
+            "avg_perc": 14.7398, 
+            "count": 12733
+        }, 
+        "long": {
+            "avg_chars": 2.313, 
+            "avg_perc": 15.8156, 
+            "count": 3412
+        }, 
+        "middle": {
+            "avg_chars": 1.5467, 
+            "avg_perc": 20.0668, 
+            "count": 2612
+        }, 
+        "sentence": {
+            "avg_chars": 1.1617, 
+            "avg_perc": 5.0924, 
+            "count": 5380
+        }, 
+        "short": {
+            "avg_chars": 1.6065, 
+            "avg_perc": 40.5618, 
+            "count": 1329
+        }
+    }, 
+    "son": {
+        "global": {
+            "avg_chars": 0.3685, 
+            "avg_perc": 10.2688, 
+            "count": 7991
+        }, 
+        "long": {
+            "avg_chars": 1.7995, 
+            "avg_perc": 12.6068, 
+            "count": 2065
+        }, 
+        "middle": {
+            "avg_chars": 1.2313, 
+            "avg_perc": 15.0518, 
+            "count": 1634
+        }, 
+        "sentence": {
+            "avg_chars": -1.1141, 
+            "avg_perc": 0.8467, 
+            "count": 3487
+        }, 
+        "short": {
+            "avg_chars": 1.3689, 
+            "avg_perc": 35.3768, 
+            "count": 805
+        }
+    }, 
+    "sq": {
+        "global": {
+            "avg_chars": 4.1694, 
+            "avg_perc": 18.1418, 
+            "count": 12095
+        }, 
+        "long": {
+            "avg_chars": 3.0312, 
+            "avg_perc": 20.4357, 
+            "count": 3177
+        }, 
+        "middle": {
+            "avg_chars": 1.4349, 
+            "avg_perc": 18.1914, 
+            "count": 2495
+        }, 
+        "sentence": {
+            "avg_chars": 6.8739, 
+            "avg_perc": 13.2527, 
+            "count": 5170
+        }, 
+        "short": {
+            "avg_chars": 1.3416, 
+            "avg_perc": 32.3996, 
+            "count": 1253
+        }
+    }, 
+    "sr": {
+        "global": {
+            "avg_chars": 1.0801, 
+            "avg_perc": 10.0103, 
+            "count": 11655
+        }, 
+        "long": {
+            "avg_chars": 1.5933, 
+            "avg_perc": 10.7504, 
+            "count": 3034
+        }, 
+        "middle": {
+            "avg_chars": 0.7016, 
+            "avg_perc": 9.2103, 
+            "count": 2416
+        }, 
+        "sentence": {
+            "avg_chars": 0.8833, 
+            "avg_perc": 4.0453, 
+            "count": 4980
+        }, 
+        "short": {
+            "avg_chars": 1.3551, 
+            "avg_perc": 34.0041, 
+            "count": 1225
+        }
+    }, 
+    "ss": {
+        "global": {
+            "avg_chars": 3.287, 
+            "avg_perc": 23.7719, 
+            "count": 7919
+        }, 
+        "long": {
+            "avg_chars": 3.7116, 
+            "avg_perc": 25.2929, 
+            "count": 2105
+        }, 
+        "middle": {
+            "avg_chars": 2.2357, 
+            "avg_perc": 28.8926, 
+            "count": 1952
+        }, 
+        "sentence": {
+            "avg_chars": 4.1504, 
+            "avg_perc": 11.6208, 
+            "count": 2873
+        }, 
+        "short": {
+            "avg_chars": 1.9505, 
+            "avg_perc": 45.7263, 
+            "count": 989
+        }
+    }, 
+    "st": {
+        "global": {
+            "avg_chars": 3.9028, 
+            "avg_perc": 23.9572, 
+            "count": 7919
+        }, 
+        "long": {
+            "avg_chars": 3.7677, 
+            "avg_perc": 25.7786, 
+            "count": 2105
+        }, 
+        "middle": {
+            "avg_chars": 2.043, 
+            "avg_perc": 25.7027, 
+            "count": 1952
+        }, 
+        "sentence": {
+            "avg_chars": 6.0038, 
+            "avg_perc": 14.6862, 
+            "count": 2873
+        }, 
+        "short": {
+            "avg_chars": 1.7573, 
+            "avg_perc": 43.5676, 
+            "count": 989
+        }
+    }, 
+    "sv-SE": {
+        "global": {
+            "avg_chars": 1.7077, 
+            "avg_perc": 10.5768, 
+            "count": 17861
+        }, 
+        "long": {
+            "avg_chars": 1.4317, 
+            "avg_perc": 9.5328, 
+            "count": 4983
+        }, 
+        "middle": {
+            "avg_chars": 0.8357, 
+            "avg_perc": 11.062, 
+            "count": 3676
+        }, 
+        "sentence": {
+            "avg_chars": 2.4322, 
+            "avg_perc": 5.4153, 
+            "count": 7358
+        }, 
+        "short": {
+            "avg_chars": 1.301, 
+            "avg_perc": 33.0269, 
+            "count": 1844
+        }
+    }, 
+    "sw": {
+        "global": {
+            "avg_chars": 2.4504, 
+            "avg_perc": 17.8083, 
+            "count": 6728
+        }, 
+        "long": {
+            "avg_chars": 3.2771, 
+            "avg_perc": 22.1472, 
+            "count": 1873
+        }, 
+        "middle": {
+            "avg_chars": 1.3625, 
+            "avg_perc": 17.0309, 
+            "count": 1564
+        }, 
+        "sentence": {
+            "avg_chars": 2.8683, 
+            "avg_perc": 9.1233, 
+            "count": 2476
+        }, 
+        "short": {
+            "avg_chars": 1.3681, 
+            "avg_perc": 35.7137, 
+            "count": 815
+        }
+    }, 
+    "ta": {
+        "global": {
+            "avg_chars": 4.4446, 
+            "avg_perc": 22.4657, 
+            "count": 11850
+        }, 
+        "long": {
+            "avg_chars": 3.7402, 
+            "avg_perc": 25.0006, 
+            "count": 3129
+        }, 
+        "middle": {
+            "avg_chars": 2.1128, 
+            "avg_perc": 26.2529, 
+            "count": 2491
+        }, 
+        "sentence": {
+            "avg_chars": 6.7667, 
+            "avg_perc": 14.8243, 
+            "count": 4993
+        }, 
+        "short": {
+            "avg_chars": 1.5497, 
+            "avg_perc": 39.2711, 
+            "count": 1237
+        }
+    }, 
+    "ta-LK": {
+        "global": {
+            "avg_chars": 6.4341, 
+            "avg_perc": 36.5909, 
+            "count": 5178
+        }, 
+        "long": {
+            "avg_chars": 5.7376, 
+            "avg_perc": 37.9017, 
+            "count": 1486
+        }, 
+        "middle": {
+            "avg_chars": 3.3258, 
+            "avg_perc": 42.3069, 
+            "count": 1194
+        }, 
+        "sentence": {
+            "avg_chars": 10.7794, 
+            "avg_perc": 23.9631, 
+            "count": 1786
+        }, 
+        "short": {
+            "avg_chars": 2.2008, 
+            "avg_perc": 55.9457, 
+            "count": 712
+        }
+    }, 
+    "te": {
+        "global": {
+            "avg_chars": 3.0673, 
+            "avg_perc": 18.9741, 
+            "count": 7804
+        }, 
+        "long": {
+            "avg_chars": 3.4762, 
+            "avg_perc": 23.3632, 
+            "count": 1993
+        }, 
+        "middle": {
+            "avg_chars": 1.9164, 
+            "avg_perc": 23.6986, 
+            "count": 1602
+        }, 
+        "sentence": {
+            "avg_chars": 3.6989, 
+            "avg_perc": 9.533, 
+            "count": 3428
+        }, 
+        "short": {
+            "avg_chars": 1.612, 
+            "avg_perc": 39.522, 
+            "count": 781
+        }
+    }, 
+    "th": {
+        "global": {
+            "avg_chars": -1.9158, 
+            "avg_perc": 1.9833, 
+            "count": 8060
+        }, 
+        "long": {
+            "avg_chars": 0.513, 
+            "avg_perc": 3.7549, 
+            "count": 2070
+        }, 
+        "middle": {
+            "avg_chars": 0.6598, 
+            "avg_perc": 8.1166, 
+            "count": 1652
+        }, 
+        "sentence": {
+            "avg_chars": -5.1619, 
+            "avg_perc": -6.295, 
+            "count": 3526
+        }, 
+        "short": {
+            "avg_chars": 0.7488, 
+            "avg_perc": 20.936, 
+            "count": 812
+        }
+    }, 
+    "tl": {
+        "global": {
+            "avg_chars": 0, 
+            "avg_perc": 0, 
+            "count": 0
+        }, 
+        "long": {
+            "avg_chars": 0, 
+            "avg_perc": 0, 
+            "count": 0
+        }, 
+        "middle": {
+            "avg_chars": 0, 
+            "avg_perc": 0, 
+            "count": 0
+        }, 
+        "sentence": {
+            "avg_chars": 0, 
+            "avg_perc": 0, 
+            "count": 0
+        }, 
+        "short": {
+            "avg_chars": 0, 
+            "avg_perc": 0, 
+            "count": 0
+        }
+    }, 
+    "tn": {
+        "global": {
+            "avg_chars": 6.9093, 
+            "avg_perc": 35.4462, 
+            "count": 5996
+        }, 
+        "long": {
+            "avg_chars": 5.8876, 
+            "avg_perc": 39.4944, 
+            "count": 1583
+        }, 
+        "middle": {
+            "avg_chars": 2.5301, 
+            "avg_perc": 32.0273, 
+            "count": 1594
+        }, 
+        "sentence": {
+            "avg_chars": 13.6476, 
+            "avg_perc": 28.5607, 
+            "count": 1924
+        }, 
+        "short": {
+            "avg_chars": 2.0302, 
+            "avg_perc": 49.1769, 
+            "count": 895
+        }
+    }, 
+    "tr": {
+        "global": {
+            "avg_chars": 1.5303, 
+            "avg_perc": 12.9184, 
+            "count": 17352
+        }, 
+        "long": {
+            "avg_chars": 1.701, 
+            "avg_perc": 11.6874, 
+            "count": 4832
+        }, 
+        "middle": {
+            "avg_chars": 1.2696, 
+            "avg_perc": 15.9455, 
+            "count": 3650
+        }, 
+        "sentence": {
+            "avg_chars": 1.5139, 
+            "avg_perc": 4.2666, 
+            "count": 7036
+        }, 
+        "short": {
+            "avg_chars": 1.6619, 
+            "avg_perc": 43.3288, 
+            "count": 1834
+        }
+    }, 
+    "ts": {
+        "global": {
+            "avg_chars": 4.3875, 
+            "avg_perc": 26.4274, 
+            "count": 7919
+        }, 
+        "long": {
+            "avg_chars": 4.3658, 
+            "avg_perc": 29.3877, 
+            "count": 2105
+        }, 
+        "middle": {
+            "avg_chars": 2.2254, 
+            "avg_perc": 28.278, 
+            "count": 1952
+        }, 
+        "sentence": {
+            "avg_chars": 6.7649, 
+            "avg_perc": 16.9736, 
+            "count": 2875
+        }, 
+        "short": {
+            "avg_chars": 1.7852, 
+            "avg_perc": 43.9919, 
+            "count": 987
+        }
+    }, 
+    "uk": {
+        "global": {
+            "avg_chars": 2.0109, 
+            "avg_perc": 17.6557, 
+            "count": 17109
+        }, 
+        "long": {
+            "avg_chars": 2.7974, 
+            "avg_perc": 19.0387, 
+            "count": 4749
+        }, 
+        "middle": {
+            "avg_chars": 1.6683, 
+            "avg_perc": 21.4773, 
+            "count": 3579
+        }, 
+        "sentence": {
+            "avg_chars": 1.6348, 
+            "avg_perc": 6.0505, 
+            "count": 6987
+        }, 
+        "short": {
+            "avg_chars": 2.0769, 
+            "avg_perc": 51.5691, 
+            "count": 1794
+        }
+    }, 
+    "ur": {
+        "global": {
+            "avg_chars": 0.4495, 
+            "avg_perc": 8.3581, 
+            "count": 7302
+        }, 
+        "long": {
+            "avg_chars": 1.0941, 
+            "avg_perc": 7.3849, 
+            "count": 2051
+        }, 
+        "middle": {
+            "avg_chars": 0.7623, 
+            "avg_perc": 9.7885, 
+            "count": 1641
+        }, 
+        "sentence": {
+            "avg_chars": -0.4432, 
+            "avg_perc": 0.9405, 
+            "count": 2764
+        }, 
+        "short": {
+            "avg_chars": 1.1962, 
+            "avg_perc": 32.1769, 
+            "count": 846
+        }
+    }, 
+    "ve": {
+        "global": {
+            "avg_chars": 5.9787, 
+            "avg_perc": 32.7896, 
+            "count": 7919
+        }, 
+        "long": {
+            "avg_chars": 4.8684, 
+            "avg_perc": 32.6243, 
+            "count": 2105
+        }, 
+        "middle": {
+            "avg_chars": 2.9273, 
+            "avg_perc": 37.3998, 
+            "count": 1952
+        }, 
+        "sentence": {
+            "avg_chars": 10.1489, 
+            "avg_perc": 22.3684, 
+            "count": 2875
+        }, 
+        "short": {
+            "avg_chars": 2.234, 
+            "avg_perc": 54.3803, 
+            "count": 987
+        }
+    }, 
+    "vi": {
+        "global": {
+            "avg_chars": 0.4821, 
+            "avg_perc": 8.0014, 
+            "count": 11358
+        }, 
+        "long": {
+            "avg_chars": 1.3514, 
+            "avg_perc": 9.5056, 
+            "count": 2957
+        }, 
+        "middle": {
+            "avg_chars": 0.8354, 
+            "avg_perc": 10.4674, 
+            "count": 2388
+        }, 
+        "sentence": {
+            "avg_chars": -0.3494, 
+            "avg_perc": 1.7744, 
+            "count": 4788
+        }, 
+        "short": {
+            "avg_chars": 0.9453, 
+            "avg_perc": 23.902, 
+            "count": 1225
+        }
+    }, 
+    "wo": {
+        "global": {
+            "avg_chars": -1.1738, 
+            "avg_perc": 6.6851, 
+            "count": 5875
+        }, 
+        "long": {
+            "avg_chars": 1.6092, 
+            "avg_perc": 11.3803, 
+            "count": 1676
+        }, 
+        "middle": {
+            "avg_chars": 0.5885, 
+            "avg_perc": 6.5252, 
+            "count": 1458
+        }, 
+        "sentence": {
+            "avg_chars": -5.7026, 
+            "avg_perc": -4.9487, 
+            "count": 1974
+        }, 
+        "short": {
+            "avg_chars": 1.0508, 
+            "avg_perc": 26.671, 
+            "count": 767
+        }
+    }, 
+    "xh": {
+        "global": {
+            "avg_chars": 6.2433, 
+            "avg_perc": 39.3592, 
+            "count": 10110
+        }, 
+        "long": {
+            "avg_chars": 6.022, 
+            "avg_perc": 41.1878, 
+            "count": 2862
+        }, 
+        "middle": {
+            "avg_chars": 3.8538, 
+            "avg_perc": 48.7538, 
+            "count": 2394
+        }, 
+        "sentence": {
+            "avg_chars": 9.1675, 
+            "avg_perc": 21.3695, 
+            "count": 3630
+        }, 
+        "short": {
+            "avg_chars": 2.7623, 
+            "avg_perc": 70.0599, 
+            "count": 1224
+        }
+    }, 
+    "zh-CN": {
+        "global": {
+            "avg_chars": -19.0637, 
+            "avg_perc": -57.1932, 
+            "count": 17864
+        }, 
+        "long": {
+            "avg_chars": -9.0856, 
+            "avg_perc": -60.2209, 
+            "count": 4986
+        }, 
+        "middle": {
+            "avg_chars": -4.3139, 
+            "avg_perc": -54.473, 
+            "count": 3676
+        }, 
+        "sentence": {
+            "avg_chars": -37.5681, 
+            "avg_perc": -61.5058, 
+            "count": 7358
+        }, 
+        "short": {
+            "avg_chars": -1.6101, 
+            "avg_perc": -37.2216, 
+            "count": 1844
+        }
+    }, 
+    "zh-TW": {
+        "global": {
+            "avg_chars": -18.7812, 
+            "avg_perc": -54.8172, 
+            "count": 17860
+        }, 
+        "long": {
+            "avg_chars": -8.7067, 
+            "avg_perc": -57.557, 
+            "count": 4984
+        }, 
+        "middle": {
+            "avg_chars": -4.0155, 
+            "avg_perc": -50.5804, 
+            "count": 3676
+        }, 
+        "sentence": {
+            "avg_chars": -37.3316, 
+            "avg_perc": -60.7555, 
+            "count": 7358
+        }, 
+        "short": {
+            "avg_chars": -1.4072, 
+            "avg_perc": -32.1381, 
+            "count": 1842
+        }
+    }, 
+    "zu": {
+        "global": {
+            "avg_chars": 5.3264, 
+            "avg_perc": 33.5626, 
+            "count": 9672
+        }, 
+        "long": {
+            "avg_chars": 5.3335, 
+            "avg_perc": 36.114, 
+            "count": 2675
+        }, 
+        "middle": {
+            "avg_chars": 3.3689, 
+            "avg_perc": 42.9104, 
+            "count": 2250
+        }, 
+        "sentence": {
+            "avg_chars": 7.4926, 
+            "avg_perc": 18.0255, 
+            "count": 3599
+        }, 
+        "short": {
+            "avg_chars": 2.3554, 
+            "avg_perc": 58.0052, 
+            "count": 1148
+        }
+    }
+}

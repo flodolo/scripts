@@ -57,12 +57,6 @@ def get_string(package, localdirectory, strings):
 
 
 
-def utf8len(s):
-    return len(s.decode('utf-8'))
-
-
-
-
 def main():
     locales_folder = os.path.join(os.getcwd(), 'locales')
     repo_english = os.path.join(locales_folder, 'en-GB', 'mozilla-beta') + os.sep
