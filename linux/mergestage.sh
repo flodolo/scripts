@@ -14,7 +14,7 @@ echo "Merge a revision to $tag tag for mozilla.org"
 read -rp $'Do you want to svn update the repo (y/n, default yes)?\n' -n 1 updatesvn
 if [ "$updatesvn" == 'y' ] || [ "$updatesvn" == '' ]
 then
-    echo "Updating $tag repo to the latest version..."
+    echo -e "\nUpdating $tag repo to the latest version..."
     svn up --ignore-externals
 fi
 
@@ -23,10 +23,10 @@ if (( $# == 1 ))
   then
     revision=$1
   else
-  	read -rp $'Which revision do you want to merge?\n' revision
+  	read -rp $'\nWhich revision do you want to merge?\n' revision
 fi
 
-echo "----------------"
+echo -e "\n----------------"
 echo "Starting merge..."
 svn merge $trunk --ignore-ancestry -c${revision}
 echo "End of merge, don't forget to commit your changes to $tag."
@@ -36,11 +36,11 @@ stage+="locales"
 cd $stage
 svn status
 
-echo "----------------"
-read -rp $'Do you want to commit your changes (y/n, default no)?\n' -n 1 commitsvn
+echo -e "\n----------------"
+read -rp $'\nDo you want to commit your changes (y/n, default no)?\n' -n 1 commitsvn
 echo "----------------"
 if [ "$commitsvn" == 'y' ]
 then
-    echo "Commit to $tag..."
+    echo -e "\nCommit to $tag..."
     svn ci -m "l10n: translation update"
 fi
