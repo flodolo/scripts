@@ -38,7 +38,7 @@ then
 fi
 cd gaia-l10n
 
-for localecode in $(cat ../locales.txt)
+for localecode in $(cat ../locales_gaia.txt)
 do
 	if [ -d $localecode/.hg ]
     then
