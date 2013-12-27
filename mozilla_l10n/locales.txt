@@ -20,6 +20,7 @@ da
 de
 el
 en-GB
+en-US
 en-ZA
 eo
 es-AR
