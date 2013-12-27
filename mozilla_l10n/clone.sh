@@ -1,5 +1,8 @@
 #! /usr/bin/env bash
 
+# Note: replace "ssh://" with "https://" if you don't have SSH access to hg.mozilla.org
+# You need a locales.txt file in the same folder of the script
+
 interrupt_code()
 # This code runs if user hits control-c
 {
