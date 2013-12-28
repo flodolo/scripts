@@ -2,8 +2,11 @@
 
 # Note: replace "ssh://" with "https://" if you don't have SSH access to hg.mozilla.org
 # You need a locales.txt file in the same folder of the script
+# Syntax:
+# - without parameters: update all locales
+# - one parameter (locale code): update only the requested locale
 
-interrupt_code()
+function interrupt_code()
 # This code runs if user hits control-c
 {
   echored "*** Setup interrupted ***"
@@ -31,6 +34,50 @@ function echoyellow() {
     echo -e "$YELLOW$*$NORMAL"
 }
 
+function check_repo() {
+	# $1: repository name
+	# $2: locale code
+
+	local reponame="$1"
+	local localecode="$2"
+
+	if [ -d $localecode/$reponame/.hg ]
+	    then
+			echogreen "Updating $reponame for $localecode"
+			hg -R $localecode/$reponame pull -u default
+		else
+			mkdir -p $localecode
+			echored "$reponame for $localecode does not exist"
+			cd $localecode
+			echoyellow "Cloning $reponame for $localecode"
+			if [ $reponame == "l10-central" ]
+			then
+				hg clone ssh://hg.mozilla.org/$reponame/$localecode l10n-central
+			else
+				hg clone ssh://hg.mozilla.org/releases/l10n/$reponame/$localecode/ $reponame
+			fi
+			cd ..
+		fi
+}
+
+if [ $# -eq 1 ]
+then
+    # I have exactly one parameter, it should be the locale code
+    locale_list=$1
+else
+	# Have to update all locales
+	locale_list=$(cat locales.txt)
+fi
+
+if [ $# -gt 1 ]
+then
+    # Too many parameters, warn and exit
+    echo "ERROR: too many arguments. Run 'clone.sh' without parameters to"
+    echo "clone/update all locales, or add the locale code as the only parameter "
+    echo "(e.g. 'clone.sh it' to clone/update only Italian)."
+    exit 1
+fi
+
 # Create "locales" folder if missing
 if [ ! -d "locales" ]
 then
@@ -38,45 +85,9 @@ then
 fi
 cd locales
 
-for localecode in $(cat ../locales.txt)
+for localecode in $locale_list
 do
-	if [ -d $localecode/mozilla-beta/.hg ]
-    then
-		echogreen "Updating mozilla-beta for $localecode"
-		hg -R $localecode/mozilla-beta pull -u default
-	else
-		mkdir -p $localecode
-		echored "mozilla-beta for $localecode does not exist"
-		cd $localecode
-		echoyellow "Cloning mozilla-beta for $localecode"
-		hg clone ssh://hg.mozilla.org/releases/l10n/mozilla-beta/$localecode/ mozilla-beta
-		cd ..
-	fi
-
-	if [ -d $localecode/mozilla-aurora/.hg ]
-    then
-		echogreen "Updating mozilla-aurora for $localecode"
-		hg -R $localecode/mozilla-aurora pull -u default
-	else
-		mkdir -p $localecode
-		echored "mozilla-aurora for $localecode does not exist"
-		cd $localecode
-		echoyellow "Cloning mozilla-aurora for $localecode"
-		hg clone ssh://hg.mozilla.org/releases/l10n/mozilla-aurora/$localecode/ mozilla-aurora
-		cd ..
-	fi
-
-	if [ -d $localecode/l10n-central/.hg ]
-    then
-		echogreen "Updating l10n-central for $localecode"
-		hg -R $localecode/l10n-central pull -u default
-	else
-		mkdir -p $localecode
-		echored "l10n-central for $localecode does not exist"
-		cd $localecode
-		echoyellow "Cloning l10n-central for $localecode"
-		hg clone ssh://hg.mozilla.org/l10n-central/$localecode l10n-central
-		cd ..
-	fi
+	check_repo mozilla-beta $localecode
+	check_repo mozilla-aurora $localecode
+	check_repo l10n-central $localecode
 done
-
