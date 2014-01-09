@@ -616,6 +616,9 @@ def main():
     beta_locales = install_folder + "/beta.txt"
     release_locales = install_folder + "/release.txt"
 
+    if not os.path.exists("web/p12n"):
+        os.makedirs("web/p12n")
+
     jsonfilename = "web/p12n/searchplugins.json"
     jsondata = {}
 
