@@ -263,7 +263,7 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
         if (channel in jsondata[locale][product]):
             # I need to proceed only if I have searchplugin for this branch+product+locale
             for element in jsondata[locale][product][channel].values():
-                if element["name"]:
+                if ("name" in element):
                     available_searchplugins.append(element["name"])
 
             existingfile = os.path.isfile(source)
@@ -361,15 +361,17 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
                     if key.startswith('gecko.handlerService.schemes.'):
                         lineok = True
                         splittedkey = key.split('.')
-                        ch_name = splittedkey[3]
+                        ch_type = splittedkey[3]
                         ch_number = splittedkey[4]
                         ch_param = splittedkey[5]
-                        if (ch_number not in contenthandlers):
-                            contenthandlers[ch_number] = {}
+                        if (ch_type not in contenthandlers):
+                            contenthandlers[ch_type] = {}
+                        if (ch_number not in contenthandlers[ch_type]):
+                            contenthandlers[ch_type][ch_number] = {}
                         if (ch_param == "name"):
-                            contenthandlers[ch_number]["name"] = value
+                            contenthandlers[ch_type][ch_number]["name"] = value
                         if (ch_param == "uriTemplate"):
-                            contenthandlers[ch_number]["uri"] = value
+                            contenthandlers[ch_type][ch_number]["uri"] = value
 
                     # Ignore some keys for mail and seamonkey
                     if (product == "suite") or (product == "mail"):
@@ -387,13 +389,30 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
                         html_output.append("<p><span class='code'>" + key + " = " + value + "</span></p>")
 
                 try:
-                    jsondata[locale][product][channel]["p12n"] = {
-                        "defaultenginename": defaultenginename,
-                        "searchorder": searchorder,
-                        "feedhandlers": feedhandlers,
-                        "handlerversion": handlerversion,
-                        "contenthandlers": contenthandlers
-                    }
+                    if (product != "suite"):
+                        jsondata[locale][product][channel]["p12n"] = {
+                            "defaultenginename": defaultenginename,
+                            "searchorder": searchorder,
+                            "feedhandlers": feedhandlers,
+                            "handlerversion": handlerversion,
+                            "contenthandlers": contenthandlers
+                        }
+                    else:
+                        # Seamonkey has 2 different region.properties files:
+                        # browser: has contenthandlers
+                        # common: has search.order
+                        # When analyzing common in ony update search.order and default
+                        if ("/common/region.properties" in source):
+                            jsondata[locale][product][channel]["p12n"]["defaultenginename"] = defaultenginename
+                            jsondata[locale][product][channel]["p12n"]["searchorder"] =  searchorder
+                        else:
+                            jsondata[locale][product][channel]["p12n"] = {
+                                "defaultenginename": defaultenginename,
+                                "searchorder": searchorder,
+                                "feedhandlers": feedhandlers,
+                                "handlerversion": handlerversion,
+                                "contenthandlers": contenthandlers
+                            }
                 except Exception as e:
                     html_output.append("<p><span class='error'>Error:</span> problem saving data into json from " +
                         source + " (" + locale + ", " + product + ", " + channel + ")</p>")
@@ -548,6 +567,7 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
             extract_sp_product(path + "suite/locales/en-US/en-US/searchplugins/", "suite", "en-US", channel, jsondata, splistenUS_suite, images_list, html_output)
             if clp12n:
                 extract_p12n_product(path + "suite/locales/en-US/en-US/chrome/browser/region.properties", "suite", "en-US", channel, jsondata, html_output)
+                extract_p12n_product(path + "suite/locales/en-US/en-US/chrome/common/region.properties", "suite", "en-US", channel, jsondata, html_output)
 
         locale_list = open(localeslist, "r").read().splitlines()
         for locale in locale_list:
@@ -574,6 +594,7 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
                 extract_sp_product(path + "suite/searchplugins/", "suite", locale, channel, jsondata, splistenUS_suite, images_list, html_output)
                 if clp12n:
                     extract_p12n_product(path + "suite/chrome/browser/region.properties", "suite", locale, channel, jsondata, html_output)
+                    extract_p12n_product(path + "suite/chrome/common/region.properties", "suite", locale, channel, jsondata, html_output)
     except Exception as e:
         print "Error reading list of locales from " + localeslist
         print e
