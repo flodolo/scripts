@@ -39,9 +39,10 @@
 <?php
     include_once('../logos.inc');
 
-    $locales = array('ca', 'cs', 'da', 'de', 'en-GB', 'es-ES', 'fi', 'fr', 'ga-IE', 'hu', 'ja', 'ko',
-                     'it', 'nb-NO', 'nl', 'pl', 'pt-BR', 'pt-PT', 'ro', 'ru', 'sk', 'sv-SE', 'tr',
-                     'uk', 'zh-CN', 'zh-TW');
+    $locales = array('ca', 'cs', 'da', 'de', 'en-GB', 'en-ZA', 'es-ES', 'fi', 'fr', 'ga-IE', 'hu', 'ja',
+                     'ko', 'lt', 'it', 'nb-NO', 'nl', 'pl', 'pt-BR', 'pt-PT', 'ro', 'ru', 'sk', 'sl',
+                     'sv-SE', 'th', 'tr', 'uk', 'zh-CN', 'zh-TW');
+
 
     $filename = '../searchplugins.json';
 
@@ -52,7 +53,7 @@
     $products = array('mobile');
     $productnames = array('Firefox Mobile (Android)');
 
-    $channel = !empty($_REQUEST['channel']) ? $_REQUEST['channel'] : 'aurora';
+    $channel = !empty($_REQUEST['channel']) ? $_REQUEST['channel'] : 'beta';
 
     $html_output = "<h1>Searchplugin Images Analysis - " . $channel . "</h1>\n";
     $html_output .= '<p id="update">Last update: ' . $jsonarray["creation_date"] . "</p>\n";

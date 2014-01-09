@@ -406,65 +406,6 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
 
 
 
-def p12n_differences (jsondata):
-
-    def print_differences (more_stable, less_stable, more_stable_label, less_stable_label):
-        diff = set(more_stable.keys()) - set(less_stable.keys())
-        if diff:
-            print "\nThere are differences between " + more_stable_label + " and " + less_stable_label + " for " + locale
-
-            print "Items available in " + more_stable_label + " but non in " + less_stable_label
-            for item in diff:
-                print "  " + item
-
-            temp_diff = set(less_stable.keys()) - set(more_stable.keys())
-            if temp_diff:
-                print "Items available in " + less_stable_label + " but non in " + more_stable_label
-                for item in temp_diff:
-                    print "  " + item
-
-            common_items = set(more_stable.keys()).intersection(set(less_stable.keys()))
-            if common_items:
-                print "Items present in both but changed"
-                for item in common_items:
-                    if (more_stable[item] != less_stable[item]):
-                        print "  " + item
-
-
-
-
-    print "\n\n"
-    print "**********************************************************************"
-    print "*                       PRODUCTIZATION  CHECKS                       *"
-    print "**********************************************************************"
-
-    # Analyze Firefox
-    for locale in jsondata:
-        p12n_release = {}
-        p12n_beta = {}
-        p12n_aurora = {}
-        p12n_trunk = {}
-
-        if ("release" in jsondata[locale]["browser"]):
-            p12n_release = jsondata[locale]["browser"]["release"]
-        if ("beta" in jsondata[locale]["browser"]):
-            p12n_beta = jsondata[locale]["browser"]["beta"]
-        if ("aurora" in jsondata[locale]["browser"]):
-            p12n_aurora = jsondata[locale]["browser"]["aurora"]
-        if ("trunk" in jsondata[locale]["browser"]):
-            p12n_trunk = jsondata[locale]["browser"]["trunk"]
-
-        if (p12n_release and p12n_beta):
-            print_differences (p12n_release, p12n_beta, "RELEASE", "BETA")
-
-        if (p12n_beta and p12n_aurora):
-            print_differences (p12n_beta, p12n_aurora, "BETA", "AURORA")
-
-        if (p12n_aurora and p12n_trunk):
-            print_differences (p12n_aurora, p12n_trunk, "AURORA", "TRUNK")
-
-
-
 
 def diff(a, b):
     b = set(b)
@@ -646,12 +587,12 @@ def main():
     clparser = OptionParser()
     clparser.add_option("-p", "--product", help="Choose a specific product", choices=["browser", "mobile", "mail", "suite", "all"], default="all")
     clparser.add_option("-b", "--branch", help="Choose a specific branch", choices=["release", "beta", "aurora", "trunk", "all"], default="all")
-    clparser.add_option("-s", "--productization", help="Enable productization checks", action="store_true")
+    clparser.add_option("-n", "--noproductization", help="Disable productization checks", action="store_true")
 
     (options, args) = clparser.parse_args()
     clproduct = options.product
     clbranch = options.branch
-    clp12n = options.productization if options.productization else False
+    clp12n = False if options.noproductization else True
 
     # Read configuration file
     parser = SafeConfigParser()
@@ -675,10 +616,10 @@ def main():
     beta_locales = install_folder + "/beta.txt"
     release_locales = install_folder + "/release.txt"
 
-    jsonfilename = "web/searchplugins.json"
+    jsonfilename = "web/p12n/searchplugins.json"
     jsondata = {}
 
-    htmlfilename = "web/p12n.html"
+    htmlfilename = "web/p12n/index.html"
     html_output = ['''<!DOCTYPE html>
         <html lang="en">
         <head>
@@ -739,10 +680,6 @@ def main():
         extract_p12n_channel(clproduct, beta_source, beta_l10n, beta_locales, "beta", jsondata, clp12n, images_list, html_output)
     if (clbranch=="all") or (clbranch=="release"):
         extract_p12n_channel(clproduct, release_source, release_l10n, release_locales, "release", jsondata, clp12n, images_list, html_output)
-
-    if (clbranch=="all") and (clp12n):
-        #p12n_differences(jsondata)
-        pass
 
     # Create images json structure and save it to file
     image_data = {}
