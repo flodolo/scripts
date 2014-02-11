@@ -153,7 +153,15 @@ def main():
         'po_file': 'LC_MESSAGES/javascript.po',
         'locale_folder': 'locale'
     }
-
+    products['zippy'] = {
+        'repository_name': 'zippy',
+        'product_name': 'zippy',
+        'displayed_name': 'Zippy',
+        'repository_type': 'git',
+        'repository_url': 'https://github.com/mozilla/zippy',
+        'po_file': 'LC_MESSAGES/messages.po',
+        'locale_folder': 'locale'
+    }
     # Check if repositories exist and pull, if not clone
     for key,product in products.iteritems():
         if os.path.isdir(path + '/' + product['repository_name']):
