@@ -179,7 +179,8 @@ else
 	then
 		cd $localecode
 		echogreen "Update locales/$localecode repository"
-		hg pull -u
+		hg pull -r default
+		hg up -C
 	fi
 fi
 
