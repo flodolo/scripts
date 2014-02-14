@@ -45,6 +45,7 @@ function check_repo() {
 	    then
 			echogreen "Updating $reponame for $localecode"
 			hg -R $localecode/$reponame pull -u default
+			hg -R $localecode/$reponame update -C
 		else
 			mkdir -p $localecode
 			echored "$reponame for $localecode does not exist"
