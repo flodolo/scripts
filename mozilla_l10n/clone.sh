@@ -51,7 +51,7 @@ function check_repo() {
 			echored "$reponame for $localecode does not exist"
 			cd $localecode
 			echoyellow "Cloning $reponame for $localecode"
-			if [ $reponame == "l10-central" ]
+			if [ $reponame == "l10n-central" ]
 			then
 				hg clone ssh://hg.mozilla.org/$reponame/$localecode l10n-central
 			else
