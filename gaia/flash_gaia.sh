@@ -185,4 +185,4 @@ else
 fi
 
 cd $repofolder/gaia
-make clean && PRODUCTION=1 make install-gaia MAKECMDGOALS=production MOZILLA_OFFICIAL=1 GAIA_KEYBOARD_LAYOUTS=en,$localecode GAIA_DEFAULT_LOCALE=$localecode LOCALES_FILE=locales/languages_all.json LOCALE_BASEDIR=locales/ REMOTE_DEBUGGER=1
+make clean && PRODUCTION=1 make install-gaia MAKECMDGOALS=production MOZILLA_OFFICIAL=1 GAIA_KEYBOARD_LAYOUTS=en,$localecode GAIA_DEFAULT_LOCALE=$localecode LOCALES_FILE=locales/languages_all.json LOCALE_BASEDIR=locales/ DEVICE_DEBUG=1
