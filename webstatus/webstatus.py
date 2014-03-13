@@ -91,20 +91,20 @@ def main():
         'locale_folder': 'locale'
     }
     products['fxaccount-client'] = {
-        'repository_name': 'fxa-content-server',
-        'product_name': 'fxaccount-client',
+        'repository_name': 'fxa-content-server-l10n',
+        'product_name': 'fxaccount-client-l10n',
         'displayed_name': 'Firefox Account (client)',
         'repository_type': 'git',
-        'repository_url': 'https://github.com/mozilla/fxa-content-server',
+        'repository_url': 'https://github.com/mozilla/fxa-content-server-l10n',
         'po_file': 'LC_MESSAGES/client.po',
         'locale_folder': 'locale'
     }
     products['fxaccount-server'] = {
-        'repository_name': 'fxa-content-server',
-        'product_name': 'fxaccount-server',
+        'repository_name': 'fxa-content-server-l10n',
+        'product_name': 'fxaccount-server-l10n',
         'displayed_name': 'Firefox Account (server)',
         'repository_type': 'git',
-        'repository_url': 'https://github.com/mozilla/fxa-content-server',
+        'repository_url': 'https://github.com/mozilla/fxa-content-server-l10n',
         'po_file': 'LC_MESSAGES/server.po',
         'locale_folder': 'locale'
     }
