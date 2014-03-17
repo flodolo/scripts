@@ -25,8 +25,6 @@
         table tbody tr:hover {background: #EAECEE; color: #111;}
         table tbody tr.fixed {background: #A5FAB0;}
         table tbody td.number {text-align: right;}
-        table tbody tr.complete {background-color: #92CC6E}
-        table tbody tr.incomplete {background-color: #FFA952}
         table tbody tr.error {background-color: #FF5252}
         p#update {margin: 20px;}
     </style>
@@ -107,18 +105,20 @@
             <tbody>
         <?php
         foreach ($json_array[$requested_locale] as $current_product) {
-            if ($current_product['percentage'] == 100) {
-                $classrow = 'complete';
+            $opacity = floor(round($current_product['percentage']/100,2)*10)/10;
+            if ($opacity >= 0.5) {
+                $stylerow = "background-color: rgba(88, 179, 52, {$opacity})";
             } else {
-                $classrow = 'incomplete';
+                $opacity = 1 - $opacity;
+                $stylerow = "background-color: rgba(237, 173, 55, {$opacity})";
             }
-
             if ($current_product['error_status'] == 'true') {
                 $classrow = 'error';
+                $stylerow = '';
+            } else {
+                $classrow = '';
             }
-
-            echo '<tr class="' . $classrow . '">
-                    ';
+            echo "<tr class='{$classrow}' style='{$stylerow}'>\n";
             echo '<th>' . $current_product['name'] . "</th>\n";
             echo '      <td class="number">' . $current_product['percentage'] . "</td>\n";
             echo '      <td class="number">' . $current_product['translated'] . "</td>\n";
@@ -153,18 +153,20 @@
         foreach ($available_locales as $locale_code) {
             if (isset($json_array[$locale_code][$requested_product])) {
                 $current_product = $json_array[$locale_code][$requested_product];
-                if ($current_product['percentage'] == 100) {
-                    $classrow = 'complete';
+                $opacity = floor(round($current_product['percentage']/100,2)*10)/10;
+                if ($opacity >= 0.5) {
+                    $stylerow = "background-color: rgba(88, 179, 52, {$opacity})";
                 } else {
-                    $classrow = 'incomplete';
+                    $opacity = 1 - $opacity;
+                    $stylerow = "background-color: rgba(237, 173, 55, {$opacity})";
                 }
-
                 if ($current_product['error_status'] == 'true') {
                     $classrow = 'error';
+                    $stylerow = '';
+                } else {
+                    $classrow = '';
                 }
-
-                echo '<tr class="' . $classrow . '">
-                        ';
+                echo "<tr class='{$classrow}' style='{$stylerow}'>\n";
                 echo '<th>' . $locale_code . "</th>\n";
                 echo '      <td class="number">' . $current_product['percentage'] . '</td>';
                 echo '      <td class="number">' . $current_product['translated'] . '</td>';
@@ -183,7 +185,7 @@
     ?>
 
 <?php
-    echo '<p id="update">Last update: ' . date ("Y-m-d H:i", filemtime($file_name)) . '</p>';
+    echo '<p id="update">Last update: ' . date ("Y-m-d H:i", filemtime($file_name)) . ' CET</p>';
 ?>
 </body>
 </html>
