@@ -11,8 +11,8 @@ def main():
     # Path to repository folder and output json file
     path = '/home/flod/git/webstatus'
     json_filename = '/home/flod/public_html/webstatus/webstatus.json'
-    # path = '/home/flodolo/mozilla/test_webstatus'
-    # json_filename = '/home/flodolo/mozilla/test_webstatus/webstatus.json'
+    #path = '/home/flodolo/webstatus'
+    #json_filename = '/home/flodolo/webstatus/webstatus.json'
     json_data = {}
     ignored_folders = ['dbg', 'templates', '.svn', '.git']
 
@@ -25,7 +25,8 @@ def main():
         'repository_type': 'svn',
         'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/affiliates/',
         'po_file': 'LC_MESSAGES/messages.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locale',
+        'excluded_folders': []
     }
     products['browserid'] = {
         'repository_name': 'browserid',
@@ -34,7 +35,8 @@ def main():
         'repository_type': 'svn',
         'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/browserid/',
         'po_file': 'LC_MESSAGES/messages.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locale',
+        'excluded_folders': []
     }
     products['browserid-bigtent'] = {
         'repository_name': 'browserid-bigtent',
@@ -43,7 +45,8 @@ def main():
         'repository_type': 'svn',
         'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/browserid-bigtent/',
         'po_file': 'LC_MESSAGES/messages.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locale',
+        'excluded_folders': []
     }
     products['browserid-bigtent-gmail'] = {
         'repository_name': 'browserid-bigtent',
@@ -52,7 +55,8 @@ def main():
         'repository_type': 'svn',
         'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/browserid-bigtent/',
         'po_file': 'LC_MESSAGES/gmail.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locale',
+        'excluded_folders': []
     }
     products['browserid-client'] = {
         'repository_name': 'browserid',
@@ -61,7 +65,8 @@ def main():
         'repository_type': 'svn',
         'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/browserid/',
         'po_file': 'LC_MESSAGES/client.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locale',
+        'excluded_folders': []
     }
     products['commbadge'] = {
         'repository_name': 'commbadge',
@@ -70,7 +75,8 @@ def main():
         'repository_type': 'git',
         'repository_url': 'https://github.com/mozilla/commbadge',
         'po_file': 'LC_MESSAGES/messages.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locale',
+        'excluded_folders': []
     }
     products['firefoxflicks'] = {
         'repository_name': 'firefoxflicks',
@@ -79,7 +85,8 @@ def main():
         'repository_type': 'svn',
         'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/firefoxflicks/',
         'po_file': 'LC_MESSAGES/messages.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locale',
+        'excluded_folders': []
     }
     products['fireplace'] = {
         'repository_name': 'fireplace',
@@ -88,7 +95,8 @@ def main():
         'repository_type': 'git',
         'repository_url': 'https://github.com/mozilla/fireplace',
         'po_file': 'LC_MESSAGES/messages.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locale',
+        'excluded_folders': []
     }
     products['fxaccount-client'] = {
         'repository_name': 'fxa-content-server-l10n',
@@ -97,7 +105,8 @@ def main():
         'repository_type': 'git',
         'repository_url': 'https://github.com/mozilla/fxa-content-server-l10n',
         'po_file': 'LC_MESSAGES/client.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locale',
+        'excluded_folders': []
     }
     products['fxaccount-server'] = {
         'repository_name': 'fxa-content-server-l10n',
@@ -106,7 +115,8 @@ def main():
         'repository_type': 'git',
         'repository_url': 'https://github.com/mozilla/fxa-content-server-l10n',
         'po_file': 'LC_MESSAGES/server.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locale',
+        'excluded_folders': []
     }
     products['input'] = {
         'repository_name': 'input',
@@ -115,7 +125,38 @@ def main():
         'repository_type': 'svn',
         'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/input/',
         'po_file': 'LC_MESSAGES/messages.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locale',
+        'excluded_folders': []
+    }
+    products['mdn'] = {
+        'repository_name': 'mdn',
+        'product_name': 'mdn',
+        'displayed_name': 'MDN',
+        'repository_type': 'svn',
+        'repository_url': 'http://svn.mozilla.org/projects/mdn/trunk/',
+        'po_file': 'LC_MESSAGES/messages.po',
+        'locale_folder': 'locale',
+        'excluded_folders': ['x_testing', 'xx_testing', 'en_US']
+    }
+    products['mdn-js'] = {
+        'repository_name': 'mdn',
+        'product_name': 'mdn-js',
+        'displayed_name': 'MDN (javascript.po)',
+        'repository_type': 'svn',
+        'repository_url': 'http://svn.mozilla.org/projects/mdn/trunk/',
+        'po_file': 'LC_MESSAGES/javascript.po',
+        'locale_folder': 'locale',
+        'excluded_folders': ['x_testing', 'xx_testing', 'en_US']
+    }
+    products['mdn-promote'] = {
+        'repository_name': 'mdn',
+        'product_name': 'mdn-promote',
+        'displayed_name': 'MDN (promote-mdn.po)',
+        'repository_type': 'svn',
+        'repository_url': 'http://svn.mozilla.org/projects/mdn/trunk/',
+        'po_file': 'LC_MESSAGES/promote-mdn.po',
+        'locale_folder': 'locale',
+        'excluded_folders': ['x_testing', 'xx_testing', 'en_US']
     }
     products['mozillians'] = {
         'repository_name': 'mozillians',
@@ -124,7 +165,8 @@ def main():
         'repository_type': 'svn',
         'repository_url': 'http://svn.mozilla.org/projects/l10n-misc/trunk/mozillians/',
         'po_file': 'LC_MESSAGES/messages.po',
-        'locale_folder': 'locales'
+        'locale_folder': 'locales',
+        'excluded_folders': []
     }
     products['rocketfuel'] = {
         'repository_name': 'rocketfuel',
@@ -133,7 +175,8 @@ def main():
         'repository_type': 'git',
         'repository_url': 'https://github.com/mozilla/rocketfuel',
         'po_file': 'LC_MESSAGES/messages.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locale',
+        'excluded_folders': []
     }
     products['stats'] = {
         'repository_name': 'marketplace-stats',
@@ -142,7 +185,8 @@ def main():
         'repository_type': 'git',
         'repository_url': 'https://github.com/mozilla/marketplace-stats',
         'po_file': 'LC_MESSAGES/messages.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locale',
+        'excluded_folders': []
     }
     products['webpay'] = {
         'repository_name': 'webpay',
@@ -151,7 +195,8 @@ def main():
         'repository_type': 'git',
         'repository_url': 'https://github.com/mozilla/webpay',
         'po_file': 'LC_MESSAGES/messages.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locale',
+        'excluded_folders': []
     }
     products['zamboni'] = {
         'repository_name': 'zamboni',
@@ -160,7 +205,8 @@ def main():
         'repository_type': 'git',
         'repository_url': 'https://github.com/mozilla/zamboni',
         'po_file': 'LC_MESSAGES/messages.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locale',
+        'excluded_folders': []
     }
     products['zamboni-js'] = {
         'repository_name': 'zamboni',
@@ -169,7 +215,8 @@ def main():
         'repository_type': 'git',
         'repository_url': 'https://github.com/mozilla/zamboni',
         'po_file': 'LC_MESSAGES/javascript.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locale',
+        'excluded_folders': []
     }
     products['zippy'] = {
         'repository_name': 'zippy',
@@ -178,7 +225,8 @@ def main():
         'repository_type': 'git',
         'repository_url': 'https://github.com/mozilla/zippy',
         'po_file': 'LC_MESSAGES/messages.po',
-        'locale_folder': 'locale'
+        'locale_folder': 'locale',
+        'excluded_folders': []
     }
     # Check if repositories exist and pull, if not clone
     for key,product in products.iteritems():
@@ -212,7 +260,7 @@ def main():
             else:
                 # svn repository
                 cmd_status = subprocess.check_output(
-                    'svn co ' + product['repository_url'],
+                    'svn co ' + product['repository_url'] + ' ' + product['product_name'],
                     stderr = subprocess.STDOUT,
                     shell = True)
                 print cmd_status
@@ -222,21 +270,29 @@ def main():
         for locale in sorted(os.listdir(product_folder)):
             # Ignore files, just folders, and ignore some of them based on ignore_folders
             locale_folder = os.path.join(product_folder, locale)
-            if (os.path.isdir(locale_folder)) & (locale not in ignored_folders):
+            if (os.path.isdir(locale_folder)
+                & (locale not in ignored_folders)
+                & (locale not in product['excluded_folders'])):
                 print locale_folder
                 error_status = False
                 error_message = ''
-                try:
-                    cmd = 'msgfmt --statistics ' + locale_folder + '/' +product['po_file']
-                    translation_status = subprocess.check_output(
-                        cmd,
-                        stderr = subprocess.STDOUT,
-                        shell = True)
-                except Exception as e:
-                    print 'Error running msgfmt on ' + locale
-                    translation_status = '0 translated messages, 9999 untranslated messages.'
+
+                file_path = locale_folder + '/' +product['po_file']
+                if os.path.isfile(file_path):
+                    try:
+                        cmd = 'msgfmt --statistics ' + file_path
+                        translation_status = subprocess.check_output(
+                            cmd,
+                            stderr = subprocess.STDOUT,
+                            shell = True)
+                    except Exception as e:
+                        print 'Error running msgfmt on ' + locale
+                        translation_status = '0 translated messages, 9999 untranslated messages.'
+                        error_status = True
+                        error_message = 'Error extracting data with msgfmt --statistics'
+                else:
                     error_status = True
-                    error_message = 'Error extracting data with msgfmt --statistics'
+                    error_message = 'File does not exist'
 
                 pretty_locale = locale.replace('_', '-')
                 print 'Locale: ' + pretty_locale
