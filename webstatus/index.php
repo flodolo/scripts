@@ -1,3 +1,37 @@
+<?php
+
+function getRowStyle($current_product) {
+    $perc = $current_product['percentage'];
+    $opacity = 1;
+    if ($perc < 100) {
+        $opacity = floor(round(($perc-20)/100,2)*10)/10;
+    }
+    if ($perc >= 70) {
+        $stylerow = "background-color: rgba(129, 209, 25, {$opacity})";
+    } elseif ($perc >= 40) {
+        $opacity = 1 - $opacity;
+        $stylerow = "background-color: rgba(255, 252, 61, {$opacity})";
+    } else {
+        $opacity = 1 - $opacity;
+        $stylerow = "background-color: rgba(255, 174, 61, {$opacity})";
+    }
+
+    if ($current_product['error_status'] == 'true') {
+        $classrow = 'error';
+        $stylerow = '';
+    } else {
+        $classrow = '';
+    }
+
+    return [
+        'class' => $classrow,
+        'style' => $stylerow,
+    ];
+}
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -105,20 +139,8 @@
             <tbody>
         <?php
         foreach ($json_array[$requested_locale] as $current_product) {
-            $opacity = floor(round($current_product['percentage']/100,2)*10)/10;
-            if ($opacity >= 0.5) {
-                $stylerow = "background-color: rgba(88, 179, 52, {$opacity})";
-            } else {
-                $opacity = 1 - $opacity;
-                $stylerow = "background-color: rgba(237, 173, 55, {$opacity})";
-            }
-            if ($current_product['error_status'] == 'true') {
-                $classrow = 'error';
-                $stylerow = '';
-            } else {
-                $classrow = '';
-            }
-            echo "<tr class='{$classrow}' style='{$stylerow}'>\n";
+            $row_style = getRowStyle($current_product);
+            echo "<tr class='{$row_style['class']}' style='{$row_style['style']}'>\n";
             echo '<th>' . $current_product['name'] . "</th>\n";
             echo '      <td class="number">' . $current_product['percentage'] . "</td>\n";
             echo '      <td class="number">' . $current_product['translated'] . "</td>\n";
@@ -153,20 +175,8 @@
         foreach ($available_locales as $locale_code) {
             if (isset($json_array[$locale_code][$requested_product])) {
                 $current_product = $json_array[$locale_code][$requested_product];
-                $opacity = floor(round($current_product['percentage']/100,2)*10)/10;
-                if ($opacity >= 0.5) {
-                    $stylerow = "background-color: rgba(88, 179, 52, {$opacity})";
-                } else {
-                    $opacity = 1 - $opacity;
-                    $stylerow = "background-color: rgba(237, 173, 55, {$opacity})";
-                }
-                if ($current_product['error_status'] == 'true') {
-                    $classrow = 'error';
-                    $stylerow = '';
-                } else {
-                    $classrow = '';
-                }
-                echo "<tr class='{$classrow}' style='{$stylerow}'>\n";
+                $row_style = getRowStyle($current_product);
+                echo "<tr class='{$row_style['class']}' style='{$row_style['style']}'>\n";
                 echo '<th>' . $locale_code . "</th>\n";
                 echo '      <td class="number">' . $current_product['percentage'] . '</td>';
                 echo '      <td class="number">' . $current_product['translated'] . '</td>';
