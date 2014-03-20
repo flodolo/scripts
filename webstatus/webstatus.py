@@ -168,6 +168,26 @@ def main():
         'locale_folder': 'locales',
         'excluded_folders': []
     }
+    products['olympia'] = {
+        'repository_name': 'olympia',
+        'product_name': 'olympia',
+        'displayed_name': 'AMO (olympia)',
+        'repository_type': 'git',
+        'repository_url': 'https://github.com/mozilla/olympia',
+        'po_file': 'LC_MESSAGES/messages.po',
+        'locale_folder': 'locale',
+        'excluded_folders': []
+    }
+    products['olympia-js'] = {
+        'repository_name': 'olympia',
+        'product_name': 'olympia-js',
+        'displayed_name': 'AMO (olympia js)',
+        'repository_type': 'git',
+        'repository_url': 'https://github.com/mozilla/olympia',
+        'po_file': 'LC_MESSAGES/javascript.po',
+        'locale_folder': 'locale',
+        'excluded_folders': []
+    }
     products['rocketfuel'] = {
         'repository_name': 'rocketfuel',
         'product_name': 'rocketfuel',
@@ -201,7 +221,7 @@ def main():
     products['zamboni'] = {
         'repository_name': 'zamboni',
         'product_name': 'zamboni',
-        'displayed_name': 'AMO (zamboni)',
+        'displayed_name': 'Marketplace (zamboni)',
         'repository_type': 'git',
         'repository_url': 'https://github.com/mozilla/zamboni',
         'po_file': 'LC_MESSAGES/messages.po',
@@ -211,7 +231,7 @@ def main():
     products['zamboni-js'] = {
         'repository_name': 'zamboni',
         'product_name': 'zamboni-js',
-        'displayed_name': 'AMO (zamboni js)',
+        'displayed_name': 'Marketplace (zamboni js)',
         'repository_type': 'git',
         'repository_url': 'https://github.com/mozilla/zamboni',
         'po_file': 'LC_MESSAGES/javascript.po',
@@ -249,7 +269,7 @@ def main():
                 print cmd_status
         else:
             os.chdir(path)
-            print 'Cloning repository:' + product['repository_url']
+            print 'Cloning repository: ' + product['repository_url']
             if (product['repository_type'] == 'git'):
                 # git repository
                 cmd_status = subprocess.check_output(

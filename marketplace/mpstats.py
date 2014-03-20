@@ -104,7 +104,7 @@ def main():
     output_type = options.output
 
     path = "/home/flod/git/webstatus"
-    products = ["fireplace", "webpay", "zamboni", "commbadge", "rocketfuel", "marketplace-stats", "zippy"]
+    products = ["fireplace", "webpay", "zamboni", "olympia", "commbadge", "rocketfuel", "marketplace-stats", "zippy"]
     json_filename = "/home/flod/public_html/mpstats/marketplace.json"
     html_filename = "/home/flod/public_html/mpstats/index.html"
     json_data = {}
