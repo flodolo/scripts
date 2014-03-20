@@ -82,7 +82,7 @@ function getRowStyle($current_product) {
             $available_locales[$locale_code] = $locale_code;
         }
         $available_products = array();
-        $available_products['all'] = 'All Products';
+        $available_products['all'] = ' All Products';
         foreach ($available_locales as $locale_code) {
             foreach (array_keys($json_array[$locale_code]) as $product_code) {
                 if (! in_array($product_code, $available_products)) {
@@ -90,6 +90,7 @@ function getRowStyle($current_product) {
                 }
             }
         }
+        asort($available_products);
         $file_content = '<?php' . PHP_EOL;
         $file_content .= '$available_locales = ' . var_export($available_locales, true) . ';' . PHP_EOL;
         $file_content .= '$available_products = ' . var_export($available_products, true) . ';' . PHP_EOL;
