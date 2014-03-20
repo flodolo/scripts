@@ -139,17 +139,21 @@ function getRowStyle($current_product) {
             </thead>
             <tbody>
         <?php
-        foreach ($json_array[$requested_locale] as $current_product) {
-            $row_style = getRowStyle($current_product);
-            echo "<tr class='{$row_style['class']}' style='{$row_style['style']}'>\n";
-            echo '<th>' . $current_product['name'] . "</th>\n";
-            echo '      <td class="number">' . $current_product['percentage'] . "</td>\n";
-            echo '      <td class="number">' . $current_product['translated'] . "</td>\n";
-            echo '      <td class="number">' . $current_product['untranslated'] . "</td>\n";
-            echo '      <td class="number">' . $current_product['fuzzy'] . "</td>\n";
-            echo '      <td class="number">' . $current_product['total'] . "</td>\n";
-            echo '      <td>' . $current_product['error_message'] . "</td>\n";
-            echo "</tr>\n";
+
+        foreach ($available_products as $key => $value) {
+            if (array_key_exists($key, $json_array[$requested_locale])) {
+                $current_product = $json_array[$requested_locale][$key];
+                $row_style = getRowStyle($current_product);
+                echo "<tr class='{$row_style['class']}' style='{$row_style['style']}'>\n";
+                echo '<th>' . $current_product['name'] . "</th>\n";
+                echo '      <td class="number">' . $current_product['percentage'] . "</td>\n";
+                echo '      <td class="number">' . $current_product['translated'] . "</td>\n";
+                echo '      <td class="number">' . $current_product['untranslated'] . "</td>\n";
+                echo '      <td class="number">' . $current_product['fuzzy'] . "</td>\n";
+                echo '      <td class="number">' . $current_product['total'] . "</td>\n";
+                echo '      <td>' . $current_product['error_message'] . "</td>\n";
+                echo "</tr>\n";
+            }
         }
         ?>
             </tbody>
