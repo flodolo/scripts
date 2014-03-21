@@ -14,30 +14,7 @@ def write_html(json, products, filename):
         <head>
           <meta charset=utf-8>
           <title>Repo Status</title>
-          <style type="text/css">
-            body {background-color: #FFF; font-family: Arial, Verdana; font-size: 14px; padding: 10px 30px;}
-            p {margin-top: 2px;}
-            table {padding: 0; margin: 0; border-collapse: collapse; color: #333; background: #F3F5F7; font-size: 12px;}
-            table a {color: #3A4856; text-decoration: none; border-bottom: 1px solid #DDD; }
-            table a:visited {color: #777;}
-            table a:hover {color: #000;}
-            table thead th {background: #EAECEE; padding: 15px 5px; color: #000; text-align: center; font-weight: bold; vertical-align: top;}
-            table tr th {background: #EAECEE;}
-            table td.firstsection {padding-left: 40px; border-left: 1px solid #DDD;}
-            table td.lastsection {padding-right: 40px; border-right: 1px solid #DDD;}
-            table .lastsection:last-child {border-right: 0};
-            table tbody, table thead {border-left: 1px solid #DDD; border-right: 1px solid #DDD;}
-            table tbody {border-bottom: 1px solid #DDD;}
-            table tbody td, table tbody th {padding: 5px; text-align: left;}
-            table tbody td {border-bottom: 1px solid #DDD}
-            table tbody tr {background: #F5F5F5;}
-            table tbody tr.odd {background: #F0F2F4;}
-            table tbody tr:hover {background: #EAECEE; color: #111;}
-            table tbody tr.fixed {background: #A5FAB0;}
-            table tbody td.number {text-align: center;}
-            table tbody td.complete {background-color: #92CC6E}
-            table tbody td.incomplete {background-color: #FF5252}
-          </style>
+          <link rel="stylesheet" href="style.css" type="text/css" media="all" />
         </head>
         <body>
             <table>
@@ -67,18 +44,26 @@ def write_html(json, products, filename):
         html_code = html_code + "<tr>\n<th>" + locale + "</th>"
         for product in products:
             try:
-                html_code = html_code + "  <td class='firstsection'>" + str(json[locale][product]['translated']) + "</td>\n"
-                html_code = html_code + "  <td>" + str(json[locale][product]['untranslated']) + "</td>\n"
-                if (json[locale][product]['complete']):
-                    css_class="class='lastsection complete'"
+                perc = round(json[locale][product]['percentage']/100.0, 2)
+                if perc<0.30:
+                    opacity = 1 - perc
+                    inline_style = "style=' background-color: rgba(255, 82, 82, " + str(opacity) + ");'"
+                elif perc<0.70:
+                    opacity = 1.3 - perc
+                    inline_style = "style=' background-color: rgba(235, 235, 110, " + str(opacity) + ");'"
                 else:
-                    css_class="class='lastsection incomplete'"
-                html_code = html_code + "  <td " + css_class + ">" + str(json[locale][product]['percentage']) + "</td>\n"
+                    opacity = perc
+                    inline_style = "style=' background-color: rgba(146, 204, 110, " + str(opacity) + ");'"
+
+                html_code = html_code + "  <td class='firstsection' " + inline_style + ">" + str(json[locale][product]['translated']) + "</td>\n"
+                html_code = html_code + "  <td " + inline_style + ">" + str(json[locale][product]['untranslated']) + "</td>\n"
+                html_code = html_code + "  <td class='lastsection' " + inline_style + ">" + str(json[locale][product]['percentage']) + "</td>\n"
             except Exception as e:
                 html_code = html_code + '''  <td class='firstsection'>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td class='lastsection'>&nbsp;</td>
                 '''
+                print e
                 print "Product not found (" + locale + ", " + product + ")"
 
         html_code = html_code + "</tr>"
