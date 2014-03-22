@@ -106,7 +106,7 @@ def main():
         'repository_url': 'https://github.com/mozilla/fxa-content-server-l10n',
         'po_file': 'LC_MESSAGES/client.po',
         'locale_folder': 'locale',
-        'excluded_folders': []
+        'excluded_folders': ['linux', 'osx', 'win32']
     }
     products['fxaccount-server'] = {
         'repository_name': 'fxa-content-server-l10n',
@@ -116,7 +116,7 @@ def main():
         'repository_url': 'https://github.com/mozilla/fxa-content-server-l10n',
         'po_file': 'LC_MESSAGES/server.po',
         'locale_folder': 'locale',
-        'excluded_folders': []
+        'excluded_folders': ['linux', 'osx', 'win32']
     }
     products['input'] = {
         'repository_name': 'input',
