@@ -212,9 +212,9 @@ def main():
         json_file.write(json.dumps(json_data, indent=4, sort_keys=True))
         json_file.close()
 
-    # Write back updated json data
-    if (output_type == 'html') or (output_type == 'all'):
-        write_html(json_data, products, html_filename)
+    # Write back html
+    #if (output_type == 'html') or (output_type == 'all'):
+    #   write_html(json_data, products, html_filename)
 
 if __name__ == "__main__":
     main()

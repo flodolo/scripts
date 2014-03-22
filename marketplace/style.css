@@ -9,6 +9,10 @@ p {
       margin-top: 2px;
 }
 
+p#update {
+      margin-top: 10px;
+}
+
 table {
       padding: 0;
       margin: 0;
@@ -43,6 +47,10 @@ table thead th {
 
 table tr th {
       background: #EAECEE;
+}
+
+th.rowheader span {
+      padding-right: 5px;
 }
 
 table td.firstsection {
