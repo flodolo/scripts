@@ -5,30 +5,39 @@ date_default_timezone_set('Europe/Rome');
 $json_filename = '/home/flod/public_html/webstatus/webstatus.json';
 $json_array = (array) json_decode(file_get_contents($json_filename), true);
 
-$product_codes = ['fireplace', 'webpay', 'zamboni', 'olympia', 'commbadge', 'rocketfuel', 'marketplace-stats', 'zippy'];
-$exclude_locales = ['an', 'br', 'db-LB', 'en-GB', 'en-ZA', 'es-AR',
+$products = [
+    'fireplace'         => '',
+    'webpay'            => '',
+    'zippy'             => '',
+    'zamboni'           => '',
+    'marketplace-stats' => '',
+    'commbadge'         => '',
+    'rocketfuel'        => '',
+    'olympia'           => ''
+];
+
+$excluded_locales = ['an', 'br', 'db-LB', 'en-GB', 'en-ZA', 'es-AR',
                     'es-CL', 'es-ES', 'es-MX', 'fy', 'ga', 'gu-IN',
                     'hy-AM', 'is', 'ja-JP-mac', 'kk', 'lv', 'mai',
                     'mr', 'nn-NO', 'pa-IN', 'pt', 'rm', 'son', 'sv',
                     'sw', 'ta', 'xh', 'zu'];
-$products = [];
-$locales = [];
 
 // Extract locales
+$locales = [];
 foreach ($json_array as $locale => $product) {
     array_push($locales, $locale);
 }
 sort($locales);
 // Exclude some locales
-$locales = array_diff($locales, $exclude_locales);
+$locales = array_diff($locales, $excluded_locales);
 
 // Extract product names from en-US
 foreach ($json_array['en-US'] as $code => $product) {
-    if (array_search($code, $product_codes) !== false) {
+    if (array_key_exists($code, $products)) {
         $products[$code] = $product['name'];
     }
 }
-asort($products);
+// asort($products);
 
 function getRowStyle($current_product) {
     $perc = $current_product['percentage'];
