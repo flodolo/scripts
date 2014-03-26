@@ -13,7 +13,6 @@ $products = [
     'marketplace-stats' => '',
     'commbadge'         => '',
     'rocketfuel'        => '',
-    'olympia'           => ''
 ];
 
 $excluded_locales = ['an', 'br', 'db-LB', 'en-GB', 'en-ZA', 'es-AR',
