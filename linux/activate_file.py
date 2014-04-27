@@ -7,7 +7,6 @@ import re
 import urllib2
 
 langchecker_url = 'http://l10n.mozilla-community.org/~pascalc/langchecker/'
-langchecker_url = 'http://192.168.133.115/langchecker/'
 
 def activate_file(filename):
     with open(filename,'r+') as f:
