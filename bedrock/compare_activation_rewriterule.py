@@ -38,7 +38,7 @@ for page in pages:
 	activated_locales_url = "http://l10n.mozilla-community.org/~pascalc/langchecker/?locale=all&website=0&json&file=" + filename
 
 	# URL to extract locales currently included in rewrite rule
-	rewrite_rule_url = "https://raw.github.com/mozilla/bedrock/master/etc/httpd/global.conf"
+	rewrite_rule_url = "https://raw.githubusercontent.com/mozilla/bedrock/master/etc/httpd/global.conf"
 	rule_ending = page['rule_check']
 
 	# Analyze active pages
