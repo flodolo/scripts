@@ -15,10 +15,10 @@ $products = [
     'rocketfuel'        => '',
 ];
 
-$excluded_locales = ['an', 'br', 'db-LB', 'en-GB', 'en-ZA', 'es-AR',
+$excluded_locales = ['an', 'br', 'db-LB', 'en', 'en-GB', 'en-ZA', 'es-AR',
                     'es-CL', 'es-ES', 'es-MX', 'fy', 'ga', 'gu-IN',
                     'hy-AM', 'is', 'ja-JP-mac', 'kk', 'lv', 'mai',
-                    'mr', 'nn-NO', 'pa-IN', 'pt', 'rm', 'son', 'sv',
+                    'mr', 'nb', 'nn-NO', 'pa-IN', 'pt', 'rm', 'son', 'sv',
                     'sw', 'xh', 'zu'];
 
 // Extract locales
