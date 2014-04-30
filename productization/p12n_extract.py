@@ -11,7 +11,7 @@ import re
 import StringIO
 from ConfigParser import SafeConfigParser
 from optparse import OptionParser
-from time import strftime, gmtime
+from time import strftime, localtime
 from xml.dom import minidom
 
 
@@ -340,7 +340,7 @@ def extract_p12n_product(source, product, locale, channel, jsondata, html_output
                                 feedhandlers[feedhandler_number] = {}
                             feedhandlers[feedhandler_number]["title"] = value
                             # Print warning for Google Reader
-                            if (value.lower() == 'google'):
+                            if ('google' in value.lower()):
                                 html_output.append("<p><span class='warning'>Warning:</span> [" + product + "] Google Reader " +
                                     "has been dismissed, see bug 882093 (<span class='code'>" + key + "</span>)</p>")
                         if key.endswith('.uri'):
@@ -584,7 +584,7 @@ def extract_p12n_channel(clproduct, pathsource, pathl10n, localeslist, channel, 
                     extract_p12n_product(path + "browser/chrome/browser-region/region.properties", "browser", locale, channel, jsondata, html_output)
                     extract_p12n_product(path + "browser/metro/chrome/region.properties", "metro", locale, channel, jsondata, html_output)
                     # Do checks specific for Metro
-                    check_p12nmetro(locale, channel, jsondata, html_output)
+                    # check_p12nmetro(locale, channel, jsondata, html_output)
             if (clproduct=="all") or (clproduct=="mobile"):
                 extract_sp_product(path + "mobile/searchplugins/", "mobile", locale, channel, jsondata, splistenUS_mobile, images_list, html_output)
                 if clp12n:
@@ -620,9 +620,9 @@ def main():
 
     # Read configuration file
     parser = SafeConfigParser()
-    parser.read("web/inc/config.ini")
+    parser.read("app/config/config.ini")
     local_hg = parser.get("config", "local_hg")
-    install_folder = parser.get("config", "install")
+    config_files = parser.get("config", "config")
 
     # Set Transvision's folders and locale files
     release_l10n = local_hg + "/RELEASE_L10N/"
@@ -635,10 +635,10 @@ def main():
     aurora_source = local_hg + "/AURORA_EN-US/"
     trunk_source = local_hg + "/TRUNK_EN-US/"
 
-    trunk_locales = install_folder + "/central.txt"
-    aurora_locales = install_folder + "/aurora.txt"
-    beta_locales = install_folder + "/beta.txt"
-    release_locales = install_folder + "/release.txt"
+    trunk_locales = config_files + "/central.txt"
+    aurora_locales = config_files + "/aurora.txt"
+    beta_locales = config_files + "/beta.txt"
+    release_locales = config_files + "/release.txt"
 
     if not os.path.exists("web/p12n"):
         os.makedirs("web/p12n")
@@ -670,7 +670,7 @@ def main():
         <body>
             <h1>Productization analysis</h1>
         ''']
-    html_output.append("<p>Last update: " + strftime("%Y-%m-%d %H:%M:%S", gmtime()) + "<br/>")
+    html_output.append("<p>Last update: " + strftime("%Y-%m-%d %H:%M:%S", localtime()) + "<br/>")
     html_output.append("Analyzing product: " + clproduct + "<br/>")
     html_output.append("Branch: " + clbranch + "</p>")
 
@@ -713,7 +713,7 @@ def main():
     for index, value in enumerate(images_list):
         image_data[index] = value
     jsondata["images"] = image_data
-    jsondata["creation_date"] = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    jsondata["creation_date"] = strftime("%Y-%m-%d %H:%M:%S", localtime())
 
 
     # Write back updated json data
