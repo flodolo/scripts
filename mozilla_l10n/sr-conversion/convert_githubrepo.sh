@@ -40,6 +40,12 @@ elif [ "$product_name" == "zippy" ]
 then
 	/usr/local/opt/icu4c/bin/uconv -x Serbian-Latin/BGN -o locale/sr_LATN/LC_MESSAGES/messages.po locale/sr/LC_MESSAGES/messages.po
 	git add locale/sr_Latn/LC_MESSAGES/messages.po
+elif [ "$product_name" == "olympia" ] || [ "$product_name" == "zamboni" ]
+then
+	/usr/local/opt/icu4c/bin/uconv -x Serbian-Latin/BGN -o locale/sr_Latn/LC_MESSAGES/messages.po locale/sr/LC_MESSAGES/messages.po
+	/usr/local/opt/icu4c/bin/uconv -x Serbian-Latin/BGN -o locale/sr_Latn/LC_MESSAGES/javascript.po locale/sr/LC_MESSAGES/javascript.po
+	git add locale/sr_Latn/LC_MESSAGES/messages.po
+	git add locale/sr_Latn/LC_MESSAGES/javascript.po
 else
 	/usr/local/opt/icu4c/bin/uconv -x Serbian-Latin/BGN -o locale/sr_Latn/LC_MESSAGES/messages.po locale/sr/LC_MESSAGES/messages.po
 	git add locale/sr_Latn/LC_MESSAGES/messages.po
