@@ -4,10 +4,13 @@
 structure like the following:
 
 this_script
-    |__gaia
+    |__gaia-l10n
         |__locale_code
 
 Reference repo: https://hg.mozilla.org/gaia-l10n/
+
+You can use this script + locales.txt to create the folder structure
+https://github.com/flodolo/scripts/blob/master/mozilla_l10n/clone_gaia.sh
 '''
 
 import os
