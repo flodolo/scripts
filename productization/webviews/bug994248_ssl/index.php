@@ -24,7 +24,7 @@
     $channel = 'aurora';
     $products = array('browser', 'mobile');
     $productnames = array('Firefox Desktop', 'Firefox Mobile (Android)');
-    $html_output = '';
+    $html_output = "<p>Last update: {$jsonarray['creation_date']}</p>\n";
 
     foreach ($products as $i=>$product) {
         $html_output .= "<h1>{$product}</h1>";
