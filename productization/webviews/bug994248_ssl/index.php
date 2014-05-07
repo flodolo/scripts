@@ -27,9 +27,10 @@
     $html_output = "<p>Last update: {$jsonarray['creation_date']}</p>\n";
 
     foreach ($products as $i=>$product) {
-        $html_output .= "<h1>{$product}</h1>";
+        $html_output .= "<h1>{$product} - {$channel}</h1>";
         $locale_list = '';
         $nonen_locale_list = '';
+        $locale_errors = [];
         foreach ($locales as $locale) {
             $html_output .= "<h2>{$locale}</h2>";
             if (array_key_exists($product, $jsonarray[$locale])) {
@@ -55,9 +56,14 @@
 
                             if (strpos($singlesp['url'], 'yahoo') !== false ||
                                 strpos($singlesp['url'], 'google') !== false) {
-                                if (! $singlesp['secure']) {
-                                    $html_output .= "<p>{$singlesp['file']}: ";
-                                    $html_output .= "<span class='red'>not SSL</span></p>";
+                                if (strpos($spfilename, 'metrofx') === false) {
+                                    $html_output .= "<p>{$singlesp['name']} (search): ";
+                                    if (! $singlesp['secure']) {
+                                        $html_output .= "<span class='red'>not SSL</span></p>";
+                                        array_push($locale_errors, $locale);
+                                    } else {
+                                        $html_output .= "<span class='green'>SSL</span></p>";
+                                    }
                                 }
                             }
                         } else {
@@ -66,11 +72,11 @@
                                 $contenthandlers = $singlesp['contenthandlers']['mailto'];
                                 foreach ($contenthandlers as $contenthandler) {
                                     if (strpos($contenthandler['uri'], 'yahoo') !== false ||
-                                        strpos($contenthandler['uri'], 'google') !== false ||
-                                        strpos($contenthandler['uri'], '30boxes') !== false) {
+                                        strpos($contenthandler['uri'], 'google') !== false) {
                                         $html_output .= "<p>{$contenthandler['name']} (mailto): ";
                                         if ((strpos($contenthandler['uri'], 'https') === false)) {
                                             $html_output .= "<span class='red'>not SSL</span></p>";
+                                            array_push($locale_errors, $locale);
                                         } else {
                                             $html_output .= "<span class='green'>SSL</span></p>";
                                         }
@@ -80,14 +86,33 @@
                                 $html_output .= "<p class='red'>mailto handler is missing</p>";
                             }
 
+                            // 30 boxes
+                            if (array_key_exists('webcal', $singlesp['contenthandlers'])) {
+                                $contenthandlers = $singlesp['contenthandlers']['webcal'];
+                                foreach ($contenthandlers as $contenthandler) {
+                                    if (strpos($contenthandler['uri'], '30boxes') !== false) {
+                                        $html_output .= "<p>{$contenthandler['name']} (webcal): ";
+                                        if ((strpos($contenthandler['uri'], 'https') === false)) {
+                                            $html_output .= "<span class='red'>not SSL</span></p>";
+                                            array_push($locale_errors, $locale);
+                                        } else {
+                                            $html_output .= "<span class='green'>SSL</span></p>";
+                                        }
+                                    }
+                                }
+                            } else {
+                                $html_output .= "<p class='red'>webcal handler is missing</p>";
+                            }
+
                             if (array_key_exists('feedhandlers', $singlesp)) {
                                 $feedhandlers = $singlesp['feedhandlers'];
                                 foreach ($feedhandlers as $feedhandler) {
                                     if (strpos($feedhandler['uri'], 'yahoo') !== false ||
                                         strpos($feedhandler['uri'], 'google') !== false) {
-                                        $html_output .= "<p>{$feedhandler['title']} (content): ";
+                                        $html_output .= "<p>{$feedhandler['title']} (feed): ";
                                         if ((strpos($feedhandler['uri'], 'https') === false)) {
                                             $html_output .= "<span class='red'>not SSL</span></p>";
+                                            array_push($locale_errors, $locale);
                                         } else {
                                             $html_output .= "<span class='green'>SSL</span></p>";
                                         }
@@ -103,6 +128,14 @@
         }
         $html_output .= "<p>List of locales with Yahoo: {$locale_list}</p>";
         $html_output .= "<p>List of locales with localized versions of Yahoo: {$nonen_locale_list}</p>";
+        $locale_errors = array_unique($locale_errors);
+        if (count($locale_errors) > 0) {
+            $html_output .= "<p>Locales with errors: ";
+            foreach ($locale_errors as $locale) {
+                $html_output .= $locale . ' ';
+            }
+            $html_output .= "</p>";
+        }
     }
 
     echo $html_output;
