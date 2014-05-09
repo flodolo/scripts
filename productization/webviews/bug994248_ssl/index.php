@@ -24,15 +24,18 @@
     $channel = 'aurora';
     $products = array('browser', 'mobile');
     $productnames = array('Firefox Desktop', 'Firefox Mobile (Android)');
-    $html_output = "<p>Last update: {$jsonarray['creation_date']}</p>\n";
+    echo "<p>Last update: {$jsonarray['creation_date']}</p>\n";
+
+    $html_errors = '<h1>Errors</h1><ul>';
+    $html_output = '';
 
     foreach ($products as $i=>$product) {
-        $html_output .= "<h1>{$product} - {$channel}</h1>";
+        $html_output .= "<h1>Details</h1>\n<h2>{$product} - {$channel}</h2>";
         $locale_list = '';
         $nonen_locale_list = '';
         $locale_errors = [];
         foreach ($locales as $locale) {
-            $html_output .= "<h2>{$locale}</h2>";
+            $html_output .= "<h3>{$locale}</h3>";
             if (array_key_exists($product, $jsonarray[$locale])) {
                 if (array_key_exists($channel, $jsonarray[$locale][$product])) {
                     // I have searchplugins for this locale
@@ -61,6 +64,7 @@
                                     if (! $singlesp['secure']) {
                                         $html_output .= "<span class='red'>not SSL</span></p>";
                                         array_push($locale_errors, $locale);
+                                        $html_errors .= "<li>{$locale} - {$product}: {$singlesp['name']} ({$singlesp['file']}), not SSL</li>";
                                     } else {
                                         $html_output .= "<span class='green'>SSL</span></p>";
                                     }
@@ -76,6 +80,7 @@
                                         $html_output .= "<p>{$contenthandler['name']} (mailto): ";
                                         if ((strpos($contenthandler['uri'], 'https') === false)) {
                                             $html_output .= "<span class='red'>not SSL</span></p>";
+                                            $html_errors .= "<li>{$locale} - {$product}: {$contenthandler['name']}, not SSL</li>";
                                             array_push($locale_errors, $locale);
                                         } else {
                                             $html_output .= "<span class='green'>SSL</span></p>";
@@ -84,6 +89,7 @@
                                 }
                             } else {
                                 $html_output .= "<p class='red'>mailto handler is missing</p>";
+                                $html_errors .= "<li>{$locale} - {$product}: mailto handler is missing</li>";
                             }
 
                             // 30 boxes
@@ -94,6 +100,7 @@
                                         $html_output .= "<p>{$contenthandler['name']} (webcal): ";
                                         if ((strpos($contenthandler['uri'], 'https') === false)) {
                                             $html_output .= "<span class='red'>not SSL</span></p>";
+                                            $html_errors .= "<li>{$locale} - {$product}: {$contenthandler['name']}, not SSL</li>";
                                             array_push($locale_errors, $locale);
                                         } else {
                                             $html_output .= "<span class='green'>SSL</span></p>";
@@ -102,6 +109,7 @@
                                 }
                             } else {
                                 $html_output .= "<p class='red'>webcal handler is missing</p>";
+                                $html_errors .= "<li>{$locale} - {$product}: webcal handler is missing</li>";
                             }
 
                             if (array_key_exists('feedhandlers', $singlesp)) {
@@ -112,6 +120,7 @@
                                         $html_output .= "<p>{$feedhandler['title']} (feed): ";
                                         if ((strpos($feedhandler['uri'], 'https') === false)) {
                                             $html_output .= "<span class='red'>not SSL</span></p>";
+                                            $html_errors .= "<li>{$locale} - {$product}: {$feedhandler['title']}, not SSL</li>";
                                             array_push($locale_errors, $locale);
                                         } else {
                                             $html_output .= "<span class='green'>SSL</span></p>";
@@ -120,6 +129,7 @@
                                 }
                             } else {
                                 $html_output .= "<p class='red'>feed handler is missing</p>";
+                                $html_errors .= "<li>{$locale} - {$product}: feed handler is missing</li>";
                             }
                         }
                     }
@@ -136,6 +146,11 @@
             }
             $html_output .= "</p>";
         }
+    }
+
+    if (count($locale_errors) > 0) {
+        $html_errors .= '</ul>';
+        echo $html_errors;
     }
 
     echo $html_output;
