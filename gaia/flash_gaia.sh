@@ -147,8 +147,8 @@ then
 	# Check which repo is cloned in the folder
 	l10nrepo=$(awk -F "=" '/default/ {print $2}' $localecode/.hg/hgrc | tr -d ' ')
 	echogreen "Checking if the l10n repo is correct for $gitversion"
-	# If default path contains gaia-l10n it's master
-	if [[ $l10nrepo == *gaia-l10n* ]] && [ $version != "master" ]
+	# If default path doesn't contain releases it's master
+	if [[ $l10nrepo != *releases* ]] && [ $version != "master" ]
 	then
 		echored "Wrong locale version (master). Deleting folder"
 		rm -r $localecode
