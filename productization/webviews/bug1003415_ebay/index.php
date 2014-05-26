@@ -93,9 +93,9 @@
                 }
             }
         }
-        $locale_list = rtrim($locale_list, ', ');
-        $enus_list = rtrim($enus_list, ', ');
-        $nonen_locale_list = rtrim($nonen_locale_list, ', ');
+        $locale_list = $locale_list ? rtrim($locale_list, ', ') : 'none';
+        $enus_list = $enus_list ? rtrim($enus_list, ', ') : 'none';
+        $nonen_locale_list = $nonen_locale_list ? rtrim($nonen_locale_list, ', ') : 'none';
         $html_output .= "<p>List of locales with eBay: {$locale_list}.</p>";
         $html_output .= "<p>List of locales with en-US version of eBay: {$enus_list}.</p>";
         $html_output .= "<p>List of locales with localized versions of eBay: {$nonen_locale_list}.</p>";
