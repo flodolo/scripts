@@ -62,6 +62,7 @@
         $html_output .= "<h1>{$productnames[$i]} - {$channel}</h1>";
         $locale_list = '';
         $nonen_locale_list = '';
+        $enus_list = '';
         foreach ($locales as $locale) {
             if (array_key_exists($product, $jsonarray[$locale])) {
                 if (array_key_exists($channel, $jsonarray[$locale][$product])) {
@@ -71,7 +72,7 @@
                             $spfilename = strtolower($singlesp['file']);
                             if (strpos($spfilename, 'ebay') !== false) {
                                $locale_list .= "{$locale}, ";
-                               if (strpos($singlesp['description'], 'en-US') === false) {
+                               if ($spfilename != 'ebay.xml') {
                                     $nonen_locale_list .= "{$locale}, ";
                                     $details .= "<tr>
                                         <td>$productnames[$i]</td>
@@ -83,15 +84,21 @@
                                     if (! in_array($pluginname, $available_variants)) {
                                         array_push($available_variants, $pluginname);
                                     }
-                               }
+                                } else {
+                                    $enus_list .= "{$locale}, ";
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        $html_output .= "<p>List of locales with eBay (en-US version): {$locale_list}</p>";
-        $html_output .= "<p>List of locales with localized versions of eBay: {$nonen_locale_list}</p>";
+        $locale_list = rtrim($locale_list, ', ');
+        $enus_list = rtrim($enus_list, ', ');
+        $nonen_locale_list = rtrim($nonen_locale_list, ', ');
+        $html_output .= "<p>List of locales with eBay: {$locale_list}.</p>";
+        $html_output .= "<p>List of locales with en-US version of eBay: {$enus_list}.</p>";
+        $html_output .= "<p>List of locales with localized versions of eBay: {$nonen_locale_list}.</p>";
     }
 
     echo $html_output;
