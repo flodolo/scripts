@@ -18,9 +18,9 @@ csb
 cy
 da
 de
+dsb
 el
 en-GB
-en-US
 en-ZA
 eo
 es-AR
@@ -41,6 +41,7 @@ gu-IN
 he
 hi-IN
 hr
+hsb
 hu
 hy-AM
 id
