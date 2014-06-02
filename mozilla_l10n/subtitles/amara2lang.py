@@ -8,7 +8,7 @@ Usage: amara2lang.py video_id
 Output: video_id.lang
 
 IMPORTANT: set amara_apikey and amara_username to your values in order for
-the script to work. This information can be saved in a file called auth.txt,
+the script to work. This information can be saved in a file called auth.json,
 using JSON format
 
 {
@@ -109,7 +109,7 @@ def main():
 		sys.exit(0)
 
 	if len(sys.argv) != 2:
-		print "Error: missing Amara video ID.\nSyntax: amara2lang.py fVnjqp30g5j1"
+		print "Error: missing Amara video ID.\nSyntax: amara2lang.py videoID"
 		sys.exit(0)
 
 	video_id = sys.argv[1]
