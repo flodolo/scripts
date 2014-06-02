@@ -1,5 +1,17 @@
 #!/usr/bin/env python
 
+'''
+Convert local lang file, created by srt2lang, into .srt format
+
+Usage: lang2srt.py file_to_convert
+
+Expect this format in the .lang file
+
+# SUBTITLE_ID=>TIMING
+;English subtitle (single line)
+Translated subtitles (single line)
+'''
+
 import json
 import os
 import sys
@@ -9,7 +21,7 @@ def readlang(filename):
 	try:
 		json_subtitles = {}
 		langfile = open(filename)
-		current_index = timing = subtitle = "";
+		current_index = timing = subtitle = ""
 		for line in langfile:
 			line = line.strip()
 			if line != "":
@@ -35,7 +47,7 @@ def readlang(filename):
 		# jsonfile.write(json.dumps(json_subtitles, indent=4, sort_keys=True))
 		# jsonfile.close()
 
-		langfile.close();
+		langfile.close()
 		return json_subtitles
 	except Exception as e:
 		print e

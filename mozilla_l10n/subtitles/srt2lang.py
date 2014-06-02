@@ -1,5 +1,21 @@
 #!/usr/bin/env python
 
+'''
+Convert local subtitle file downloaded from Amara into .lang format
+
+Usate: srt2lang.py file_to_convert
+
+Expect this format in the .srt file
+
+SUBTITLE_ID
+TIMING
+Subtitles (multiline)
+
+Empty line marks the end of subtitle.
+'''
+
+# Convert .srt file from Amara into .lang file
+
 import json
 import os
 import sys
@@ -9,7 +25,7 @@ def readsrt(filename):
 	try:
 		json_subtitles = {}
 		srtfile = open(filename)
-		current_index = timing = subtitle = "";
+		current_index = timing = subtitle = ""
 		for line in srtfile:
 			line = line.strip()
 			if line != "":
@@ -36,7 +52,7 @@ def readsrt(filename):
 					"timing": timing,
 					"subtitle": subtitle
 				}
-				current_index = timing = subtitle = "";
+				current_index = timing = subtitle = ""
 
 		# Reached end of file, save the last subtitle
 		json_subtitles[current_index] = {
@@ -49,7 +65,7 @@ def readsrt(filename):
 		# jsonfile.write(json.dumps(json_subtitles, indent=4, sort_keys=True))
 		# jsonfile.close()
 
-		srtfile.close();
+		srtfile.close()
 		return json_subtitles
 	except Exception as e:
 		print e
