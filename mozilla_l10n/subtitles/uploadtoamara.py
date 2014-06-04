@@ -22,8 +22,25 @@ import json
 import sys
 import urllib2
 
+
 amara_apikey = ""
 amara_username = ""
+
+
+def postRequest(url, values, authdata):
+	headers = {
+		"Content-Type": "application/json",
+		"X-api-username": authdata["username"],
+		"X-apikey": authdata["apikey"]
+	}
+	req = urllib2.Request(url, json.dumps(values), headers)
+	try:
+		response = urllib2.urlopen(req)
+		print response.read()
+	except Exception as e:
+		print e
+		sys.exit(0)
+
 
 def main():
 	global amara_username
@@ -47,6 +64,11 @@ def main():
 		print "Error: missing parameters.\nSyntax: uploadtoamara.py videoid localeid srtfile"
 		sys.exit(0)
 
+	authdata = {
+		"username" : amara_username,
+		"apikey"   : amara_apikey
+	}
+
 	video_id = sys.argv[1]
 	locale_id = sys.argv[2]
 	srt_filename = sys.argv[3]
@@ -55,29 +77,47 @@ def main():
 	try:
 		srtfile = open(srt_filename).read()
 	except Exception as e:
+		print "There was an error reading the file."
 		print e
+		sys.exit(0)
 
-	print "Uploading file to Amara..."
-	url = "https://www.amara.org/api2/partners/videos/" + video_id + "/languages/" + locale_id + "/subtitles/"
-
+	# Check if this language exists
+	missing_language = False
+	print "Checking if language exists..."
+	url = "https://www.amara.org/api2/partners/videos/" + video_id + "/languages/" + locale_id + "/"
 	headers = {
-		"Content-Type": "application/json",
+		"Accept": "application/json",
 		"X-api-username": amara_username,
 		"X-apikey": amara_apikey
 	}
-	values = {
-		"sub_format": "srt",
-		"subtitles": srtfile
-	}
-
-	req = urllib2.Request(url, json.dumps(values), headers)
+	req = urllib2.Request(url, None, headers)
 	try:
 		response = urllib2.urlopen(req)
 		print response.read()
 	except Exception as e:
-		print e
-		sys.exit(0)
+		if e.code == 404:
+			missing_language = True
+		else:
+			print e
 
+
+	# Missing locale, need to create it
+	if missing_language:
+		print "Language is missing on Amara, creating..."
+		url = "https://www.amara.org/api2/partners/videos/" + video_id + "/languages/"
+		values = {
+			"language_code": locale_id
+		}
+		postRequest(url, values, authdata)
+
+	# Uploading a file
+	print "Uploading file to Amara..."
+	url = "https://www.amara.org/api2/partners/videos/" + video_id + "/languages/" + locale_id + "/subtitles/"
+	values = {
+		"sub_format": "srt",
+		"subtitles": srtfile
+	}
+	postRequest(url, values, authdata)
 
 
 if __name__ == "__main__":
