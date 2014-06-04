@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 
+
 '''
 Download English subtitles from video with id VIDEO_ID, convert them to .lang format
 
-Usage: amara2lang.py video_id
+Usage: amara2lang.py video_id locale_id
 
-Output: video_id.lang
+Output: video_id.locale_id.lang
 
 IMPORTANT: set amara_apikey and amara_username to your values in order for
 the script to work. This information can be saved in a file called auth.json,
-using JSON format
+using this format
 
 {
 	"amara_apikey": "API_ID",
@@ -20,13 +21,39 @@ See also http://amara.readthedocs.org/en/latest/api.html
 
 '''
 
+
 import json
 import StringIO
 import sys
 import urllib2
 
-amara_apikey = ""
-amara_username = ""
+
+# Add your amara auth data
+authdata = {
+	"username" : "",
+	"apikey"   : ""
+}
+
+
+def getRequest(url, authdata):
+	headers = {
+		"Accept"         : "application/json",
+		"X-api-username" : authdata["username"],
+		"X-apikey"       : authdata["apikey"]
+	}
+	req = urllib2.Request(url, None, headers)
+	try:
+		response = urllib2.urlopen(req)
+		return {
+			"success" : True,
+			"result"  : response.read()
+		}
+	except Exception as e:
+		return {
+			"success" : False,
+			"result"  : e.code
+		}
+
 
 def readsrt(srtcontent):
 	try:
@@ -91,48 +118,41 @@ def writelang(subtitles, filename):
 
 
 def main():
-	global amara_username
-	global amara_apikey
+	global authdata
 
-	if amara_username == "" or amara_apikey == "":
+	if authdata["username"] == "" or authdata["apikey"] == "":
 		# Search for auth.json, try to set variables from it
 		try:
 			jsonfile = open("auth.json")
 			api_data = json.load(jsonfile)
-			amara_username = api_data["amara_username"]
-			amara_apikey = api_data["amara_apikey"]
+			authdata["username"] = api_data["amara_username"]
+			authdata["apikey"]   = api_data["amara_apikey"]
 		except Exception as e:
 			print e
 
-	if amara_username == "" or amara_apikey == "":
+	if authdata["username"] == "" or authdata["apikey"] == "":
 		print "Error: missing mandatory parameters (Amara API key and username)"
 		sys.exit(0)
 
-	if len(sys.argv) != 2:
-		print "Error: missing Amara video ID.\nSyntax: amara2lang.py videoID"
+	if len(sys.argv) != 3:
+		print "Error: wrong number of parameters.\nSyntax: amara2lang.py videoID localeID"
 		sys.exit(0)
 
-	video_id = sys.argv[1]
-	lang_filename = video_id + ".lang"
+	video_id  = sys.argv[1]
+	locale_id = sys.argv[2]
+	lang_filename = video_id + "." + locale_id + ".lang"
 
-	# Get subtitles in English
+	# Get subtitles
 	print "Retrieving data from Amara..."
-	url = "https://www.amara.org/api2/partners/videos/" + video_id + "/languages/en/subtitles/?format=srt"
-	headers = {
-		"X-api-username": amara_username,
-		"X-apikey": amara_apikey
-	}
-	req = urllib2.Request(url, None, headers)
-	try:
-		response = urllib2.urlopen(req)
-	except Exception as e:
-		print e
-		sys.exit(0)
+	url = "https://www.amara.org/api2/partners/videos/" + video_id + "/languages/" + locale_id + "/subtitles/?format=srt"
 
-	srtcontent = response.read()
-	json_subtitles = readsrt(srtcontent)
-	print "\nSaving data in " + lang_filename
-	writelang(json_subtitles, lang_filename)
+	response = getRequest(url, authdata)
+	if not response["success"]:
+		print "There was an error:", response["result"]
+	else:
+		json_subtitles = readsrt(response["result"])
+		print "\nSaving data in " + lang_filename
+		writelang(json_subtitles, lang_filename)
 
 
 if __name__ == "__main__":

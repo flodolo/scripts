@@ -6,8 +6,8 @@ Upload file to Amara.
 Usage: uploadtoamara.py video_id locale_id srt_file
 
 IMPORTANT: set amara_apikey and amara_username to your values in order for
-the script to work. This information can be saved in a file called auth.txt,
-using JSON format
+the script to work. This information can be saved in a file called auth.json,
+using this format
 
 {
 	"amara_apikey"   : "API_ID",
