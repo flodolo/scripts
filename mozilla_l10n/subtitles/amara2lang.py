@@ -2,7 +2,8 @@
 
 
 '''
-Download English subtitles from video with id VIDEO_ID, convert them to .lang format
+Download subtitles from video with id VIDEO_ID in the requested locale,
+convert them to .lang format.
 
 Usage: amara2lang.py video_id locale_id
 
@@ -13,12 +14,11 @@ the script to work. This information can be saved in a file called auth.json,
 using this format
 
 {
-	"amara_apikey": "API_ID",
-	"amara_username": "USERNAME"
+	"amara_apikey"   : "API_ID",
+	"amara_username" : "USERNAME"
 }
 
 See also http://amara.readthedocs.org/en/latest/api.html
-
 '''
 
 
