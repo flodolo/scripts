@@ -85,6 +85,7 @@
                 </thead>
                 <tbody>' . "\n";
 
+        $locales_list = [];
         foreach ($locales as $locale) {
             if (array_key_exists($product, $jsonarray[$locale])) {
                 if (array_key_exists($channel, $jsonarray[$locale][$product])) {
@@ -104,6 +105,8 @@
                                     if (strpos($singlesp['description'], 'en-US') !== false) {
                                         // It's the en-US version
                                         $yahoo_enUS++;
+                                    } else {
+                                        $locales_list['yahoo'][] = $locale;
                                     }
                                 }
                                 if (strpos($spfilename, 'bing') !== false) {
@@ -112,6 +115,8 @@
                                     if (strpos($singlesp['description'], 'en-US') !== false) {
                                         // It's the en-US version
                                         $bing_enUS++;
+                                    } else {
+                                        $locales_list['bing'][] = $locale;
                                     }
                                 }
                                 if (strpos($spfilename, 'ebay') !== false) {
@@ -120,6 +125,8 @@
                                     if (strpos($singlesp['description'], 'en-US') !== false) {
                                         // It's the en-US version
                                         $ebay_enUS++;
+                                    } else {
+                                        $locales_list['ebay'][] = $locale;
                                     }
                                 }
 
@@ -149,12 +156,16 @@
                 }
             }
         }
+
         $html_output .= "</tbody>
                             </table>
                         ";
         $html_output .= "<p><strong>Yahoo:</strong> {$yahoo_total} ({$yahoo_enUS} en-US)\n";
+        $html_output .= "<p>List of locales not using en-US: " . implode(', ', $locales_list['yahoo']) . "</p>";
         $html_output .= "<p><strong>Bing:</strong> {$bing_total} ({$bing_enUS} en-US)\n";
+        $html_output .= "<p>List of locales not using en-US: " . implode(', ', $locales_list['bing']) . "</p>";
         $html_output .= "<p><strong>eBay:</strong> {$ebay_total} ({$ebay_enUS} en-US)\n";
+        $html_output .= "<p>List of locales not using en-US: " . implode(', ', $locales_list['ebay']) . "</p>";
     }
 
     echo $html_output;
