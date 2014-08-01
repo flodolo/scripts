@@ -13,7 +13,8 @@ def main():
 
     for root, dirnames, filenames in os.walk(sourcepath):
         for filename in filenames:
-            if '.hg' not in root and '.hg' not in filename:
+            if ('.hg' not in root and '.hg' not in filename and
+                '.svn' not in root and '.svn' not in filename):
                 filelist.append(os.path.join(root, filename))
 
     for sourcefile in filelist:
