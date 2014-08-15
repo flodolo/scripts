@@ -117,6 +117,19 @@ fi
 
 cd "$repofolder"
 
+# Check if mercurial and git are available
+if ! hash git 2>/dev/null
+then
+    echored "git not found: please make sure that git is installed on your system"
+    exit
+fi
+
+if ! hash hg 2>/dev/null
+then
+    echored "hg not found: please make sure that mercurial is installed on your system"
+    exit
+fi
+
 # Check Gaia repository
 if [ ! -d "gaia" ]
 then
@@ -132,6 +145,8 @@ else
 		cd gaia
 		echogreen "Running reset --hard"
 		git reset --hard
+        echogreen "Removing extra files and folders"
+        git clean -fd
 		echogreen "Running git pull"
 		echogreen "Checkout $gitversion"
 		git checkout $gitversion
