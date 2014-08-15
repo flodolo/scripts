@@ -103,6 +103,7 @@ tr
 ts
 uk
 ur
+uz
 ve
 vi
 wo
