@@ -44,6 +44,8 @@ then
 			echo "----------"
 			green "Updating $folder..."
 			cd $folder
+			git stash
+			git clean -fd
 			git checkout master
 			git fetch -p
 			git fetch upstream
