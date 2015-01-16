@@ -26,18 +26,18 @@ function echogreen() {
 BASE_FOLDER="/Users/flodolo/mozilla/mercurial/"
 
 REPOSITORIES=(
-	"ssh://hg.mozilla.org/l10n-central/it/"
-	"ssh://hg.mozilla.org/releases/l10n/mozilla-aurora/it/"
-	"ssh://hg.mozilla.org/releases/l10n/mozilla-beta/it/"
-	"ssh://hg.mozilla.org/gaia-l10n/it/"
-	"ssh://hg.mozilla.org/gaia-l10n/en-US/"
-	"ssh://hg.mozilla.org/releases/gaia-l10n/v1_3/it/"
-	"ssh://hg.mozilla.org/releases/gaia-l10n/v1_4/it/"
-	"ssh://hg.mozilla.org/releases/gaia-l10n/v2_0/it/"
+    "ssh://hg.mozilla.org/l10n-central/it/"
+    "ssh://hg.mozilla.org/releases/l10n/mozilla-aurora/it/"
+    "ssh://hg.mozilla.org/releases/l10n/mozilla-beta/it/"
+    "ssh://hg.mozilla.org/gaia-l10n/it/"
+    "ssh://hg.mozilla.org/gaia-l10n/en-US/"
+    "ssh://hg.mozilla.org/releases/gaia-l10n/v1_3/it/"
+    "ssh://hg.mozilla.org/releases/gaia-l10n/v1_4/it/"
+    "ssh://hg.mozilla.org/releases/gaia-l10n/v2_0/it/"
     "ssh://hg.mozilla.org/releases/gaia-l10n/v2_1/it/"
-	"https://bitbucket.org/flod/gaia-master-it/"
-	"https://gaia-l10n.allizom.org/integration/gaia-central"
-	"ssh://hg.mozilla.org/mozilla-central"
+    "ssh://hg@bitbucket.org/flod/gaia-master-it"
+    "https://gaia-l10n.allizom.org/integration/gaia-central"
+    "ssh://hg.mozilla.org/mozilla-central"
 )
 
 FOLDER_NAMES=(
