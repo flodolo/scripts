@@ -25,7 +25,10 @@ try:
               (used_mb / (30 - remaining_days))
         print "Media dispon.:    %5.0f MB/g" % \
               (remaining_mb / remaining_days)
-
+except urllib2.HTTPError, err:
+    if err.code == 403:
+        print "Errore 403 - Connessione non Eolo"
+    else:
+        raise
 except Exception as e:
-    print "Error reading json file from " + eolo_url
-    print e
+    print "Errore lettura JSON da %s:\n %s" % (eolo_url, e)
