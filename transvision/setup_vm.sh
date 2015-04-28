@@ -40,12 +40,15 @@ homefolder=$(readlink -f ~)
 echo "[config]
 root=$homefolder/transvision
 local_hg=$homefolder/transvision/data/hg
+local_git=$homefolder/transvision/data/git
+local_svn=$homefolder/transvision/data/svn
 libraries=$homefolder/transvision/libraries
 install=$homefolder/github/transvision
+config=$homefolder/github/transvision/app/config
+l10nwebservice = \"https://l10n.mozilla-community.org/~flod/mozilla-l10n-query/\"
+dev=false
+github_key=putsecretkeyhere
 " > ~/github/transvision/web/inc/config.ini
-
-# Run Transvision setup
-./setup.sh
 
 # Set default Transvision as the default webserver and change AllowOverride
 # directive (None->All). This obviously makes sense only on a dedicated VM
@@ -58,3 +61,7 @@ sudo /etc/init.d/apache2 restart
 cd ~/github/transvision/web
 curl -sS https://getcomposer.org/installer | php
 php composer.phar install
+
+# Run Transvision setup
+./app/scripts/setup.sh
+./app/scripts/glossaire.sh
