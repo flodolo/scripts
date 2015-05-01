@@ -68,7 +68,18 @@ def main():
         # Read localized file XML
         locale_tree = etree.parse(file_path)
         locale_root = locale_tree.getroot()
+
+        # Using locale folder as locale code. In some cases we need to map this
+        # value to a different locale code
+        # http://www.ibabbleon.com/iOS-Language-Codes-ISO-639.html
         locale_code = file_path.split(os.sep)[-2]
+        locale_mapping = {
+            'bn-IN': 'bn',
+            'ga-IE': 'ga',
+            'sv-SE': 'sv'
+        }
+        if locale_code in locale_mapping:
+            locale_code = locale_mapping[locale_code]
 
         # Store existing localizations
         translations = {}
