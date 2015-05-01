@@ -3,7 +3,7 @@
 #
 # clean-xliff.py <l10n_folder>
 #
-#  Remove targets from a locale, fix target-locale
+#  Remove targets from a locale, remove target-language attribute
 #
 
 from glob import glob
@@ -47,18 +47,16 @@ def main():
     # Read localized file XML
     locale_tree = etree.parse(file_path)
     locale_root = locale_tree.getroot()
-    locale_code = file_path.split(os.sep)[-2]
 
-    # Remove existing localizations
+    # Remove existing localizations and target-language
     for trans_node in locale_root.xpath('//x:trans-unit', namespaces=NS):
         for child in trans_node.xpath('./x:target', namespaces=NS):
             child.getparent().remove(child)
 
-        # Update target-language where defined
+        # Remove target-language where defined
         for file_node in locale_root.xpath('//x:file', namespaces=NS):
             if file_node.get('target-language'):
-                file_node.set('target-language', locale_code)
-
+                file_node.attrib.pop('target-language')
         # Replace the existing locale file with the new XML content
         with open(file_path, 'w') as fp:
             # Fix indentations
