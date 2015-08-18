@@ -68,4 +68,11 @@ for i in "${!FOLDER_NAMES[@]}"; do
   fi
 done
 
-exit
+# Extract strings in mc-strings repository
+MC=~/mozilla/mercurial/mozilla-central
+REPO=~/mozilla/mercurial/mc-strings
+FILEMAP=~/github/scripts/mac/filemap.txt
+
+hg convert --filemap $FILEMAP $MC $REPO
+hg -R $REPO update --check
+hg -R $REPO push ssh://hg@bitbucket.org/flod/mozilla-central-strings

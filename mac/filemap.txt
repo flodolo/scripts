@@ -1,0 +1,10 @@
+include browser/locales/en-US
+include dom/locales/en-US
+include mobile/android/base/locales/en-US
+include mobile/android/locales/en-US
+include mobile/locales/en-US
+include netwerk/locales/en-US
+include services/sync/locales/en-US
+include security/manager/locales/en-US
+include toolkit/locales/en-US
+include webapprt/locales/en-US
