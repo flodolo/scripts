@@ -11,8 +11,10 @@ bg
 bn-BD
 bn-IN
 br
+brx
 bs
 ca
+cak
 cs
 csb
 cy
@@ -54,6 +56,8 @@ kk
 km
 kn
 ko
+kok
+ks
 ku
 lg
 lij
@@ -83,6 +87,7 @@ ro
 ru
 rw
 sah
+sat
 si
 sk
 sl
@@ -101,6 +106,7 @@ tl
 tn
 tr
 ts
+tsz
 uk
 ur
 uz
