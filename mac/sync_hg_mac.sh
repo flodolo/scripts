@@ -33,7 +33,7 @@ REPOSITORIES=(
     "ssh://hg.mozilla.org/gaia-l10n/en-US/"
     "ssh://hg.mozilla.org/releases/gaia-l10n/v2_0/it/"
     "ssh://hg.mozilla.org/releases/gaia-l10n/v2_1/it/"
-    "https://gaia-l10n.allizom.org/integration/gaia-2_2"
+    "ssh://hg.mozilla.org/releases/gaia-l10n/v2_2/it/"
     "ssh://hg@bitbucket.org/flod/gaia-master-it"
     "https://gaia-l10n.allizom.org/integration/gaia-central"
     "ssh://hg.mozilla.org/mozilla-central"
