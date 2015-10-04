@@ -12,7 +12,6 @@ bs
 ca
 cs
 cy
-dsb
 en-GB
 en-ZA
 es-MX
@@ -30,7 +29,6 @@ hi-IN
 hr
 hy-AM
 id
-it
 ja
 ja-JP-mac
 ka
