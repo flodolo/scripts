@@ -50,8 +50,10 @@ mn
 mr
 ms
 my
+nb-NO
 ne-NP
 nl
+nn-NO
 nr
 nso
 oc
