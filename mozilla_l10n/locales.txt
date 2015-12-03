@@ -39,6 +39,7 @@ fy-NL
 ga-IE
 gd
 gl
+gn
 gu-IN
 he
 hi-IN
@@ -61,6 +62,7 @@ ks
 ku
 lg
 lij
+lo
 lt
 lv
 mai
