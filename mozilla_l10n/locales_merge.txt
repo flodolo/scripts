@@ -88,3 +88,4 @@ xh
 zh-CN
 zh-TW
 zu
+zh-CN
