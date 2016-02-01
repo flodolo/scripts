@@ -29,6 +29,7 @@ hsb
 hu
 hy-AM
 id
+is
 kk
 km
 kn
@@ -50,11 +51,11 @@ nr
 nso
 oc
 or
+pt-PT
 ro
 rw
 sah
 sat
-si
 son
 ss
 sv-SE
@@ -70,6 +71,5 @@ tsz
 ur
 uz
 vi
-wo
 xh
 zu

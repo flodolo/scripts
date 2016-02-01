@@ -1,0 +1,12 @@
+el
+he
+hr
+ka
+ko
+pt-BR
+rm
+sk
+sl
+uk
+wo
+zh-CN

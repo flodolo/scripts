@@ -30,8 +30,8 @@ gu-IN
 he
 hi-IN
 hr
-hy-AM
 hu
+hy-AM
 id
 ja
 ja-JP-mac
@@ -88,4 +88,3 @@ xh
 zh-CN
 zh-TW
 zu
-zh-CN
