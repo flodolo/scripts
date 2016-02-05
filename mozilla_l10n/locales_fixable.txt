@@ -7,3 +7,4 @@ mk
 nb-NO
 nl
 nn-NO
+sq
