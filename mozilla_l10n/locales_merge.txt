@@ -67,6 +67,7 @@ rm
 ro
 rw
 si
+sk
 son
 sq
 sr
