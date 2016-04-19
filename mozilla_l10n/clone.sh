@@ -35,60 +35,53 @@ function echoyellow() {
 }
 
 function check_repo() {
-	# $1: repository name
-	# $2: locale code
+    # $1: repository name
+    # $2: locale code
 
-	local reponame="$1"
-	local localecode="$2"
+    local reponame="$1"
+    local localecode="$2"
 
-	if [ -d $localecode/$reponame/.hg ]
-	    then
-			echogreen "Updating $reponame for $localecode"
-			hg -R $localecode/$reponame pull -u default
-			hg -R $localecode/$reponame update -C
-		else
-			mkdir -p $localecode
-			echored "$reponame for $localecode does not exist"
-			cd $localecode
-			echoyellow "Cloning $reponame for $localecode"
-			if [ $reponame == "l10n-central" ]
-			then
-				hg clone ssh://hg.mozilla.org/$reponame/$localecode l10n-central
-			else
-				hg clone ssh://hg.mozilla.org/releases/l10n/$reponame/$localecode/ $reponame
-			fi
-			cd ..
-		fi
+    if [ -d $localecode/$reponame/.hg ]
+        then
+            echogreen "Updating $reponame for $localecode"
+            hg -R $localecode/$reponame pull -u -r default
+            hg -R $localecode/$reponame update -C
+            hg -R $localecode/$reponame purge
+        else
+            mkdir -p $localecode
+            echored "$reponame for $localecode does not exist"
+            cd $localecode
+            echoyellow "Cloning $reponame for $localecode"
+            if [ $reponame == "l10n-central" ]
+            then
+                hg clone ssh://hg.mozilla.org/$reponame/$localecode l10n-central
+            else
+                hg clone ssh://hg.mozilla.org/releases/l10n/$reponame/$localecode/ $reponame
+            fi
+            cd ..
+        fi
 }
 
-if [ $# -eq 1 ]
+if [ $# -ge 1 ]
 then
-    # I have exactly one parameter, it should be the locale code
-    locale_list=$1
+    # Transform locale codes in an array
+    locale_list="$@"
 else
-	# Have to update all locales
-	locale_list=$(cat locales.txt)
-fi
-
-if [ $# -gt 1 ]
-then
-    # Too many parameters, warn and exit
-    echo "ERROR: too many arguments. Run 'clone.sh' without parameters to"
-    echo "clone/update all locales, or add the locale code as the only parameter "
-    echo "(e.g. 'clone.sh it' to clone/update only Italian)."
-    exit 1
+    # Have to update all locales
+    locale_list=$(cat locales.txt)
 fi
 
 # Create "locales" folder if missing
 if [ ! -d "locales" ]
 then
-	mkdir -p locales
+    mkdir -p locales
 fi
 cd locales
 
 for localecode in $locale_list
 do
-	check_repo mozilla-beta $localecode
-	check_repo mozilla-aurora $localecode
-	check_repo l10n-central $localecode
+    #check_repo mozilla-release $localecode
+    check_repo mozilla-beta $localecode
+    check_repo mozilla-aurora $localecode
+    check_repo l10n-central $localecode
 done
