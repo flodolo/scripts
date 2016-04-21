@@ -1,10 +1,10 @@
 #! /usr/bin/env bash
 
 # Note: replace "ssh://" with "https://" if you don't have SSH access to hg.mozilla.org
-# You need a locales.txt file in the same folder of the script
+# You need a locales_merge.txt file in the same folder of the script to run without parameters.
 # Syntax:
-# - without parameters: update all locales
-# - one parameter (locale code): update only the requested locale
+# - without parameters: update all locales in locales_merge.txt
+# - a list of locales to update
 
 function interrupt_code()
 # This code runs if user hits control-c
@@ -78,22 +78,13 @@ function update_repo() {
         fi
 }
 
-if [ $# -eq 1 ]
+if [ $# -ge 1 ]
 then
-    # I have exactly one parameter, it should be the locale code
-    locale_list=$1
+    # Transform locale codes in an array
+    locale_list="$@"
 else
 	# Have to update all locales
 	locale_list=$(cat locales_merge.txt)
-fi
-
-if [ $# -gt 1 ]
-then
-    # Too many parameters, warn and exit
-    echo "ERROR: too many arguments. Run 'clone.sh' without parameters to"
-    echo "clone/update all locales, or add the locale code as the only parameter "
-    echo "(e.g. 'clone.sh it' to clone/update only Italian)."
-    exit 1
 fi
 
 # Create "locales" folder if missing

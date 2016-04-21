@@ -1,10 +1,10 @@
 #! /usr/bin/env bash
 
 # Note: replace "ssh://" with "https://" if you don't have SSH access to hg.mozilla.org
-# You need a locales.txt file in the same folder of the script
+# You need a locales.txt file in the same folder of the script to run without parameters.
 # Syntax:
-# - without parameters: update all locales
-# - one parameter (locale code): update only the requested locale
+# - without parameters: update all locales listed in locales.txt
+# - a list of locales to update
 
 function interrupt_code()
 # This code runs if user hits control-c
@@ -80,7 +80,7 @@ cd locales
 
 for localecode in $locale_list
 do
-    #check_repo mozilla-release $localecode
+    check_repo mozilla-release $localecode
     check_repo mozilla-beta $localecode
     check_repo mozilla-aurora $localecode
     check_repo l10n-central $localecode
