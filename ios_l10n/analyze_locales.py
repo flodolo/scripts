@@ -34,7 +34,7 @@ def main():
         sys.exit(9)
 
     # URL to determine the list of complete localizations
-    url_complete_locales = 'https://l10n.mozilla-community.org/~flod/webstatus/api/?product=firefox-ios&txt&type=complete'
+    url_complete_locales = 'https://l10n.mozilla-community.org/webstatus/api/?product=firefox-ios&txt&type=complete'
     try:
         complete_locales = []
         for line in urllib2.urlopen(url_complete_locales):
