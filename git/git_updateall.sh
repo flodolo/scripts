@@ -18,7 +18,6 @@ function yellow() {
     echo -e "$YELLOW$*$NORMAL"
 }
 
-
 if [ $# -lt 1 ]
   then
     red "ERROR: no arguments supplied."
@@ -30,33 +29,43 @@ fi
 
 cd $1
 
-echo "This will check all subfolders, update them if they're git repositories (including submodules), checkout master and push to remote."
-read -p "Do you want to continue (y/n, default yes)? " -n 1 updateall
-echo ""
-
 if [ "$updateall" == 'y' ] || [ "$updateall" == '' ]
 then
 	for folder in $(find . -mindepth 1 -maxdepth 1 -type d  \( ! -iname ".*" \) | sed 's|^\./||g');
 	do
-		if [ -d "./$folder/.git" ]
+		if [ -d "./${folder}/.git" ]
 		then
 			# It's a git repository
-			echo "----------"
-			green "Updating $folder..."
-			cd $folder
-			git stash
-			git clean -fd
-			git checkout master
-			git fetch -p
-			git fetch upstream
-			git merge upstream/master
-			git pull --recurse-submodules && git submodule update
-			git push
+            cd $folder
+            green "-------------------"
+            green "Updating ${folder}...."
+            green "-------------------"
+
+            # Remove pending changes, untracked files and folders
+            green "Remove pending changes and untracked files/folders..."
+            git reset --hard
+            git clean -fd
+
+            # Make sure to be on master
+            green "Updating master..."
+            git checkout master
+            git pull
+            git fetch -p
+
+            # If upstream is defined, pull and merge
+            if git config remote.upstream.url > /dev/null
+            then
+                green "Fetching upstream..."
+                git fetch upstream
+                git merge upstream/master
+                git push
+            fi
+
 			cd ..
 		else
 			# Not a git repository
 			echo "----------"
-			yellow "$folder: not a git repository."
+			yellow "${folder}: not a git repository."
 		fi
 	done
 fi
