@@ -16,6 +16,7 @@ cy
 el
 en-GB
 en-ZA
+es-CL
 es-MX
 et
 eu
@@ -33,6 +34,7 @@ hr
 hu
 hy-AM
 id
+is
 ja
 ja-JP-mac
 ka
