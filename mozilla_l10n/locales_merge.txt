@@ -70,6 +70,7 @@ ro
 rw
 si
 sk
+sl
 son
 sq
 sr
