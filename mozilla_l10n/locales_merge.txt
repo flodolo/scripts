@@ -16,6 +16,7 @@ cy
 el
 en-GB
 en-ZA
+es-AR
 es-CL
 es-MX
 et
