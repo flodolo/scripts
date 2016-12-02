@@ -1,0 +1,32 @@
+# Make sure to add this to your ~/.bash_profile
+# include additional .bashrc if it exists
+# if [ -f $HOME/github/scripts/mac/bashrc_aliases ]; then
+#     . $HOME/github/scripts/mac/bashrc_aliases
+# fi
+
+# Colors in Terminal
+export CLICOLOR=1
+export LSCOLORS=GxFxCxDxBxegedabagaced
+
+# Git branch in prompt.
+parse_git_branch() {
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+export PS1="\u@\h \W\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "
+
+alias hgup="~/github/scripts/mac/sync_hg_mac.sh"
+alias gitup="~/github/git_updateall.sh ~/github/"
+
+# 'mate' comes from the TextMate app
+alias hgc="hg commit"
+alias hgd="hg diff|mate"
+alias gitd="git diff|mate"
+
+alias trunkst="cd ~/mozilla/mercurial/l10n-central"
+
+alias cmp_browser="~/github/scripts/mac/cmp_browser.sh"
+alias cmp_mobile="~/github/scripts/mac/cmp_browser.sh"
+
+if [ -f ~/github/scripts/mac/git-completion.sh ]; then
+  . ~/github/scripts/mac/git-completion.sh
+fi

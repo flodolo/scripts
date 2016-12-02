@@ -29,7 +29,8 @@ repositories=(
     "ssh://hg.mozilla.org/l10n-central/it/"
     "ssh://hg.mozilla.org/releases/l10n/mozilla-aurora/it/"
     "ssh://hg.mozilla.org/releases/l10n/mozilla-beta/it/"
-    "ssh://hg.mozilla.org/mozilla-unified"
+    "https://hg.mozilla.org/mozilla-unified"
+    "https://hg.mozilla.org/hgcustom/version-control-tools"
 )
 
 folder_names=(
@@ -37,6 +38,7 @@ folder_names=(
 	"mozilla-aurora"
 	"mozilla-beta"
 	"mozilla-unified"
+    "version-control-tools"
 )
 
 cd "${base_folder}"
