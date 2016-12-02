@@ -31,6 +31,7 @@ repositories=(
     "ssh://hg.mozilla.org/releases/l10n/mozilla-beta/it/"
     "https://hg.mozilla.org/mozilla-unified"
     "https://hg.mozilla.org/hgcustom/version-control-tools"
+    "https://hg.mozilla.org/l10n/compare-locales/"
 )
 
 folder_names=(
@@ -39,6 +40,7 @@ folder_names=(
 	"mozilla-beta"
 	"mozilla-unified"
     "version-control-tools"
+    "compare-locales"
 )
 
 cd "${base_folder}"

@@ -1,5 +1,5 @@
 # Make sure to add this to your ~/.bash_profile
-# include additional .bashrc if it exists
+# include additional .bash_profiles if it exists
 # if [ -f $HOME/github/scripts/mac/bashrc_aliases ]; then
 #     . $HOME/github/scripts/mac/bashrc_aliases
 # fi
@@ -14,19 +14,27 @@ parse_git_branch() {
 }
 export PS1="\u@\h \W\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "
 
-alias hgup="~/github/scripts/mac/sync_hg_mac.sh"
-alias gitup="~/github/git_updateall.sh ~/github/"
-
-# 'mate' comes from the TextMate app
-alias hgc="hg commit"
-alias hgd="hg diff|mate"
-alias gitd="git diff|mate"
-
-alias trunkst="cd ~/mozilla/mercurial/l10n-central"
-
-alias cmp_browser="~/github/scripts/mac/cmp_browser.sh"
-alias cmp_mobile="~/github/scripts/mac/cmp_browser.sh"
-
+# Autocomplete Git commands
 if [ -f ~/github/scripts/mac/git-completion.sh ]; then
   . ~/github/scripts/mac/git-completion.sh
 fi
+
+
+# Mercurial commands
+# 'mate' comes from the TextMate app
+alias hgc="hg commit"
+alias hgd="hg diff|mate"
+alias hgup="~/github/scripts/mac/sync_hg_mac.sh"
+
+# Git commands
+alias gitd="git diff|mate"
+alias git_branch="~/github/scripts/git/git_branch.sh"
+alias git_clone="~/github/scripts/git/git_clone.sh"
+alias git_update="~/github/scripts/git/git_update.sh"
+alias git_updateall="~/github/scripts/git/git_updateall.sh"
+alias gitup="git_updateall ~/github/"
+
+# Mozilla l10n commands
+alias trunkst="cd ~/mozilla/mercurial/l10n-central"
+alias cmp_browser="~/github/scripts/mac/cmp_browser.sh"
+alias cmp_mobile="~/github/scripts/mac/cmp_browser.sh"
