@@ -13,7 +13,7 @@ git clone "https://github.com/flodolo/$1"
 
 echo "----------------"
 read -p "Do you want to add a remote (y/n, default yes)? " -n 1 addremote
-if [ "$addremote" == 'y' ] || [ "$addremote" == '' ]
+if [ "$addremote" == 'y' ]
 then
 	cd $1
 	read -p "User of remote URL? " remoteuser
