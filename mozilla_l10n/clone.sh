@@ -80,7 +80,7 @@ cd locales
 
 for localecode in $locale_list
 do
-    check_repo mozilla-release $localecode
+    # check_repo mozilla-release $localecode
     check_repo mozilla-beta $localecode
     check_repo mozilla-aurora $localecode
     check_repo l10n-central $localecode
