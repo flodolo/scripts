@@ -57,8 +57,8 @@ for i in "${!folder_names[@]}"; do
         if [ "${folder_name}" == "mozilla-unified" ]
             then
                 # For mozilla-unified I need to update to central bookmark too
-                hg -R ${folder_name} pull -u
                 hg -R ${folder_name} up central
+                hg -R ${folder_name} pull -u
   		    else
                 hg -R ${folder_name} pull -r default -u
             fi
