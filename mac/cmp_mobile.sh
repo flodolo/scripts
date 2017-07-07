@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd ~/mozilla/mercurial
-compare-locales ./mozilla-unified/mobile/locales/l10n.ini ./l10n/ it
+compare-locales ./mozilla-unified/mobile/android/locales/l10n.toml ./l10n/ it
