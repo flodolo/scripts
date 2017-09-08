@@ -31,6 +31,7 @@ repositories=(
     "https://hg.mozilla.org/mozilla-unified"
     "https://hg.mozilla.org/hgcustom/version-control-tools"
     "https://hg.mozilla.org/l10n/compare-locales/"
+    "https://hg.mozilla.org/users/axel_mozilla.com/en-US"
 )
 
 folder_names=(
@@ -39,6 +40,7 @@ folder_names=(
 	"mozilla-unified"
     "version-control-tools"
     "compare-locales"
+    "cross-channel"
 )
 
 cd "${base_folder}"
