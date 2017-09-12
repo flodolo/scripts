@@ -31,7 +31,7 @@ repositories=(
     "https://hg.mozilla.org/mozilla-unified"
     "https://hg.mozilla.org/hgcustom/version-control-tools"
     "https://hg.mozilla.org/l10n/compare-locales/"
-    "https://hg.mozilla.org/users/axel_mozilla.com/en-US"
+    "https://hg.mozilla.org/users/axel_mozilla.com/gecko-strings"
 )
 
 folder_names=(
@@ -40,7 +40,7 @@ folder_names=(
 	"mozilla-unified"
     "version-control-tools"
     "compare-locales"
-    "cross-channel"
+    "gecko-strings"
 )
 
 cd "${base_folder}"
