@@ -31,7 +31,7 @@ repositories=(
     "https://hg.mozilla.org/mozilla-unified"
     "https://hg.mozilla.org/hgcustom/version-control-tools"
     "https://hg.mozilla.org/l10n/compare-locales/"
-    "https://hg.mozilla.org/users/axel_mozilla.com/gecko-strings"
+    "https://hg.mozilla.org/users/axel_mozilla.com/gecko-strings-quarantine"
 )
 
 folder_names=(
@@ -40,7 +40,7 @@ folder_names=(
 	"mozilla-unified"
     "version-control-tools"
     "compare-locales"
-    "gecko-strings"
+    "gecko-strings-quarantine"
 )
 
 cd "${base_folder}"
@@ -57,7 +57,8 @@ for i in "${!folder_names[@]}"; do
         if [ "${folder_name}" == "mozilla-unified" ]
             then
                 # For mozilla-unified I need to update to central bookmark too
-                hg -R ${folder_name} up central
+                hg update -C
+                hg -R ${folder_name} update central
                 hg -R ${folder_name} pull -u
   		    else
                 hg -R ${folder_name} pull -r default -u
