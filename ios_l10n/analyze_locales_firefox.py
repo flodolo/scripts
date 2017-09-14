@@ -22,7 +22,7 @@ def main():
     args = parser.parse_args()
 
     # URL to determine the list of shipping locales in the requested branch
-    url_shipping_locales = 'https://raw.githubusercontent.com/mozilla/firefox-ios/{0}/shipping_locales.txt'.format(args.version)
+    url_shipping_locales = 'https://raw.githubusercontent.com/mozilla-mobile/firefox-ios/{0}/shipping_locales.txt'.format(args.version)
     try:
         shipping_locales = []
         for line in urllib2.urlopen(url_shipping_locales):
