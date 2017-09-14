@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import argparse
+import json
 import sys
 import urllib2
 
@@ -34,7 +35,8 @@ def main():
         sys.exit(9)
 
     # URL to determine the list of complete localizations
-    url_complete_locales = 'https://l10n.mozilla-community.org/webstatus/api/?product=firefox-ios&txt&type=complete'
+    base_url = 'https://l10n.mozilla-community.org/webstatus/api/?product=firefox-ios'
+    url_complete_locales = base_url + '&txt&type=complete'
     try:
         complete_locales = []
         for line in urllib2.urlopen(url_complete_locales):
@@ -51,14 +53,27 @@ def main():
         sys.exit(9)
 
     # List locales shipping but currently not complete
-    print 'NEW LOCALES'
-    print 'List of locales not shipping in {0} but currently complete:'.format(args.version)
-    print ', '.join(diff(complete_locales, shipping_locales))
+    new_locales = diff(complete_locales, shipping_locales)
+    if new_locales:
+        print('\n---\n\nThe following locales are complete but missing from {}: {}'.format(args.version, ', '.join(new_locales)))
+    else:
+        print('\n---\n\nThere are no complete locales missing in {}'.format(args.version))
 
     # List locales complete but still not shipping
-    print '\nPOTENTIALLY OBSOLETE LOCALES'
-    print 'List of locales shipping in {0} but currently incomplete:'.format(args.version)
-    print ', '.join(diff(shipping_locales, complete_locales))
+    incomplete_locales = diff(shipping_locales, complete_locales)
+    if incomplete_locales:
+        print('\n---\n\nThe following locales are shipping in {} but incomplete: {}'.format(args.version, ', '.join(incomplete_locales)))
+        # Get detailed stats
+        update_source = base_url + '&json&type=stats'
+        response = urllib2.urlopen(update_source)
+        json_data = json.load(response)
+        print('\nDetailed stats:')
+        for locale in incomplete_locales:
+            count_missing = json_data[locale]['missing'] + json_data[locale]['untranslated'] + json_data[locale]['fuzzy']
+            print('{}: {} missing strings'.format(locale, count_missing))
+    else:
+        print('\n---\n\nThere are no incomplete locales.')
+
 
 if __name__ == '__main__':
     main()
