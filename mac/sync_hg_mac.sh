@@ -65,3 +65,6 @@ for i in "${!folder_names[@]}"; do
             fi
   fi
 done
+
+# Run stats
+/Users/flodolo/Dropbox/mozilla/wip_pm/firefox_stats/extract_stats.py ~/mozilla/mercurial/gecko-strings-quarantine/
