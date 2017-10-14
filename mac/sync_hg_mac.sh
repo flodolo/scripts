@@ -65,4 +65,18 @@ for i in "${!folder_names[@]}"; do
 done
 
 # Run stats
-/Users/flodolo/Dropbox/mozilla/wip_pm/firefox_stats/extract_stats.py ~/mozilla/mercurial/gecko-strings-quarantine/
+folder_name="mozpm_stats"
+if [ ! -d ${folder_name} ]
+  then
+      git clone https://github.com/flodolo/mozpm_stats
+      cd ${folder_name}
+  else
+      cd ${folder_name}
+      git pull
+fi
+./firefox_stats/extract_stats.py ~/mozilla/mercurial/gecko-strings-quarantine/
+day=$(date +"%Y%m%d")
+git add firefox_stats/db/stats.db
+git add firefox_stats/cache.json
+git commit -a -m "Update data ($day)"
+git push
