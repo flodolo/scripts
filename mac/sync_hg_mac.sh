@@ -3,8 +3,8 @@
 function interrupt_code()
 # This code runs if user hits control-c
 {
-  echored "\n*** Setup interrupted ***\n"
-  exit $?
+    echored "\n*** Setup interrupted ***\n"
+    exit $?
 }
 
 # Trap keyboard interrupt (control-c)
@@ -43,40 +43,43 @@ folder_names=(
 
 cd "${base_folder}"
 for i in "${!folder_names[@]}"; do
-  repository="${repositories[$i]}"
-  folder_name="${folder_names[$i]}"
-  if [ ! -d ${folder_name} ]
-  	then
-  		echored "Repository ${folder_name} does not exist"
-  		echogreen "Checking out the repo ${folder_name}..."
-  		hg clone ${repository} ${folder_name}
-  	else
-  		echogreen "Updating ${folder_name}..."
+    repository="${repositories[$i]}"
+    folder_name="${folder_names[$i]}"
+    if [ ! -d ${folder_name} ]
+    then
+        echored "Repository ${folder_name} does not exist"
+        echogreen "Checking out the repo ${folder_name}..."
+        hg clone ${repository} ${folder_name}
+    else
+        echogreen "Updating ${folder_name}..."
         if [ "${folder_name}" == "mozilla-unified" ]
-            then
-                # For mozilla-unified I need to update to central bookmark too
-                hg -R ${folder_name} update -C
-                hg -R ${folder_name} update central
-                hg -R ${folder_name} pull -u
-  		    else
-                hg -R ${folder_name} pull -r default -u
-            fi
-  fi
+        then
+            # For mozilla-unified I need to update to central bookmark too
+            hg -R ${folder_name} update -C
+            hg -R ${folder_name} update central
+            hg -R ${folder_name} pull -u
+        else
+            hg -R ${folder_name} pull -r default -u
+        fi
+    fi
 done
 
 # Run stats
 folder_name="mozpm_stats"
 if [ ! -d ${folder_name} ]
-  then
-      git clone https://github.com/flodolo/mozpm_stats
-      cd ${folder_name}
-  else
-      cd ${folder_name}
-      git pull
+then
+    git clone https://github.com/flodolo/mozpm_stats
+else
+    git pull
 fi
+cd ${folder_name}
 ./firefox_stats/extract_stats.py ~/mozilla/mercurial/gecko-strings-quarantine/
-day=$(date +"%Y%m%d")
-git add firefox_stats/db/stats.db
-git add firefox_stats/cache.json
-git commit -a -m "Update data ($day)"
-git push
+
+if [ -z "$(git status --porcelain)" ] 
+then 
+    day=$(date +"%Y%m%d")
+    git add firefox_stats/db/stats.db
+    git add firefox_stats/cache.json
+    git commit -a -m "Update data ($day)"
+    git push
+fi
