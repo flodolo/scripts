@@ -35,40 +35,39 @@ function echoyellow() {
 }
 
 function check_repo() {
-    # $1: repository name
-    # $2: locale code
+    # $1: locale code
+    # $2: type (hgmo, bitbucket)
 
-    local reponame="$1"
-    local localecode="$2"
+    local locale="$1"
+    local server="$2"
 
-    if [ -d $localecode/$reponame/.hg ]
+    if [ -d "${locale}/.hg" ]
         then
-            echogreen "Updating $reponame for $localecode"
-            hg -R $localecode/$reponame pull -u -r default
-            hg -R $localecode/$reponame update -C
-            hg -R $localecode/$reponame purge
+            echogreen "Updating l10n-central for ${locale}"
+            hg -R $locale pull -u -r default
+            hg -R $locale update -C
+            hg -R $locale purge
         else
-            mkdir -p $localecode
-            echored "$reponame for $localecode does not exist"
-            cd $localecode
-            echoyellow "Cloning $reponame for $localecode"
-            if [ $reponame == "l10n-central" ]
-            then
-                hg clone ssh://hg.mozilla.org/$reponame/$localecode l10n-central
+            echored "l10n-central for ${locale} does not exist"
+            echoyellow "Cloning l10n-central for ${locale}"
+            if [ "${server}" == "hgmo" ]
+                then
+                    hg clone ssh://hg.mozilla.org/l10n-central/$locale
+            elif [ "${server}" == "bitbucket" ]
+                then
+                    hg clone ssh://bitbucket.org/mozilla-l10n/$locale
             else
-                hg clone ssh://hg.mozilla.org/releases/l10n/$reponame/$localecode/ $reponame
+                echored "Unknown server ${server}"
             fi
-            cd ..
         fi
 }
 
-if [ $# -ge 1 ]
+if [ $# -eq 1 ]
 then
-    # Transform locale codes in an array
-    locale_list="$@"
-else
-    # Have to update all locales
-    locale_list=$(cat locales.txt)
+    echored "Not enough parameters:"
+    echo "* Run without parameters to update all locales"
+    echo "* Run without locale and server (hgmo, bitbucket) to update one locale"
+    exit
 fi
 
 # Create "locales" folder if missing
@@ -76,11 +75,25 @@ if [ ! -d "locales" ]
 then
     mkdir -p locales
 fi
-cd locales
 
-for localecode in $locale_list
+if [ $# -eq 2 ]
+then
+    # Only update one locale and exit
+    cd locales
+    check_repo $1 $2
+    exit
+fi
+
+# Have to update all locales
+locales_hgmo=$(cat locales_hgmo.txt)
+locales_bitbucket=$(cat locales_bitbucket.txt)
+cd locales
+for locale in $locales_hgmo
 do
-    # check_repo mozilla-release $localecode
-    check_repo mozilla-beta $localecode
-    check_repo l10n-central $localecode
+    check_repo $locale hgmo
+done
+
+for locale in $locales_bitbucket
+do
+    check_repo $locale bitbucket
 done
