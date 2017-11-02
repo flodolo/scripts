@@ -78,7 +78,7 @@ else
 fi
 ./firefox_stats/extract_stats.py ~/mozilla/mercurial/gecko-strings-quarantine/
 
-if [ -z "$(git status --porcelain)" ]
+if [[ "$(git status --porcelain)" ]]
 then
     day=$(date +"%Y%m%d")
     git add firefox_stats/db/stats.db
