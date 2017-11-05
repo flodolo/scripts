@@ -62,31 +62,31 @@ function check_repo() {
         fi
 }
 
-if [ $# -eq 1 ]
-then
-    echored "Not enough parameters:"
-    echo "* Run without parameters to update all locales"
-    echo "* Run without locale and server (hgmo, bitbucket) to update one locale"
-    exit
-fi
-
 # Create "locales" folder if missing
 if [ ! -d "locales" ]
 then
     mkdir -p locales
 fi
 
-if [ $# -eq 2 ]
+if [ $# -gt 0 ]
 then
     # Only update one locale and exit
     cd locales
-    check_repo $1 $2
+    if [ $# -eq 1 ]
+    then
+        echoyellow "Assuming hgmo as provider"
+        provider="hgmo"
+    else
+        provider="$2"
+    fi
+    check_repo $1 $provider
     exit
 fi
 
 # Have to update all locales
 locales_hgmo=$(cat locales_hgmo.txt)
 locales_bitbucket=$(cat locales_bitbucket.txt)
+
 cd locales
 for locale in $locales_hgmo
 do
