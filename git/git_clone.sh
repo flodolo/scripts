@@ -12,11 +12,13 @@ echo "Cloning https://github.com/flodolo/$1..."
 git clone "https://github.com/flodolo/$1"
 
 echo "----------------"
-read -p "Do you want to add a remote (y/n, default yes)? " -n 1 addremote
-if [ "$addremote" == 'y' ]
+read -p "Do you want to add a remote (y/n, default yes)? " -s -n 1 addremote
+if [[ "$addremote" == 'y' || "$addremote" == '' ]]
 then
 	cd $1
-	read -p "User of remote URL? " remoteuser
-    echo "Adding remote https://github.com/$remoteuser/$1..."
+    echo ""
+	echo "User of remote URL?"
+    read remoteuser
+    echo "Adding remote https://github.com/$remoteuser/$1"
     git remote add upstream https://github.com/$remoteuser/$1
 fi

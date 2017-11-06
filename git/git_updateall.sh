@@ -58,6 +58,8 @@ then
                 green "Fetching upstream..."
                 git fetch upstream
                 git merge upstream/master
+                # Fetch tags
+                git fetch upstream 'refs/tags/*:refs/tags/*'
                 git push
             fi
 
