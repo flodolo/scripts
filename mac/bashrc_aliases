@@ -4,6 +4,9 @@
 #     . $HOME/github/scripts/mac/bashrc_aliases
 # fi
 
+# History size
+HISTFILESIZE=50000
+
 # Colors in Terminal
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
