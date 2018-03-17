@@ -5,7 +5,8 @@
 # fi
 
 # History size
-HISTFILESIZE=50000
+HISTFILESIZE=500000
+HISTSIZE=500000
 
 # Colors in Terminal
 export CLICOLOR=1
