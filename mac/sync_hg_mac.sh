@@ -31,6 +31,7 @@ repositories=(
     "https://hg.mozilla.org/hgcustom/version-control-tools"
     "https://hg.mozilla.org/l10n/compare-locales/"
     "https://hg.mozilla.org/users/axel_mozilla.com/gecko-strings-quarantine"
+    "https://hg.mozilla.org/l10n/fluent-migration"
 )
 
 folder_names=(
@@ -39,6 +40,7 @@ folder_names=(
     "version-control-tools"
     "compare-locales"
     "gecko-strings-quarantine"
+    "fluent-migration"
 )
 
 cd "${base_folder}"
