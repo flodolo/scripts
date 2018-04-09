@@ -97,7 +97,7 @@ else
 	cd ${folder_name}
     git pull
 fi
-./firefox_stats/extract_stats.py ~/mozilla/mercurial/gecko-strings-quarantine/
+./firefox_stats/extract_stats.sh ~/mozilla/mercurial/gecko-strings-quarantine/
 
 if [[ "$(git status --porcelain)" ]]
 then
