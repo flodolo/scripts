@@ -33,7 +33,6 @@ repositories=(
     "https://hg.mozilla.org/users/axel_mozilla.com/gecko-strings-quarantine"
     "https://hg.mozilla.org/l10n/fluent-migration"
 )
-
 folder_names=(
 	"l10n-central"
 	"mozilla-unified"
@@ -44,7 +43,8 @@ folder_names=(
 )
 
 cd "${base_folder}"
-for i in "${!folder_names[@]}"; do
+for i in "${!folder_names[@]}"
+do
     repository="${repositories[$i]}"
     folder_name="${folder_names[$i]}"
     if [ ! -d "${folder_name}" ]
@@ -69,35 +69,43 @@ for i in "${!folder_names[@]}"; do
     fi
 done
 
-# Make sure python-fluent is available within the Mercurial folder
+# Git repositories
+git_repositories=(
+    "https://github.com/phacility/arcanist"
+    "https://github.com/phacility/libphutil"
+    "https://github.com/projectfluent/python-fluent"
+    "https://github.com/flodolo/firefox_l10n_checks"
+    "https://github.com/flodolo/mozpm_stats"
+)
+git_folder_names=(
+    "arcanist"
+    "libphutil"
+    "python-fluent"
+    "firefox_l10n_checks"
+    "mozpm_stats"
+)
+
 cd "${base_folder}"
-repository="https://github.com/projectfluent/python-fluent"
-folder_name="python-fluent"
-if [ ! -d "${folder_name}" ]
-then
-    echored "Repository ${folder_name} does not exist"
-    echogreen "Checking out the repo ${folder_name}..."
-    git clone clone ${repository} ${folder_name}
-else
-    echogreen "Updating ${folder_name}..."
-    cd "${folder_name}"
-    git pull
-    cd ..
-fi
+for i in "${!git_folder_names[@]}"
+do
+    repository="${git_repositories[$i]}"
+    folder_name="${git_folder_names[$i]}"
+    if [ ! -d "${folder_name}" ]
+    then
+        echored "Repository ${folder_name} does not exist"
+        echogreen "Checking out the repo ${folder_name}..."
+        git clone ${repository} ${folder_name}
+    else
+        echogreen "Updating ${folder_name}..."
+        cd "${folder_name}"
+        git pull
+        cd ..
+    fi
+done
 
 # Run stats
-cd "${base_folder}"
-pwd
-folder_name="mozpm_stats"
-if [ ! -d ${folder_name} ]
-then
-    git clone https://github.com/flodolo/mozpm_stats
-	cd ${folder_name}
-else
-	cd ${folder_name}
-    git pull
-fi
-./firefox_stats/extract_stats.sh ~/mozilla/mercurial/gecko-strings-quarantine/
+cd "${base_folder}/mozpm_stats"
+./firefox_stats/extract_stats.sh "${base_folder}/gecko-strings-quarantine/"
 
 if [[ "$(git status --porcelain)" ]]
 then
