@@ -4,6 +4,9 @@
 #     . $HOME/github/scripts/mac/bashrc_aliases
 # fi
 
+# Phabricator (Arcanist)
+export PATH="$PATH:/Users/flodolo/mozilla/mercurial/arcanist/bin/"
+
 # History size
 HISTFILESIZE=500000
 HISTSIZE=500000
