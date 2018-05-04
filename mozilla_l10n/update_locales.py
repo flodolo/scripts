@@ -18,7 +18,7 @@ def query_bitbucket(locales, url):
 
 
 def main():
-    script_folder = os.path.abspath(os.path.join(os.path.dirname( __file__ )))
+    script_folder = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 
     locales_hgmo = []
     try:
@@ -33,11 +33,11 @@ def main():
         # Ignore x-testing
         locales_hgmo.remove('x-testing')
 
-        output_file = open(os.path.join(script_folder, 'locales_hgmo.txt'), 'w')
-        locales_hgmo.sort()
-        for locale in locales_hgmo:
-            output_file.write('{}\n'.format(locale))
-        output_file.close()
+        file_name = os.path.join(script_folder, 'locales_hgmo.txt')
+        with open(file_name, 'w') as f:
+            locales_hgmo.sort()
+            for locale in locales_hgmo:
+                f.write('{}\n'.format(locale))
     except Exception as e:
         print(e)
 
@@ -47,13 +47,16 @@ def main():
         print('Reading list of BitBucket repositories')
         query_bitbucket(locales_bitbucket, url)
         locales_bitbucket.sort()
-        output_file = open(os.path.join(script_folder, 'locales_bitbucket.txt'), 'w')
-        for locale in locales_bitbucket:
-            if locale in locales_hgmo:
-                print('ERROR: {} is already in l10n-central, repository should be removed.'.format(locale))
-                continue
-            output_file.write('{}\n'.format(locale))
-        output_file.close()
+
+        file_name = os.path.join(script_folder, 'locales_bitbucket.txt')
+        with open(file_name, 'w') as f:
+            for locale in locales_bitbucket:
+                if locale in locales_hgmo:
+                    print(
+                        'ERROR: {} is already in l10n-central, '
+                        'repository should be removed.'.format(locale))
+                    continue
+                f.write('{}\n'.format(locale))
     except Exception as e:
         print(e)
 
