@@ -11,7 +11,6 @@ def query_bitbucket(locales, url):
         json_data = json.load(response)
         for repository in json_data['values']:
             locales.append(repository['name'])
-        # Untested, we have less than 10 repos
         if 'next' in json_data:
             query_bitbucket(locales, json_data['next'])
     except Exception as e:
