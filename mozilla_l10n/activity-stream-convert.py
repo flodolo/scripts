@@ -12,8 +12,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--method', choices=['rebase', 'merge'], default='rebase')
 parser.add_argument('--push', action='store_true', help='push results upstream')
 parser.add_argument('-p', default=4, metavar='N', help='Run N parallel jobs')
-parser.add_argument('a_s', metavar='activity-stream-l10n')
-parser.add_argument('l10n', metavar='l10n-central')
+parser.add_argument('as_path', metavar='activity-stream-l10n')
+parser.add_argument('l10n_path', metavar='l10n-central')
 args = parser.parse_args()
 
 def hg_pull(repo):
@@ -23,7 +23,7 @@ def git_pull(repo):
     return subprocess.run(['git', 'pull'], cwd=repo, stdout=subprocess.PIPE).stdout.decode('utf-8')
 
 def migrate(locale):
-    repo = os.path.join(args.l10n, locale)
+    repo = os.path.join(args.l10n_path, locale)
     out = ''
     out += 'starting migration for {}\n'.format(locale)
     if args.method == 'rebase':
@@ -35,7 +35,7 @@ def migrate(locale):
     include "l10n/{loc}/strings.properties"
     rename "l10n/{loc}/strings.properties" "browser/extensions/activity-stream/activity-stream.properties"
     '''.format(loc=locale))
-        shamap = os.path.join(args.l10n, locale, '.hg', 'shamap')
+        shamap = os.path.join(args.l10n_path, locale, '.hg', 'shamap')
         if os.path.isfile(shamap):
             os.remove(shamap)
         if args.method == 'rebase':
@@ -48,7 +48,7 @@ def migrate(locale):
                 fh.write(content)
         # ignore all the commit messages in each locale, don't add to output
         subprocess.run(
-            ['hg', 'convert', '--filemap', filemap, args.a_s, repo],
+            ['hg', 'convert', '--filemap', filemap, args.as_path, repo],
             stdout=subprocess.PIPE
         ).stdout.decode('utf-8')
         if args.method == 'merge':
@@ -85,22 +85,20 @@ def migrate(locale):
     out += 'finished migration for {}\n'.format(locale)
     return out
 
-sys.stdout.write(git_pull(args.a_s))
+sys.stdout.write(git_pull(args.as_path))
 locales = [
     dir
-    for dir in os.listdir(os.path.join(args.a_s, 'l10n'))
+    for dir in os.listdir(os.path.join(args.as_path, 'l10n'))
     if dir != 'templates'
 ]
 locales.sort()
 handle = []
 skip = []
 for loc in locales:
-    if os.path.isdir(os.path.join(args.l10n, loc)):
+    if os.path.isdir(os.path.join(args.l10n_path, loc)):
         handle.append(loc)
     else:
         skip.append(loc)
-
-handle = handle[:4]
 
 with futures.ThreadPoolExecutor(max_workers=args.p) as executor:
     for stdout in executor.map(migrate, handle):
