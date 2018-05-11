@@ -5,14 +5,20 @@ import os
 import urllib2
 
 
-def query_bitbucket(locales, url):
+def query_hg(locales, url):
     try:
         response = urllib2.urlopen(url)
         json_data = json.load(response)
-        for repository in json_data['values']:
+        # hg.mozilla.org has 'entries', bitbucket 'values'
+        key_name = 'values' if 'values' in json_data else 'entries'
+        for repository in json_data[key_name]:
+            # Ignore x-testing in mozilla.org
+            if repository == 'x-testing':
+                continue
             locales.append(repository['name'])
         if 'next' in json_data:
-            query_bitbucket(locales, json_data['next'])
+            query_hg(locales, json_data['next'])
+        locales.sort()
     except Exception as e:
         print(e)
 
@@ -22,14 +28,9 @@ def main():
 
     locales_hgmo = []
     try:
-        url = 'https://hg.mozilla.org/l10n-central/?style=raw'
+        url = 'https://hg.mozilla.org/l10n-central/?style=json'
         print('Reading list of l10n-central repositories')
-        response = urllib2.urlopen(url)
-        for line in response:
-            line = line.rstrip()
-            if not line:
-                continue
-            locales_hgmo.append(line.split('/')[-2])
+        query_hg(locales_hgmo, url)
         # Ignore x-testing
         locales_hgmo.remove('x-testing')
 
@@ -45,7 +46,7 @@ def main():
     try:
         url = 'https://api.bitbucket.org/2.0/repositories/mozilla-l10n'
         print('Reading list of BitBucket repositories')
-        query_bitbucket(locales_bitbucket, url)
+        query_hg(locales_bitbucket, url)
         locales_bitbucket.sort()
 
         file_name = os.path.join(script_folder, 'locales_bitbucket.txt')
