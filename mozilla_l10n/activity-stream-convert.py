@@ -33,7 +33,7 @@ def migrate(locale):
         with os.fdopen(fd, 'w') as fh:
             fh.write('''\
     include "l10n/{loc}/strings.properties"
-    rename "l10n/{loc}/strings.properties" "browser/extensions/activity-stream/activity-stream.properties"
+    rename "l10n/{loc}/strings.properties" "browser/chrome/browser/activity-stream/newtab.properties"
     '''.format(loc=locale))
         shamap = os.path.join(args.l10n_path, locale, '.hg', 'shamap')
         if os.path.isfile(shamap):
