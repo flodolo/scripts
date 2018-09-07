@@ -30,7 +30,7 @@ repositories=(
     "https://hg.mozilla.org/mozilla-unified"
     "https://hg.mozilla.org/hgcustom/version-control-tools"
     "https://hg.mozilla.org/l10n/compare-locales/"
-    "https://hg.mozilla.org/users/axel_mozilla.com/gecko-strings-quarantine"
+    "https://hg.mozilla.org/users/francesco.lodolo_mozillaitalia.org/gecko-strings-quarantine"
     "https://hg.mozilla.org/l10n/fluent-migration"
 )
 folder_names=(
