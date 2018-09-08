@@ -105,6 +105,7 @@ done
 
 # Run stats
 cd "${base_folder}/mozpm_stats"
+git pull
 ./firefox_stats/extract_stats.sh "${base_folder}/gecko-strings-quarantine/"
 
 if [[ "$(git status --porcelain)" ]]
