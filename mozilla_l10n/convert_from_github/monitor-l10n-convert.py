@@ -36,7 +36,6 @@ def migrate(locale):
     if args.method == 'rebase':
         out += hg_pull(repo)
     fd, filemap = mkstemp(text=True)
-    # TODO: correct path to file for mozilla-central
     try:
         with os.fdopen(fd, 'w') as fh:
             fh.write('''\
@@ -100,11 +99,12 @@ sys.stdout.write(git_pull(args.project_path))
 locales = [
     dir
     for dir in os.listdir(os.path.join(args.project_path, 'src/locales'))
-    if dir != 'en-US'
+    if dir != 'en-US' and not dir.startswith('.')
 ]
 locales.sort()
 
-#locales=['it']
+# Limit to one locale for testing
+# locales = ['it']
 
 handle = []
 skip = []
