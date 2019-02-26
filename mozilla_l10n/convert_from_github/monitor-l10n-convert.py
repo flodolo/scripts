@@ -27,6 +27,9 @@ def git_pull(repo):
     return subprocess.run(['git', 'pull'], cwd=repo, stdout=subprocess.PIPE).stdout.decode('utf-8')
 
 def migrate(locale):
+    branchmap = os.path.join(os.path.dirname(__file__), 'monitor_branchmap')
+    monitor_locale = locale
+    locale = locale.replace('_', '-')
     repo = os.path.join(args.l10n_path, locale)
     out = ''
     out += 'starting migration for {}\n'.format(locale)
@@ -39,7 +42,7 @@ def migrate(locale):
             fh.write('''\
     include "src/locales/{loc}/strings.properties"
     rename "src/locales/{loc}/strings.properties" "browser/extensions/fxmonitor/fxmonitor.properties"
-    '''.format(loc=locale))
+    '''.format(loc=monitor_locale))
         shamap = os.path.join(args.l10n_path, locale, '.hg', 'shamap')
         if os.path.isfile(shamap):
             os.remove(shamap)
@@ -53,7 +56,7 @@ def migrate(locale):
                 fh.write(content)
         # ignore all the commit messages in each locale, don't add to output
         subprocess.run(
-            ['hg', 'convert', '--filemap', filemap, args.project_path, repo],
+            ['hg', 'convert', '-r', 'l10n', '--branchmap', branchmap, '--filemap', filemap, args.project_path, repo],
             stdout=subprocess.PIPE
         ).stdout.decode('utf-8')
         if args.method == 'merge':
@@ -106,7 +109,8 @@ locales.sort()
 handle = []
 skip = []
 for loc in locales:
-    if os.path.isdir(os.path.join(args.l10n_path, loc)):
+    gecko_loc = loc.replace('_', '-')
+    if os.path.isdir(os.path.join(args.l10n_path, gecko_loc)):
         handle.append(loc)
     else:
         skip.append(loc)
