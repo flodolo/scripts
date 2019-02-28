@@ -29,7 +29,6 @@ def migrate(locale):
     if args.method == 'rebase':
         out += hg_pull(repo)
     fd, filemap = mkstemp(text=True)
-    # TODO: correct path to file for mozilla-central
     try:
         with os.fdopen(fd, 'w') as fh:
             fh.write('''\

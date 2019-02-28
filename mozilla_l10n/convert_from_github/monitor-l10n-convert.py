@@ -29,6 +29,9 @@ def git_pull(repo):
 def migrate(locale):
     branchmap = os.path.join(os.path.dirname(__file__), 'monitor_branchmap')
     monitor_locale = locale
+    # Special case ja-JP-mac (we need to read 'ja')
+    if locale == 'ja-JP-mac':
+        monitor_locale = 'ja'
     locale = locale.replace('_', '-')
     repo = os.path.join(args.l10n_path, locale)
     out = ''
@@ -101,6 +104,8 @@ locales = [
     for dir in os.listdir(os.path.join(args.project_path, 'src/locales'))
     if dir != 'en-US' and not dir.startswith('.')
 ]
+# Add ja-JP-mac
+locales.append('ja-JP-mac')
 locales.sort()
 
 # Limit to one locale for testing
