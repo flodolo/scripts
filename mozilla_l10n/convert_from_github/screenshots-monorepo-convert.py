@@ -20,8 +20,8 @@ gh_filename = 'screenshots.ftl'
 # Full path and filename in Mercurial l10n repository
 hg_file = 'browser/browser/screenshots.ftl'
 # Initial changeset for rebase. To get this, run in the GitHub repository:
-# git rev-list --max-parents=0 HEAD
-initial_changeset = 'df5e361204ec7e2076134bdf57d2445bd9baeca9'
+# hg log -r : -l 1 -T"{node}"
+initial_changeset = '3fb30a9f2505b9ffb5bb1add96c19fe3bb258820'
 
 
 def hg_pull(repo):
@@ -54,19 +54,18 @@ def migrate(project_locale, args):
             hg_file=hg_file
         ))
 
-        '''
         shamap = os.path.join(args.l10n_path, hg_locale, '.hg', 'shamap')
         if os.path.isfile(shamap):
             os.remove(shamap)
 
         content = subprocess.run(
-            ['hg', 'log', '-r', 'default',
+            [
+                'hg', 'log', '-r', 'default',
                 "-T" + initial_changeset + " {node}\n"
-                ],
+            ],
             cwd=repo, stdout=subprocess.PIPE).stdout.decode('utf-8')
         with open(shamap, 'w') as fh:
             fh.write(content)
-        '''
 
         subprocess.run(
             ['hg', 'convert', '--filemap', filemap, args.project_path, repo],
