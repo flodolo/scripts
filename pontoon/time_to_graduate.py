@@ -40,15 +40,22 @@ output = []
 output.append('Locale,User,Date,New Role,Days in Previous Role')
 
 for locale in locales:
+    # Use group__name__iexact to only get promotions to full translator and
+    # ignore promotion to project translator.
+    recorded_hashes = []
     for log in logs.filter(group__name__endswith=locale.code + ' translators'):
         user = log.performed_on
-        output.append('{},{},{},{},{}'.format(
+        row_data = (
             locale.code,
             user.email,
             log.created_at.date(),
             log.group.name,
             (log.created_at - user.date_joined).days,
-        ))
+        )
+        action_hash = hash(row_data)
+        if action_hash not in recorded_hashes:
+            output.append('{},{},{},{},{}'.format(*row_data))
+            recorded_hashes.append(action_hash)
     for log in logs.filter(group=locale.managers_group):
         user = log.performed_on
         try:
@@ -62,13 +69,16 @@ for locale in locales:
                 continue
             else:
                 date_previous = user_translator_log.created_at
-            output.append('{},{},{},{},{}'.format(
+            row_data = (
                 locale.code,
                 user.email,
                 log.created_at.date(),
                 log.group.name,
                 (log.created_at - date_previous).days,
-            ))
+            )
+            action_hash = hash(row_data)
+            if action_hash not in recorded_hashes:
+                output.append('{},{},{},{},{}'.format(*row_data))
         except PermissionChangelog.DoesNotExist:
             pass
 
