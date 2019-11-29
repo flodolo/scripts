@@ -19,6 +19,8 @@ LOCALES = [
     'is',
 ]
 START_DATE = '01/01/2010'  # DD/MM/YYYY
+# Set to True to ignore duplicates
+IGNORE_DUPLICATES = False
 
 # Script
 from datetime import datetime
@@ -52,10 +54,13 @@ for locale in locales:
             log.group.name,
             (log.created_at - user.date_joined).days,
         )
-        action_hash = hash(row_data)
-        if action_hash not in recorded_hashes:
+        if IGNORE_DUPLICATES:
+            action_hash = hash(row_data)
+            if action_hash not in recorded_hashes:
+                output.append('{},{},{},{},{}'.format(*row_data))
+                recorded_hashes.append(action_hash)
+        else:
             output.append('{},{},{},{},{}'.format(*row_data))
-            recorded_hashes.append(action_hash)
     for log in logs.filter(group=locale.managers_group):
         user = log.performed_on
         try:
@@ -76,9 +81,13 @@ for locale in locales:
                 log.group.name,
                 (log.created_at - date_previous).days,
             )
-            action_hash = hash(row_data)
-            if action_hash not in recorded_hashes:
-                output.append('{},{},{},{},{}'.format(*row_data))
+            if IGNORE_DUPLICATES:
+                action_hash = hash(row_data)
+                if action_hash not in recorded_hashes:
+                    output.append('{},{},{},{},{}'.format(*row_data))
+                    recorded_hashes.append(action_hash)
+                else:
+                    output.append('{},{},{},{},{}'.format(*row_data))
         except PermissionChangelog.DoesNotExist:
             pass
 
