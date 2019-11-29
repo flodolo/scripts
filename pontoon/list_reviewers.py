@@ -14,19 +14,27 @@ heroku run --app mozilla-pontoon ./manage.py shell
 """
 
 # Configuration
-from pontoon.base.models import Locale, Translation
-from django.utils.timezone import get_current_timezone
-from django.db.models import F
-from django.contrib.auth.models import User
-from datetime import datetime
-LOCALES = ['ko', 'my', 'th', 'tl', 'vi']
+# Use empty list for all locales
+LOCALES = [
+    'ko',
+    'my',
+    'th',
+]
 START_DATE = '31/12/2018'  # DD/MM/YYYY
 END_DATE = '11/04/2019'   # DD/MM/YYYY
 
 
 # Script
+from datetime import datetime
+from django.contrib.auth.models import User
+from django.db.models import F
+from django.utils.timezone import get_current_timezone
+from pontoon.base.models import Locale, Translation
 
-locales = Locale.objects.filter(code__in=LOCALES)
+locales = Locale.objects.all()
+if LOCALES:
+    locales = Locale.objects.filter(code__in=LOCALES)
+
 tz = get_current_timezone()
 start_date = tz.localize(datetime.strptime(START_DATE, '%d/%m/%Y'))
 end_date = tz.localize(datetime.strptime(END_DATE, '%d/%m/%Y'))
