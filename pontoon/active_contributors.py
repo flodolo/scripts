@@ -17,8 +17,8 @@ heroku run --app mozilla-pontoon ./manage.py shell
 """
 
 # Configuration
-LOCALES = ['ko', 'my', 'th', 'tl', 'vi']
-MONTHS_AGO = 6
+LOCALES = ['ar']
+MONTHS_AGO = 12
 ROLES = [
     # 'Admin',
     'Contributor',
@@ -52,12 +52,12 @@ def get_profile(username):
 
 def get_ratio(approved, rejected):
     try:
-        return format(approved / rejected, '.2f')
+        return format(approved / (approved + rejected), '.2f')
     except ZeroDivisionError:
         return '-1'
 
 output = []
-output.append('Locale,Date Joined,Profile URL,Role,Translations,Approved,Rejected,Unapproved,Ratio')
+output.append('Locale,Date Joined,Profile URL,Role,Translations,Approved,Rejected,Pending,Ratio')
 for locale in locales:
     contributors = users_with_translations_counts(start_date, Q(locale=locale), None)
     for contributor in contributors:
