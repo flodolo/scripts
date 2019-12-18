@@ -22,10 +22,10 @@ LOCALES = [
 ]
 MONTHS_AGO = 12
 ROLES = [
-    # 'Admin',
-    'Contributor',
-    # 'Manager',
-    # 'Translator',
+    # 'admin',
+    'contributor',
+    # 'manager',
+    # 'translator',
 ]
 
 
@@ -63,8 +63,11 @@ output.append('Locale,Date Joined,Profile URL,Role,Translations,Approved,Rejecte
 for locale in locales:
     contributors = users_with_translations_counts(start_date, Q(locale=locale), None)
     for contributor in contributors:
-        role = contributor.user_role.split(' ')[0]
+        role = contributor.locale_role(locale)
         if role not in ROLES:
+            continue
+        # Ignore "imported" strings
+        if contributor.username == 'Imported':
             continue
         output.append('{},{},{},{},{},{},{},{},{}'.format(
             locale.code,
