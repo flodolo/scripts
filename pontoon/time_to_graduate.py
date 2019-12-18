@@ -16,7 +16,7 @@ heroku run --app mozilla-pontoon ./manage.py shell
 # Configuration
 # Use empty list for all locales
 LOCALES = [
-    'is',
+    'it', 'ja', 'pl', 'ru', 'zh-CN',
 ]
 START_DATE = '01/01/2010'  # DD/MM/YYYY
 # Set to True to ignore duplicates

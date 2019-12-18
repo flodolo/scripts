@@ -1,7 +1,7 @@
 """
 Retrieve a list of reviewers for given locales and timeframe with a number of
 suggestions they approved or rejected.
-Self-reviewed translations are excluded from calculaton.
+Self-reviewed translations are excluded from calculation.
 
 Output is formatted as CSV with the following columns:
 * Locale
@@ -16,12 +16,10 @@ heroku run --app mozilla-pontoon ./manage.py shell
 # Configuration
 # Use empty list for all locales
 LOCALES = [
-    'ko',
-    'my',
-    'th',
+    'it', 'ja', 'pl', 'ru', 'zh-CN',
 ]
-START_DATE = '31/12/2018'  # DD/MM/YYYY
-END_DATE = '11/04/2019'   # DD/MM/YYYY
+START_DATE = '18/12/2018'  # DD/MM/YYYY
+END_DATE = '18/12/2019'   # DD/MM/YYYY
 
 
 # Script
@@ -41,7 +39,7 @@ end_date = tz.localize(datetime.strptime(END_DATE, '%d/%m/%Y'))
 
 output = []
 output.append(
-    'Locale,User,Number of Approved Suggestions,Number of Rejected Suggestions')
+    'Locale,User,Role,Number of Approved Suggestions,Number of Rejected Suggestions')
 
 for locale in locales:
     users = {}
@@ -62,6 +60,7 @@ for locale in locales:
     )
     for user in approved_users:
         users[user.email] = {
+            'role': user.role(),
             'approved': approved.filter(approved_user=user).count(),
             'rejected': 0,
         }
@@ -80,13 +79,15 @@ for locale in locales:
                 rejected_user=user).count()
         else:
             users[user.email] = {
+                'role': user.role(),
                 'approved': 0,
                 'rejected': rejected.filter(rejected_user=user).count(),
             }
     for email, stats in users.items():
-        output.append('{},{},{},{}'.format(
+        output.append('{},{},{},{},{}'.format(
             locale.code,
             email,
+            stats['role'],
             stats['approved'],
             stats['rejected'],
         ))

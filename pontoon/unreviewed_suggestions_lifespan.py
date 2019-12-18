@@ -11,10 +11,11 @@ heroku run --app mozilla-pontoon ./manage.py shell
 """
 
 # Configuration
-LOCALES = ['ko', 'my', 'th', 'tl', 'vi']
-START_DATE = '31/12/2018' # DD/MM/YYYY
-END_DATE = '11/04/2019'   # DD/MM/YYYY
-
+LOCALES = [
+    'it', 'ja', 'pl', 'ru', 'zh-CN',
+]
+START_DATE = '18/12/2018' # DD/MM/YYYY
+END_DATE = '18/12/2019'   # DD/MM/YYYY
 
 # Script
 from datetime import datetime, timedelta

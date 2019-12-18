@@ -17,7 +17,9 @@ heroku run --app mozilla-pontoon ./manage.py shell
 """
 
 # Configuration
-LOCALES = ['ar']
+LOCALES = [
+    'it', 'ja', 'pl', 'ru', 'zh-CN',
+]
 MONTHS_AGO = 12
 ROLES = [
     # 'Admin',
