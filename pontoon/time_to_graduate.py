@@ -24,6 +24,7 @@ IGNORE_DUPLICATES = False
 
 # Script
 from datetime import datetime
+from django.db.models import Q
 from django.utils.timezone import get_current_timezone
 from pontoon.base.models import Locale, PermissionChangelog
 
@@ -45,7 +46,10 @@ for locale in locales:
     # Use group__name__iexact to only get promotions to full translator and
     # ignore promotion to project translator.
     recorded_hashes = []
-    for log in logs.filter(group__name__endswith=locale.code + ' translators'):
+    for log in logs.filter(
+        Q(group=locale.translators_group) |
+        Q(group__name__endswith='/{} translators'.format(locale.code))
+    ):
         user = log.performed_on
         row_data = (
             locale.code,
