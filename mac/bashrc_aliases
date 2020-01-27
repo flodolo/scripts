@@ -11,6 +11,9 @@ PATH="$PATH:/Users/flodolo/mozilla/mercurial/arcanist/bin/"
 HISTFILESIZE=500000
 HISTSIZE=500000
 
+# Silent zsh warning
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
 # Colors in Terminal
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
