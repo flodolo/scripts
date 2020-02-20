@@ -43,8 +43,8 @@ locales = Locale.objects.filter(code__in=LOCALES)
 start_date = (timezone.now() + relativedelta(months=-MONTHS_AGO))
 
 def get_profile(username):
-    import urlparse
-    return urlparse.urljoin(
+    from urllib.parse import urljoin
+    return urljoin(
         settings.SITE_URL,
         reverse(
             'pontoon.contributors.contributor.username',

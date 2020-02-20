@@ -54,8 +54,8 @@ def get_latests_activity(user):
 
 
 def get_profile(username):
-    import urlparse
-    return urlparse.urljoin(
+    from urllib.parse import urljoin
+    return urljoin(
         settings.SITE_URL,
         reverse(
             'pontoon.contributors.contributor.username',
