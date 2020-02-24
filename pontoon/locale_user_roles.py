@@ -65,7 +65,7 @@ def get_profile(username):
 
 
 output = []
-output.append('Role,Locale,Profile URL,Date Joined,Last Login,Last Activity')
+output.append('Role,Locale,Profile URL,Email,Date Joined,Last Login,Last Activity')
 
 locales = Locale.objects.available()
 if len(LOCALES) > 0:
@@ -80,10 +80,11 @@ for locale in locales:
         users = users_with_translations_counts(None, Q(locale=locale), None)
         ROLE = 'contributor'
     for user in users:
-        output.append('{},{},{},{},{},{}'.format(
+        output.append('{},{},{},{},{},{},{}'.format(
             ROLE,
             locale.code,
             get_profile(user.username),
+            user.email,
             user.date_joined.date(),
             user.last_login.date(),
             get_latests_activity(user),

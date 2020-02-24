@@ -19,10 +19,10 @@ heroku run --app mozilla-pontoon ./manage.py shell
 # Configuration
 # Use empty list for all locales
 LOCALES = [
-    'it', 'ja', 'pl', 'ru', 'zh-CN',
+    #'it', 'ja', 'pl', 'ru', 'zh-CN',
 ]
-START_DATE = '18/12/2018'  # DD/MM/YYYY
-END_DATE = '18/12/2019'   # DD/MM/YYYY
+START_DATE = '23/02/2019'  # DD/MM/YYYY
+END_DATE = '23/02/2020'   # DD/MM/YYYY
 
 
 # Script
@@ -72,8 +72,10 @@ for locale in locales:
         pk__in=approved.values_list('approved_user', flat=True).distinct()
     )
     for user in approved_users:
+        # Replace comma in role, e.g. "Manager for bn, bn-BD" to avoid breaking CSV
+        role = user.role().replace(',', '+')
         users[user.email] = {
-            'role': user.role(),
+            'role': role,
             'approved': approved.filter(approved_user=user).count(),
             'rejected': 0,
         }
@@ -91,8 +93,9 @@ for locale in locales:
             users[user.email]['rejected'] = rejected.filter(
                 rejected_user=user).count()
         else:
+            role = user.role().replace(',', '+')
             users[user.email] = {
-                'role': user.role(),
+                'role': role,
                 'approved': 0,
                 'rejected': rejected.filter(rejected_user=user).count(),
             }
