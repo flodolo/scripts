@@ -11,11 +11,15 @@ heroku run --app mozilla-pontoon ./manage.py shell
 """
 
 # Configuration
+# Use empty list for all locales
 LOCALES = [
-    'it', 'ja', 'pl', 'ru', 'zh-CN',
+    #'it'
 ]
-START_DATE = '18/12/2018' # DD/MM/YYYY
-END_DATE = '18/12/2019'   # DD/MM/YYYY
+START_DATE = '23/02/2019'  # DD/MM/YYYY
+END_DATE = '23/02/2020'   # DD/MM/YYYY
+# If True, prettify the output (e.g. "40 days 15:21:23").
+# If False, display days and round to 2 decimals.
+PRETTY_OUTPUT = True
 
 # Script
 from datetime import datetime, timedelta
@@ -23,7 +27,10 @@ from django.db.models import Avg, F
 from django.utils.timezone import get_current_timezone
 from pontoon.base.models import Locale, Translation
 
-locales = Locale.objects.filter(code__in=LOCALES)
+locales = Locale.objects.all()
+if LOCALES:
+    locales = Locale.objects.filter(code__in=LOCALES)
+
 tz = get_current_timezone()
 start_date = tz.localize(datetime.strptime(START_DATE, '%d/%m/%Y'))
 end_date = tz.localize(datetime.strptime(END_DATE, '%d/%m/%Y'))
@@ -33,8 +40,9 @@ output.append('Locale,Average Unreviewed Suggestion Lifespan')
 
 def divide_timedelta(td, divisor):
     total_seconds = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6) / 1e6
-    divided_seconds = total_seconds / float(divisor)
-    return timedelta(seconds=divided_seconds)
+    divided_seconds = round(total_seconds / float(divisor))
+    days = round(divided_seconds / 86400, 2)
+    return timedelta(seconds=divided_seconds) if PRETTY_OUTPUT else days
 
 for locale in locales:
     # Translations submitted in Pontoon for given locale and timeframe

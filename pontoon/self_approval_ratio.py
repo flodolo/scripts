@@ -11,11 +11,12 @@ heroku run --app mozilla-pontoon ./manage.py shell
 """
 
 # Configuration
+# Use empty list for all locales
 LOCALES = [
-    'it', 'ja', 'pl', 'ru', 'zh-CN',
+    #'it', 'ja', 'pl', 'ru', 'zh-CN',
 ]
-START_DATE = '18/12/2018' # DD/MM/YYYY
-END_DATE = '18/12/2019'   # DD/MM/YYYY
+START_DATE = '23/02/2019'  # DD/MM/YYYY
+END_DATE = '23/02/2020'   # DD/MM/YYYY
 
 
 # Script
@@ -25,7 +26,10 @@ from django.db.models import F
 from django.utils.timezone import get_current_timezone
 from pontoon.base.models import Locale, Translation
 
-locales = Locale.objects.filter(code__in=LOCALES)
+locales = Locale.objects.all()
+if LOCALES:
+    locales = Locale.objects.filter(code__in=LOCALES)
+
 tz = get_current_timezone()
 start_date = tz.localize(datetime.strptime(START_DATE, '%d/%m/%Y'))
 end_date = tz.localize(datetime.strptime(END_DATE, '%d/%m/%Y'))
