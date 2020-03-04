@@ -42,25 +42,5 @@ def main():
     except Exception as e:
         print(e)
 
-    locales_bitbucket = []
-    try:
-        url = 'https://api.bitbucket.org/2.0/repositories/mozilla-l10n'
-        print('Reading list of BitBucket repositories')
-        query_hg(locales_bitbucket, url)
-        locales_bitbucket.sort()
-
-        file_name = os.path.join(script_folder, 'locales_bitbucket.txt')
-        with open(file_name, 'w') as f:
-            for locale in locales_bitbucket:
-                if locale in locales_hgmo:
-                    print(
-                        'ERROR: {} is already in l10n-central, '
-                        'repository should be removed.'.format(locale))
-                    continue
-                f.write('{}\n'.format(locale))
-    except Exception as e:
-        print(e)
-
-
 if __name__ == '__main__':
     main()
