@@ -36,10 +36,8 @@ function echoyellow() {
 
 function check_repo() {
     # $1: locale code
-    # $2: type (hgmo, bitbucket)
 
     local locale="$1"
-    local server="$2"
 
     if [ -d "${locale}/.hg" ]
         then
@@ -47,18 +45,11 @@ function check_repo() {
             hg -R $locale pull -u -r default
             hg -R $locale update -C
             hg -R $locale purge
+            # Make extra commits and push
         else
             echored "l10n-central for ${locale} does not exist"
             echoyellow "Cloning l10n-central for ${locale}"
-            if [ "${server}" == "hgmo" ]
-                then
-                    hg clone ssh://hg.mozilla.org/l10n-central/$locale
-            elif [ "${server}" == "bitbucket" ]
-                then
-                    hg clone ssh://bitbucket.org/mozilla-l10n/$locale
-            else
-                echored "Unknown server ${server}"
-            fi
+            hg clone ssh://hg.mozilla.org/l10n-central/$locale
         fi
 }
 
@@ -85,15 +76,9 @@ fi
 
 # Have to update all locales
 locales_hgmo=$(cat locales_hgmo.txt)
-locales_bitbucket=$(cat locales_bitbucket.txt)
 
 cd locales
 for locale in $locales_hgmo
 do
-    check_repo $locale hgmo
-done
-
-for locale in $locales_bitbucket
-do
-    check_repo $locale bitbucket
+    check_repo $locale
 done
