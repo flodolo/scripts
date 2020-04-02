@@ -17,14 +17,15 @@ heroku run --app mozilla-pontoon ./manage.py shell
 """
 
 # Configuration
+# Use empty list for all locales
 LOCALES = [
-    'it', 'ja', 'pl', 'ru', 'zh-CN',
+    #'it', 'ja', 'pl', 'ru', 'zh-CN',
 ]
-MONTHS_AGO = 12
+MONTHS_AGO = 18
 ROLES = [
     # 'admin',
-    'contributor',
-    # 'manager',
+    # 'contributor',
+    'manager',
     # 'translator',
 ]
 
@@ -39,7 +40,10 @@ from django.utils import timezone
 from pontoon.base.models import Locale
 from pontoon.contributors.utils import users_with_translations_counts
 
-locales = Locale.objects.filter(code__in=LOCALES)
+locales = Locale.objects.all()
+if LOCALES:
+    locales = Locale.objects.filter(code__in=LOCALES)
+
 start_date = (timezone.now() + relativedelta(months=-MONTHS_AGO))
 
 def get_profile(username):
