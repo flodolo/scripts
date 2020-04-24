@@ -6,6 +6,7 @@ Output is formatted as CSV with the following columns:
 * Number of new user registered
 * Number of active users
 * Number of translations submitted
+* Number of strings added
 
 Run the script in Pontoon's Django shell, e.g.:
 heroku run --app mozilla-pontoon ./manage.py shell
@@ -47,6 +48,19 @@ for y in translations_dict.items():
         data[period] = {}
     data[period]['active'] = len(y[1])
 
+# New Entity Creations
+entities = Entity.objects \
+    .annotate(period=TruncMonth("date_created")) \
+    .values("period") \
+    .annotate(count=Count("id")) \
+    .order_by("period")
+
+for x in entities:
+    period = '{}-{:02d}'.format(x['period'].year, x['period'].month)
+    if not period in data:
+        data[period] = {}
+    data[period]['added'] = x['count']
+
 # New Translation Submissions
 translations = Translation.objects.filter(user__isnull=False) \
     .annotate(period=TruncMonth('date')) \
@@ -61,7 +75,7 @@ for x in translations:
 
 # Generate output
 output = []
-output.append('Period,New User Registrations,Active Users,Translations Submitted')
+output.append('Period,New User Registrations,Active Users,Translations Submitted,Strings Added')
 periods = list(data.keys())
 periods.sort()
 for period in periods:
@@ -69,11 +83,13 @@ for period in periods:
     registrations = period_data['registrations'] if 'registrations' in period_data else 0
     active = period_data['active'] if 'active' in period_data else 0
     translations = period_data['translations'] if 'translations' in period_data else 0
-    output.append('{},{},{},{}'.format(
+    added = period_data['added'] if 'added' in period_data else 0
+    output.append('{},{},{},{},{}'.format(
         period,
         registrations,
         active,
         translations,
+        added,
     ))
 
 # Print output
