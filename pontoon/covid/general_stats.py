@@ -1,5 +1,6 @@
 """
-Get the monthly number of new registrations, active users and submitted translations.
+Get the monthly number of new registrations, active users, submitted
+translations, and strings added.
 
 Output is formatted as CSV with the following columns:
 * Period (month, year)
