@@ -52,6 +52,7 @@ alias git_updateall="~/github/scripts/git/git_updateall.sh"
 alias gitup="git_updateall ~/github/"
 
 # Mozilla l10n commands
-alias trunkst="cd ~/mozilla/mercurial/l10n-central;hg pull -u"
+alias trunkst="cd ~/mozilla/mercurial/l10n-central"
+alias trunkstu="cd ~/mozilla/mercurial/l10n-central;hg pull -u"
 alias cmp_moz="compare-locales ~/mozilla/mercurial/mozilla-unified/browser/locales/l10n.toml ~/mozilla/mercurial/mozilla-unified/mobile/android/locales/l10n.toml ~/mozilla/mercurial/l10n it"
 alias cmp_mozx="compare-locales ~/mozilla/mercurial/gecko-strings-quarantine/_configs/browser.toml ~/mozilla/mercurial/gecko-strings-quarantine/_configs/mobile-android.toml ~/mozilla/mercurial/l10n it"
