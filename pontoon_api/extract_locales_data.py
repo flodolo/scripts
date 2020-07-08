@@ -76,18 +76,26 @@ def main():
         print(e)
 
     output = []
-    output.append('Locale,Number of Projects,Missing Strings,Pending Suggestions,Latest Activity')
+    output.append('Locale,Number of Projects,Projects,Missing Strings,Pending Suggestions,Latest Activity')
     # Only print requested locales
     for locale in locales:
         if not locale in locale_data:
             print('ERROR: no data available for {}'.format(locale))
         data = locale_data[locale]['stats']
-        output.append('{},{},{},{},'.format(
-            locale, data['projects'], data['missing'], data['unreviewed']
+
+        # Get the list of projects
+        project_slugs = list(locale_data[locale].keys())
+        project_slugs.remove('stats')
+        project_slugs.sort()
+        output.append('{},{},{},{},{},'.format(
+            locale, data['projects'], ' '.join(project_slugs),
+            data['missing'], data['unreviewed']
         ))
 
-    print('\n'.join(output))
-
+    # Save locally
+    with open('output.csv', 'w') as f:
+        f.write('\n'.join(output))
+        print('Data stored as output.csv')
 
 if __name__ == '__main__':
     main()
