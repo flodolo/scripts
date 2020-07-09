@@ -11,7 +11,7 @@ from compare_locales import parser
 
 class StringExtraction():
 
-    def __init__(self, repository_path, reference_locale):
+    def __init__(self, locales_path, reference_locale):
         '''Initialize object.'''
 
         # Set defaults
@@ -22,11 +22,14 @@ class StringExtraction():
         self.fluent_placeables = {}
         self.fluent_tags = {}
 
-        self.locales_path = os.path.join(repository_path, 'locales')
+        self.locales_path = locales_path
         self.reference_locale = reference_locale
 
         # Get the list of locales available
         self.locales = self.getLocalesList()
+
+        if not reference_locale in self.locales:
+            sys.exit('Reference locale {} is not available in the provided path'.format(reference_locale))
 
     def getLocalesList(self):
         '''Get list of supported locales'''
@@ -271,15 +274,21 @@ class StringExtraction():
 
 
 def main():
-    # Reference locale
-    reference_locale = 'en'
-
     # Read command line input parameters
     parser = argparse.ArgumentParser()
-    parser.add_argument('repo_path', help='Path to blurts-server clone')
+    parser.add_argument(
+        'locales_path',
+        help='Path to locales folder in local repository'
+    )
+    parser.add_argument(
+        '--reference',
+        help='Reference locale',
+        action='store',
+        default='en-US'
+    )
     args = parser.parse_args()
 
-    extracted_strings = StringExtraction(args.repo_path, reference_locale)
+    extracted_strings = StringExtraction(args.locales_path, args.reference)
     extracted_strings.extractStrings()
     extracted_strings.checkFTL()
 
