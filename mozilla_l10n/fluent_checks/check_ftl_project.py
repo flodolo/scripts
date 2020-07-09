@@ -11,7 +11,7 @@ from compare_locales import parser
 
 class StringExtraction():
 
-    def __init__(self, locales_path, reference_locale):
+    def __init__(self, locales_path, reference_locale, requested_locale):
         '''Initialize object.'''
 
         # Set defaults
@@ -29,7 +29,13 @@ class StringExtraction():
         self.locales = self.getLocalesList()
 
         if not reference_locale in self.locales:
-            sys.exit('Reference locale {} is not available in the provided path'.format(reference_locale))
+            sys.exit('Reference locale {} is not available in the provided path'.format(
+                reference_locale))
+        if requested_locale != '':
+            if not requested_locale in self.locales:
+                sys.exit('Requested locale {} is not available in the provided path'.format(
+                    requested_locale))
+            self.locales = [requested_locale, reference_locale]
 
     def getLocalesList(self):
         '''Get list of supported locales'''
@@ -174,26 +180,26 @@ class StringExtraction():
             for string_id, translation in self.translations[locale].items():
                 # Check for stray spaces
                 if '{ "' in translation:
-                    error_msg = 'Fluent literal in string ({})'.format(
+                    error_msg = '\nFluent literal in string ({})'.format(
                         string_id)
-                    errors[locale].append(' {}'.format(error_msg))
+                    errors[locale].append('  {}'.format(error_msg))
                     errors[locale].append('  {}'.format(translation))
 
                 # Check for DTD variables, e.g. '&something;'
                 pattern = re.compile('&.*;', re.UNICODE)
                 if pattern.search(translation):
-                    error_msg = 'XML entity in Fluent string ({})'.format(
+                    error_msg = '\nXML entity in Fluent string ({})'.format(
                         string_id)
-                    errors[locale].append(' {}'.format(error_msg))
+                    errors[locale].append('  {}'.format(error_msg))
                     errors[locale].append('  {}'.format(translation))
 
                 # Check for properties variables '%S' or '%1$S'
                 pattern = re.compile(
                     '(%(?:[0-9]+\$){0,1}(?:[0-9].){0,1}([sS]))', re.UNICODE)
                 if pattern.search(translation):
-                    error_msg = 'printf variables in Fluent string ({})'.format(
+                    error_msg = '\nprintf variables in Fluent string ({})'.format(
                         string_id)
-                    errors[locale].append(' {}'.format(error_msg))
+                    errors[locale].append('  {}'.format(error_msg))
                     errors[locale].append('  {}'.format(translation))
 
                 # Check for the message ID repeated in the translation
@@ -201,72 +207,72 @@ class StringExtraction():
                 pattern = re.compile(
                     re.escape(message_id) + '\s*=', re.UNICODE)
                 if pattern.search(translation):
-                    error_msg = 'Message ID is repeated in the Fluent string ({})'.format(
+                    error_msg = '\nMessage ID is repeated in the Fluent string ({})'.format(
                         string_id)
-                    errors[locale].append(' {}'.format(error_msg))
+                    errors[locale].append('  {}'.format(error_msg))
                     errors[locale].append('  {}'.format(translation))
 
                 # Check placeables
                 placeables = self.analysePlaceables(string_id, translation)
                 if placeables:
                     if not string_id in self.fluent_placeables:
-                        error_msg = 'Strings has more placeables than reference ({})'.format(
+                        error_msg = '\nStrings has more placeables than reference ({})'.format(
                             string_id)
-                        errors[locale].append(' {}'.format(error_msg))
-                        errors[locale].append('  {}: {}'.format(self.reference_locale, self.translations[self.reference_locale][string_id]))
-                        errors[locale].append('  {}: {}'.format(locale, translation))
+                        errors[locale].append('  {}'.format(error_msg))
+                        errors[locale].append('    {}: {}'.format(self.reference_locale, self.translations[self.reference_locale][string_id]))
+                        errors[locale].append('    {}: {}'.format(locale, translation))
                     else:
                         if placeables != self.fluent_placeables[string_id]:
-                            error_msg = 'Placeables mismatch with reference ({})'.format(
+                            error_msg = '\nPlaceables mismatch with reference ({})'.format(
                                 string_id)
-                            errors[locale].append(' {}'.format(error_msg))
-                            errors[locale].append('  {}: {}'.format(self.reference_locale,
+                            errors[locale].append('  {}'.format(error_msg))
+                            errors[locale].append('    {}: {}'.format(self.reference_locale,
                                                     self.translations[self.reference_locale][string_id]))
-                            errors[locale].append('  {}: {}'.format(locale, translation))
+                            errors[locale].append('    {}: {}'.format(locale, translation))
                 else:
                     if string_id in self.fluent_placeables:
-                        error_msg = 'Missing placeables compared to reference ({})'.format(
+                        error_msg = '\nMissing placeables compared to reference ({})'.format(
                             string_id)
-                        errors[locale].append(' {}'.format(error_msg))
-                        errors[locale].append('  {}: {}'.format(self.reference_locale,
+                        errors[locale].append('  {}'.format(error_msg))
+                        errors[locale].append('    {}: {}'.format(self.reference_locale,
                                                self.translations[self.reference_locale][string_id]))
                         errors[locale].append(
-                            '  {}: {}'.format(locale, translation))
+                            '    {}: {}'.format(locale, translation))
 
                 # Check tags
                 tags = self.analyseTags(string_id, translation)
                 if tags:
                     if not string_id in self.fluent_tags:
-                        error_msg = 'Strings has more tags than reference ({})'.format(
+                        error_msg = '\nStrings has more tags than reference ({})'.format(
                             string_id)
-                        errors[locale].append(' {}'.format(error_msg))
-                        errors[locale].append('  {}: {}'.format(self.reference_locale, self.translations[self.reference_locale][string_id]))
+                        errors[locale].append('  {}'.format(error_msg))
+                        errors[locale].append('    {}: {}'.format(self.reference_locale, self.translations[self.reference_locale][string_id]))
                         errors[locale].append(
-                            '  {}: {}'.format(locale, translation))
+                            '    {}: {}'.format(locale, translation))
                     else:
                         if tags != self.fluent_tags[string_id]:
-                            error_msg = 'Tags mismatch with reference ({})'.format(
+                            error_msg = '\nTags mismatch with reference ({})'.format(
                                 string_id)
-                            errors[locale].append(' {}'.format(error_msg))
-                            errors[locale].append('  {}: {}'.format(self.reference_locale,
+                            errors[locale].append('  {}'.format(error_msg))
+                            errors[locale].append('    {}: {}'.format(self.reference_locale,
                                                     self.translations[self.reference_locale][string_id]))
                             errors[locale].append(
-                                '  {}: {}'.format(locale, translation))
+                                '    {}: {}'.format(locale, translation))
                 else:
                     if string_id in self.fluent_tags:
-                        error_msg = 'Missing tags compared to reference ({})'.format(
+                        error_msg = '\nMissing tags compared to reference ({})'.format(
                             string_id)
-                        errors[locale].append(' {}'.format(error_msg))
-                        errors[locale].append('  {}: {}'.format(self.reference_locale,
+                        errors[locale].append('  {}'.format(error_msg))
+                        errors[locale].append('    {}: {}'.format(self.reference_locale,
                                                self.translations[self.reference_locale][string_id]))
                         errors[locale].append(
-                            '  {}: {}'.format(locale, translation))
+                            '    {}: {}'.format(locale, translation))
 
         errored = False
         for locale, locale_errors in errors.items():
             if locale_errors:
                 errored = True
-                print('Locale: {}'.format(locale))
+                print('\nLocale: {}'.format(locale))
                 print('\n'.join(locale_errors))
 
         if not errored:
@@ -286,9 +292,18 @@ def main():
         action='store',
         default='en-US'
     )
+    parser.add_argument(
+        '--locale',
+        help='Only check a specific locale code',
+        action='store',
+        default=''
+    )
     args = parser.parse_args()
 
-    extracted_strings = StringExtraction(args.locales_path, args.reference)
+    extracted_strings = StringExtraction(
+        args.locales_path,
+        args.reference,
+        args.locale)
     extracted_strings.extractStrings()
     extracted_strings.checkFTL()
 
