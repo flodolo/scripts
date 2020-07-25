@@ -37,6 +37,14 @@ class StringExtraction():
                     requested_locale))
             self.locales = [requested_locale, reference_locale]
 
+        # Exceptions
+
+        self.exceptions = {
+            'placeables': {
+                'cy': ['send.ftl:reportFile', 'send.ftl:downloadTrustCheckbox']
+            }
+        }
+
     def getLocalesList(self):
         '''Get list of supported locales'''
 
@@ -213,31 +221,34 @@ class StringExtraction():
                     errors[locale].append('  {}'.format(translation))
 
                 # Check placeables
-                placeables = self.analysePlaceables(string_id, translation)
-                if placeables:
-                    if not string_id in self.fluent_placeables:
-                        error_msg = '\nStrings has more placeables than reference ({})'.format(
-                            string_id)
-                        errors[locale].append('  {}'.format(error_msg))
-                        errors[locale].append('    {}: {}'.format(self.reference_locale, self.translations[self.reference_locale][string_id]))
-                        errors[locale].append('    {}: {}'.format(locale, translation))
+                if locale in self.exceptions['placeables'] and string_id in self.exceptions['placeables'][locale]:
+                    pass
+                else:
+                    placeables = self.analysePlaceables(string_id, translation)
+                    if placeables:
+                        if not string_id in self.fluent_placeables:
+                            error_msg = '\nStrings has more placeables than reference ({})'.format(
+                                string_id)
+                            errors[locale].append('  {}'.format(error_msg))
+                            errors[locale].append('    {}: {}'.format(self.reference_locale, self.translations[self.reference_locale][string_id]))
+                            errors[locale].append('    {}: {}'.format(locale, translation))
+                        else:
+                            if placeables != self.fluent_placeables[string_id]:
+                                error_msg = '\nPlaceables mismatch with reference ({})'.format(
+                                    string_id)
+                                errors[locale].append('  {}'.format(error_msg))
+                                errors[locale].append('    {}: {}'.format(self.reference_locale,
+                                                        self.translations[self.reference_locale][string_id]))
+                                errors[locale].append('    {}: {}'.format(locale, translation))
                     else:
-                        if placeables != self.fluent_placeables[string_id]:
-                            error_msg = '\nPlaceables mismatch with reference ({})'.format(
+                        if string_id in self.fluent_placeables:
+                            error_msg = '\nMissing placeables compared to reference ({})'.format(
                                 string_id)
                             errors[locale].append('  {}'.format(error_msg))
                             errors[locale].append('    {}: {}'.format(self.reference_locale,
-                                                    self.translations[self.reference_locale][string_id]))
-                            errors[locale].append('    {}: {}'.format(locale, translation))
-                else:
-                    if string_id in self.fluent_placeables:
-                        error_msg = '\nMissing placeables compared to reference ({})'.format(
-                            string_id)
-                        errors[locale].append('  {}'.format(error_msg))
-                        errors[locale].append('    {}: {}'.format(self.reference_locale,
-                                               self.translations[self.reference_locale][string_id]))
-                        errors[locale].append(
-                            '    {}: {}'.format(locale, translation))
+                                                self.translations[self.reference_locale][string_id]))
+                            errors[locale].append(
+                                '    {}: {}'.format(locale, translation))
 
                 # Check tags
                 tags = self.analyseTags(string_id, translation)
