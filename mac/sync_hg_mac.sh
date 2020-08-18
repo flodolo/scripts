@@ -71,15 +71,11 @@ done
 
 # Git repositories
 git_repositories=(
-    "https://github.com/phacility/arcanist"
-    "https://github.com/phacility/libphutil"
     "https://github.com/projectfluent/python-fluent"
     "https://github.com/flodolo/firefox_l10n_checks"
     "https://github.com/flodolo/mozpm_stats"
 )
 git_folder_names=(
-    "arcanist"
-    "libphutil"
     "python-fluent"
     "firefox_l10n_checks"
     "mozpm_stats"
