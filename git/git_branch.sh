@@ -25,23 +25,25 @@ if [ $# -lt 2 ]
     exit 1
 fi
 
-cd ${1}
+cd "${1}"
 green "-------------------"
 green "Updating ${1}...."
 green "-------------------"
 
-# Make sure to be on master
-green "Updating master..."
-git checkout master
+# Make sure to be on the main branch
+main_branch=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')
+green "Updating ${main_branch}..."
+git checkout "${main_branch}"
 git pull
 git fetch -p
 
 # If upstream is defined, pull and merge
 if git config remote.upstream.url > /dev/null
 then
-    green "Fetching upstream..."
+    remote_head=$(git ls-remote --symref upstream HEAD | awk '/^ref:/ {sub(/refs\/heads\//, "", $2); print $2}')
+    green "Fetching upstream/${remote_head}..."
     git fetch upstream
-    git merge upstream/master
+    git merge "upstream/${remote_head}"
     git push
 fi
 
@@ -52,7 +54,7 @@ then
 fi
 
 # Create branch
-git branch ${2}
-git checkout ${2}
-git push origin ${2}
-git branch --set-upstream-to origin/${2}
+git branch "${2}"
+git checkout "${2}"
+git push origin "${2}"
+git branch --set-upstream-to "origin/${2}"

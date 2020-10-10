@@ -9,7 +9,7 @@ if [ $# -lt 1 ]
 fi
 
 echo "Cloning https://github.com/flodolo/$1..."
-git clone "https://github.com/flodolo/$1"
+git clone "https://github.com/flodolo/$1" || exit
 
 echo "----------------"
 read -p "Do you want to add a remote (y/n, default yes)? " -s -n 1 addremote

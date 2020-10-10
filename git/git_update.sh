@@ -31,9 +31,9 @@ then
     exit 1
 fi
 
-cd ${1}
+cd "${1}"
 green "-------------------"
-green "Updating ${1}...."
+green "Updating ${1}..."
 green "-------------------"
 
 # Remove pending changes, untracked files and folders
@@ -41,18 +41,20 @@ green "Remove pending changes and untracked files/folders..."
 git reset --hard
 git clean -fd
 
-# Make sure to be on master
-green "Updating master..."
-git checkout master
+# Make sure to be on the main branch
+main_branch=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')
+green "Updating ${main_branch}..."
+git checkout "${main_branch}"
 git pull
 git fetch -p
 
 # If upstream is defined, pull and merge
 if git config remote.upstream.url > /dev/null
 then
-    green "Fetching upstream..."
+    remote_head=$(git ls-remote --symref upstream HEAD | awk '/^ref:/ {sub(/refs\/heads\//, "", $2); print $2}')
+    green "Fetching upstream/${remote_head}..."
     git fetch upstream
-    git merge upstream/master
+    git merge "upstream/${remote_head}"
     # Fetch tags
     git fetch upstream 'refs/tags/*:refs/tags/*'
     git push
