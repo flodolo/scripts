@@ -2,7 +2,7 @@
 
 '''
 This script is used to read:
-- All locales enabled for Firefox in Pontoon
+- All locales enabled for Firefox and Android-l10n (Fenix) in Pontoon
 - All locales shipping in Nightly and Release
 - Locales supported in CLDR
 - Locales supported in CLDR seed
@@ -21,12 +21,13 @@ def main():
         'pontoon': [],
         'nightly': [],
         'release': [],
+        'android-l10n': [],
         'cldr': [],
         'seed': [],
     }
 
     # Get the list of locales enabled in Pontoon.
-    query = '''
+    query = urlquote('''
 {
   firefox: project(slug: "firefox") {
     localizations {
@@ -35,24 +36,37 @@ def main():
         }
     }
   }
+
+  android: project(slug: "android-l10n") {
+    localizations {
+        locale {
+            code
+        }
+    }
+  }
 }
-'''
+''')
     try:
-        print("Reading Pontoon stats...")
-        url = 'https://pontoon.mozilla.org/graphql?query={}'.format(
-            urlquote(query))
+        print('Reading Pontoon stats...')
+        url = f'https://pontoon.mozilla.org/graphql?query={query}'
         response = urlopen(url)
         json_data = json.load(response)
         for project, project_data in json_data['data'].items():
             for element in project_data['localizations']:
-                locales['pontoon'].append(element['locale']['code'])
+                locale = element['locale']['code']
+                if project == 'android':
+                    locales['android-l10n'].append(locale)
+                locales['pontoon'].append(locale)
     except Exception as e:
         print(e)
+    # Remove duplicates and sort
+    locales['pontoon'] = list(set(locales['pontoon']))
     locales['pontoon'].sort()
+    locales['android-l10n'].sort()
 
     # Get the lisf of locales enabled in Nightly
     try:
-        print("Reading Nightly locales...")
+        print('Reading Nightly locales...')
         url = 'https://hg.mozilla.org/mozilla-central/raw-file/tip/browser/locales/all-locales'
         with urlopen(url) as response:
             for locale in response:
@@ -63,7 +77,7 @@ def main():
 
     # Get the list of locales enabled in Release
     try:
-        print("Reading Release locales...")
+        print('Reading Release locales...')
         url = 'https://hg.mozilla.org/mozilla-central/raw-file/tip/browser/locales/shipped-locales'
         with urlopen(url) as response:
             for locale in response:
@@ -82,7 +96,7 @@ def main():
     # Get the version of CLDR
     base_url = 'https://raw.githubusercontent.com/unicode-cldr/cldr-core/master/'
     try:
-        print("Reading CLDR version...")
+        print('Reading CLDR version...')
         url = base_url + 'package.json'
         response = urlopen(url)
         json_data = json.load(response)
@@ -92,7 +106,7 @@ def main():
 
     # Get the list of CLDR locales in 'full'
     try:
-        print("Reading CLDR data...")
+        print('Reading CLDR data...')
         url = base_url + 'availableLocales.json'
         response = urlopen(url)
         json_data = json.load(response)
@@ -104,7 +118,7 @@ def main():
     # From https://github.com/unicode-org/cldr/tree/master/seed/main
     url = 'https://api.github.com/repos/unicode-org/cldr/contents/seed/main'
     try:
-        print("Reading CLDR seed data...")
+        print('Reading CLDR seed data...')
         response = urlopen(url)
         json_data = json.load(response)
         for element in json_data:
@@ -125,7 +139,7 @@ def main():
             # Locale is available without the region code in CLDR
             # (e.g. 'ga-IE' in Mozilla, 'ga' in CLDR)
             cldr_status = 'yes'
-            cldr_notes = 'Available as {}'.format(locale_no_region)
+            cldr_notes = f'Available as {locale_no_region}'
         elif locale in locales['seed']:
             # Locale is available with the same code in seed
             cldr_status = 'seed'
@@ -134,7 +148,7 @@ def main():
             # Locale is available without the region code in seed
             # (e.g. 'ga-IE' in Mozilla, 'ga' in CLDR)
             cldr_status = 'seed'
-            cldr_notes = 'Available as {}'.format(locale_no_region)
+            cldr_notes = f'Available as {locale_no_region}'
         else:
             # Locale is not available at all
             cldr_status = 'no'
@@ -144,21 +158,22 @@ def main():
             'pontoon': 'yes' if locale in locales['pontoon'] else 'no',
             'nightly': 'yes' if locale in locales['nightly'] else 'no',
             'release': 'yes' if locale in locales['release'] else 'no',
+            'android-l10n': 'yes' if locale in locales['android-l10n'] else 'no',
             'cldr': cldr_status,
             'notes': cldr_notes,
         }
 
     output = []
-    output.append('Locale Code,Pontoon,Firefox Nightly,Firefox Release,CLDR ({}),CLDR Notes'.format(cldr_version))
+    output.append(
+        f'Locale Code,Pontoon,Firefox Nightly,Firefox Release,'
+        f'Android-l10n,CLDR ({cldr_version}),CLDR Notes'
+    )
     for locale, locale_data in data.items():
-        output.append('{},{},{},{},{},{}'.format(
-            locale,
-            locale_data['pontoon'],
-            locale_data['nightly'],
-            locale_data['release'],
-            locale_data['cldr'],
-            locale_data['notes'],
-        ))
+        output.append(
+            f"{locale},{locale_data['pontoon']},{locale_data['nightly']},"
+            f"{locale_data['release']},{locale_data['android-l10n']},"
+            f"{locale_data['cldr']},{locale_data['notes']}"
+        )
 
     print('CSV OUTPUT\n\n')
     print('\n'.join(output))
