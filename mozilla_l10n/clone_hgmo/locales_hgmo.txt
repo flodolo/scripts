@@ -19,6 +19,7 @@ bs
 ca
 ca-valencia
 cak
+ckb
 crh
 cs
 csb
