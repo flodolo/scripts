@@ -15,8 +15,8 @@ heroku run --app mozilla-pontoon ./manage.py shell
 LOCALES = [
     #'it', 'ja', 'pl', 'ru', 'zh-CN',
 ]
-START_DATE = '23/02/2019'  # DD/MM/YYYY
-END_DATE = '23/02/2020'   # DD/MM/YYYY
+START_DATE = "23/02/2019"  # DD/MM/YYYY
+END_DATE = "23/02/2020"  # DD/MM/YYYY
 
 
 # Script
@@ -31,11 +31,11 @@ if LOCALES:
     locales = Locale.objects.filter(code__in=LOCALES)
 
 tz = get_current_timezone()
-start_date = tz.localize(datetime.strptime(START_DATE, '%d/%m/%Y'))
-end_date = tz.localize(datetime.strptime(END_DATE, '%d/%m/%Y'))
+start_date = tz.localize(datetime.strptime(START_DATE, "%d/%m/%Y"))
+end_date = tz.localize(datetime.strptime(END_DATE, "%d/%m/%Y"))
 
 output = []
-output.append('Locale,Self-Approval Ratio')
+output.append("Locale,Self-Approval Ratio")
 
 for locale in locales:
     all_approved = Translation.objects.filter(
@@ -44,16 +44,16 @@ for locale in locales:
         date__lte=end_date,
         approved=True,
     )
-    self_approved = all_approved.filter(
-        user=F('approved_user')
-    )
+    self_approved = all_approved.filter(user=F("approved_user"))
     try:
-        ratio = format(self_approved.count() / all_approved.count(), '.2f')
+        ratio = format(self_approved.count() / all_approved.count(), ".2f")
     except ZeroDivisionError:
-        ratio = '-1'
-    output.append('{},{}'.format(
-        locale.code,
-        ratio,
-    ))
+        ratio = "-1"
+    output.append(
+        "{},{}".format(
+            locale.code,
+            ratio,
+        )
+    )
 
-print('\n'.join(output))
+print("\n".join(output))

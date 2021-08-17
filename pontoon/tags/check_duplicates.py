@@ -9,7 +9,7 @@ from pontoon.base.models import *
 from pontoon.tags.models import *
 
 for resource in Resource.objects.filter(project__slug="firefox"):
-  tags = Tag.objects.filter(resources__in=[resource])
-  if tags.count() != 1:
-    resource
-    tags.values_list("slug", flat=True)
+    tags = Tag.objects.filter(resources__in=[resource])
+    if tags.count() != 1:
+        resource
+        tags.values_list("slug", flat=True)

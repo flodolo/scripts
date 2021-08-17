@@ -25,7 +25,7 @@ MONTHS_AGO = 18
 ROLES = [
     # 'admin',
     # 'contributor',
-    'manager',
+    "manager",
     # 'translator',
 ]
 
@@ -44,26 +44,29 @@ locales = Locale.objects.all()
 if LOCALES:
     locales = Locale.objects.filter(code__in=LOCALES)
 
-start_date = (timezone.now() + relativedelta(months=-MONTHS_AGO))
+start_date = timezone.now() + relativedelta(months=-MONTHS_AGO)
+
 
 def get_profile(username):
     from urllib.parse import urljoin
+
     return urljoin(
         settings.SITE_URL,
-        reverse(
-            'pontoon.contributors.contributor.username',
-            args=[username]
-        )
+        reverse("pontoon.contributors.contributor.username", args=[username]),
     )
+
 
 def get_ratio(approved, rejected):
     try:
-        return format(approved / (approved + rejected), '.2f')
+        return format(approved / (approved + rejected), ".2f")
     except ZeroDivisionError:
-        return '-1'
+        return "-1"
+
 
 output = []
-output.append('Locale,Date Joined,Profile URL,Role,Translations,Approved,Rejected,Pending,Ratio')
+output.append(
+    "Locale,Date Joined,Profile URL,Role,Translations,Approved,Rejected,Pending,Ratio"
+)
 for locale in locales:
     contributors = users_with_translations_counts(start_date, Q(locale=locale), None)
     for contributor in contributors:
@@ -71,18 +74,23 @@ for locale in locales:
         if role not in ROLES:
             continue
         # Ignore "imported" strings
-        if contributor.username == 'Imported':
+        if contributor.username == "Imported":
             continue
-        output.append('{},{},{},{},{},{},{},{},{}'.format(
-            locale.code,
-            contributor.date_joined.date(),
-            get_profile(contributor.username),
-            role,
-            contributor.translations_count,
-            contributor.translations_approved_count,
-            contributor.translations_rejected_count,
-            contributor.translations_unapproved_count,
-            get_ratio(contributor.translations_approved_count, contributor.translations_rejected_count)
-        ))
+        output.append(
+            "{},{},{},{},{},{},{},{},{}".format(
+                locale.code,
+                contributor.date_joined.date(),
+                get_profile(contributor.username),
+                role,
+                contributor.translations_count,
+                contributor.translations_approved_count,
+                contributor.translations_rejected_count,
+                contributor.translations_unapproved_count,
+                get_ratio(
+                    contributor.translations_approved_count,
+                    contributor.translations_rejected_count,
+                ),
+            )
+        )
 
-print('\n'.join(output))
+print("\n".join(output))

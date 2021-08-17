@@ -16,9 +16,13 @@ heroku run --app mozilla-pontoon ./manage.py shell
 # Configuration
 # Use empty list for all locales
 LOCALES = [
-    'it', 'ja', 'pl', 'ru', 'zh-CN',
+    "it",
+    "ja",
+    "pl",
+    "ru",
+    "zh-CN",
 ]
-START_DATE = '01/01/2010'  # DD/MM/YYYY
+START_DATE = "01/01/2010"  # DD/MM/YYYY
 # Set to True to ignore duplicates
 IGNORE_DUPLICATES = False
 
@@ -33,22 +37,22 @@ if LOCALES:
     locales = Locale.objects.filter(code__in=LOCALES)
 
 tz = get_current_timezone()
-start_date = tz.localize(datetime.strptime(START_DATE, '%d/%m/%Y'))
+start_date = tz.localize(datetime.strptime(START_DATE, "%d/%m/%Y"))
 logs = PermissionChangelog.objects.filter(
-    action_type='added',
+    action_type="added",
     created_at__gte=start_date,
 )
 
 output = []
-output.append('Locale,User,Date,New Role,Days in Previous Role')
+output.append("Locale,User,Date,New Role,Days in Previous Role")
 
 for locale in locales:
     # Use group__name__iexact to only get promotions to full translator and
     # ignore promotion to project translator.
     recorded_hashes = []
     for log in logs.filter(
-        Q(group=locale.translators_group) |
-        Q(group__name__endswith='/{} translators'.format(locale.code))
+        Q(group=locale.translators_group)
+        | Q(group__name__endswith="/{} translators".format(locale.code))
     ):
         user = log.performed_on
         row_data = (
@@ -61,15 +65,16 @@ for locale in locales:
         if IGNORE_DUPLICATES:
             action_hash = hash(row_data)
             if action_hash not in recorded_hashes:
-                output.append('{},{},{},{},{}'.format(*row_data))
+                output.append("{},{},{},{},{}".format(*row_data))
                 recorded_hashes.append(action_hash)
         else:
-            output.append('{},{},{},{},{}'.format(*row_data))
+            output.append("{},{},{},{},{}".format(*row_data))
     for log in logs.filter(group=locale.managers_group):
         user = log.performed_on
         try:
             user_translator_log = logs.filter(
-                performed_on=user, group=locale.translators_group).latest('created_at')
+                performed_on=user, group=locale.translators_group
+            ).latest("created_at")
             # User was never a translator
             if not user_translator_log:
                 date_previous = user.date_joined
@@ -88,11 +93,11 @@ for locale in locales:
             if IGNORE_DUPLICATES:
                 action_hash = hash(row_data)
                 if action_hash not in recorded_hashes:
-                    output.append('{},{},{},{},{}'.format(*row_data))
+                    output.append("{},{},{},{},{}".format(*row_data))
                     recorded_hashes.append(action_hash)
                 else:
-                    output.append('{},{},{},{},{}'.format(*row_data))
+                    output.append("{},{},{},{},{}".format(*row_data))
         except PermissionChangelog.DoesNotExist:
             pass
 
-print('\n'.join(output))
+print("\n".join(output))
