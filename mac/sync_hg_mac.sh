@@ -29,7 +29,6 @@ repositories=(
     "ssh://hg.mozilla.org/l10n-central/it/"
     "https://hg.mozilla.org/mozilla-unified"
     "https://hg.mozilla.org/hgcustom/version-control-tools"
-    "https://hg.mozilla.org/l10n/compare-locales/"
     "https://hg.mozilla.org/l10n/gecko-strings-quarantine"
     "https://hg.mozilla.org/l10n/fluent-migration"
 )
@@ -37,7 +36,6 @@ folder_names=(
 	"l10n-central"
 	"mozilla-unified"
     "version-control-tools"
-    "compare-locales"
     "gecko-strings-quarantine"
     "fluent-migration"
 )
@@ -71,11 +69,13 @@ done
 
 # Git repositories
 git_repositories=(
+    "https://github.com/mozilla/compare-locales"
     "https://github.com/projectfluent/python-fluent"
     "https://github.com/flodolo/firefox_l10n_checks"
     "https://github.com/flodolo/mozpm_stats"
 )
 git_folder_names=(
+    "compare-locales"
     "python-fluent"
     "firefox_l10n_checks"
     "mozpm_stats"
