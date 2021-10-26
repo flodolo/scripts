@@ -2,7 +2,7 @@
 
 """
 This script is used to read:
-- All locales enabled for Firefox and Android-l10n (Fenix) in Pontoon
+- All locales enabled for Firefox and firefox-for-android (Fenix) in Pontoon
 - All locales shipping in Nightly and Release
 - Locales supported in CLDR
 - Locales supported in CLDR seed
@@ -21,7 +21,7 @@ def main():
         "pontoon": [],
         "nightly": [],
         "release": [],
-        "android-l10n": [],
+        "firefox-for-android": [],
         "cldr": [],
         "seed": [],
     }
@@ -38,7 +38,7 @@ def main():
     }
   }
 
-  android: project(slug: "android-l10n") {
+  android: project(slug: "firefox-for-android") {
     localizations {
         locale {
             code
@@ -57,14 +57,14 @@ def main():
             for element in project_data["localizations"]:
                 locale = element["locale"]["code"]
                 if project == "android":
-                    locales["android-l10n"].append(locale)
+                    locales["firefox-for-android"].append(locale)
                 locales["pontoon"].append(locale)
     except Exception as e:
         print(e)
     # Remove duplicates and sort
     locales["pontoon"] = list(set(locales["pontoon"]))
     locales["pontoon"].sort()
-    locales["android-l10n"].sort()
+    locales["firefox-for-android"].sort()
 
     # Get the lisf of locales enabled in Nightly
     try:
@@ -159,7 +159,7 @@ def main():
             "pontoon": "yes" if locale in locales["pontoon"] else "no",
             "nightly": "yes" if locale in locales["nightly"] else "no",
             "release": "yes" if locale in locales["release"] else "no",
-            "android-l10n": "yes" if locale in locales["android-l10n"] else "no",
+            "firefox-for-android": "yes" if locale in locales["firefox-for-android"] else "no",
             "cldr": cldr_status,
             "notes": cldr_notes,
         }
@@ -167,12 +167,12 @@ def main():
     output = []
     output.append(
         f"Locale Code,Pontoon,Firefox Nightly,Firefox Release,"
-        f"Android-l10n,CLDR ({cldr_version}),CLDR Notes"
+        f"firefox-for-android,CLDR ({cldr_version}),CLDR Notes"
     )
     for locale, locale_data in data.items():
         output.append(
             f"{locale},{locale_data['pontoon']},{locale_data['nightly']},"
-            f"{locale_data['release']},{locale_data['android-l10n']},"
+            f"{locale_data['release']},{locale_data['firefox-for-android']},"
             f"{locale_data['cldr']},{locale_data['notes']}"
         )
 
