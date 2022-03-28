@@ -28,14 +28,12 @@ base_folder="/Users/flodolo/mozilla/mercurial/"
 repositories=(
     "ssh://hg.mozilla.org/l10n-central/it/"
     "https://hg.mozilla.org/mozilla-unified"
-    "https://hg.mozilla.org/hgcustom/version-control-tools"
     "https://hg.mozilla.org/l10n/gecko-strings-quarantine"
     "https://hg.mozilla.org/l10n/fluent-migration"
 )
 folder_names=(
 	"l10n-central"
 	"mozilla-unified"
-    "version-control-tools"
     "gecko-strings-quarantine"
     "fluent-migration"
 )
