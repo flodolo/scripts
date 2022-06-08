@@ -11,6 +11,9 @@ HISTSIZE=500000
 # Silent zsh warning
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
+# Autocompletion
+autoload -Uz compinit && compinit
+
 # Colors in Terminal
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
