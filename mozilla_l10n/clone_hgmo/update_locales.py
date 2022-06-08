@@ -1,13 +1,13 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 
 import json
 import os
-import urllib2
+from urllib.request import urlopen
 
 
 def query_hg(locales, url):
     try:
-        response = urllib2.urlopen(url)
+        response = urlopen(url)
         json_data = json.load(response)
         for repository in json_data["entries"]:
             locales.append(repository["name"])
