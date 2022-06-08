@@ -1,0 +1,29 @@
+# Make sure to add this to your ~/.zshrc
+# include additional .zshrc if it exists
+# if [ -f $HOME/github/scripts/mac/zshrc ]; then
+#     . $HOME/github/scripts/mac/zshrc
+# fi
+
+# History size
+HISTFILESIZE=500000
+HISTSIZE=500000
+
+# Silent zsh warning
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+# Colors in Terminal
+export CLICOLOR=1
+export LSCOLORS=GxFxCxDxBxegedabagaced
+
+# Load version control information
+autoload -Uz vcs_info
+precmd() { vcs_info }
+
+# Format the vcs_info_msg_0_ variable
+zstyle ':vcs_info:git:*' formats '(%F{green}%b%f)'
+
+# Set up the prompt (with git branch name)
+setopt PROMPT_SUBST
+PROMPT='%n:%F{yellow}${PWD/#$HOME/~}%f ${vcs_info_msg_0_} '
+
+export GPG_TTY=$(tty)

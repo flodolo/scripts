@@ -1,30 +1,12 @@
-# Make sure to add this to your ~/.bash_profile
+# Make sure to add this to your ~/.zprofile
 # include additional .bash_profiles if it exists
-# if [ -f $HOME/github/scripts/mac/bashrc_aliases ]; then
-#     . $HOME/github/scripts/mac/bashrc_aliases
+# if [ -f $HOME/github/scripts/mac/zsh_aliases ]; then
+#     . $HOME/github/scripts/mac/zsh_aliases
 # fi
 
 # History size
 HISTFILESIZE=500000
 HISTSIZE=500000
-
-# Silent zsh warning
-export BASH_SILENCE_DEPRECATION_WARNING=1
-
-# Colors in Terminal
-export CLICOLOR=1
-export LSCOLORS=GxFxCxDxBxegedabagaced
-
-# Git branch in prompt.
-parse_git_branch() {
-    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
-}
-export PS1="\u@\h \W\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "
-
-# Autocomplete Git commands
-if [ -f ~/github/scripts/mac/git-completion.sh ]; then
-  . ~/github/scripts/mac/git-completion.sh
-fi
 
 # gpg-agent, see https://gist.github.com/bmhatfield/cc21ec0a3a2df963bffa3c1f884b676b#file-gpg-agent-conf
 if [ -f ~/.gnupg/.gpg-agent-info ] && [ -n "$(pgrep gpg-agent)" ]; then
