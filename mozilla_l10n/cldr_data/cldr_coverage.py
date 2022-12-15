@@ -4,14 +4,13 @@
 This script is used to read:
 - All locales enabled for Firefox and firefox-for-android (Fenix) in Pontoon
 - All locales shipping in Nightly and Release
-- Locales supported in CLDR
-- Locales supported in CLDR seed
+- Locales supported in CLDR "full"
+- Locales available but not included in CLDR "full"
 
 Output data as CSV.
 """
 
 import json
-import os
 from urllib.parse import quote as urlquote
 from urllib.request import urlopen
 
@@ -66,7 +65,7 @@ def main():
     locales["pontoon"].sort()
     locales["firefox-for-android"].sort()
 
-    # Get the lisf of locales enabled in Nightly
+    # Get the list of locales enabled in Nightly
     try:
         print("Reading Nightly locales...")
         url = "https://hg.mozilla.org/mozilla-central/raw-file/tip/browser/locales/all-locales"
@@ -90,7 +89,7 @@ def main():
 
     # Create the superset of Mozilla locales
     mozilla_locales = []
-    for group, group_locales in locales.items():
+    for group_locales in locales.values():
         mozilla_locales += group_locales
     mozilla_locales = list(set(mozilla_locales))
     mozilla_locales.sort()
@@ -108,7 +107,7 @@ def main():
     # Get the list of CLDR locales in 'full'
     try:
         print("Reading CLDR data...")
-        url = "https://raw.githubusercontent.com/unicode-org/cldr-json/master/cldr-json/cldr-core/availableLocales.json"
+        url = "https://raw.githubusercontent.com/unicode-org/cldr-json/main/cldr-json/cldr-core/availableLocales.json"
         response = urlopen(url)
         json_data = json.load(response)
         locales["cldr"] = json_data["availableLocales"]["full"]
@@ -116,15 +115,19 @@ def main():
         print(e)
 
     # Try to figure out the list of seed locales in CLDR
-    # From https://github.com/unicode-org/cldr/tree/master/seed/main
-    url = "https://api.github.com/repos/unicode-org/cldr/contents/seed/main"
+    # Get the list of locales available in common/main, remove locales that
+    # are actually supported
+    url = "https://api.github.com/repos/unicode-org/cldr/contents/common/main/"
     try:
-        print("Reading CLDR seed data...")
+        print("Reading list of all locales in CLDR...")
         response = urlopen(url)
         json_data = json.load(response)
+        all_locales = []
         for element in json_data:
             locale = element["name"].rstrip(".xml").replace("_", "-")
-            locales["seed"].append(locale)
+            all_locales.append(locale)
+        # Remove locales available in supported, leaving out "seed" locales
+        locales["seed"] = list(set(all_locales) - set(locales["cldr"]))
         locales["seed"].sort()
     except Exception as e:
         print(e)
@@ -159,7 +162,9 @@ def main():
             "pontoon": "yes" if locale in locales["pontoon"] else "no",
             "nightly": "yes" if locale in locales["nightly"] else "no",
             "release": "yes" if locale in locales["release"] else "no",
-            "firefox-for-android": "yes" if locale in locales["firefox-for-android"] else "no",
+            "firefox-for-android": "yes"
+            if locale in locales["firefox-for-android"]
+            else "no",
             "cldr": cldr_status,
             "notes": cldr_notes,
         }
