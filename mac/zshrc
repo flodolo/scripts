@@ -4,9 +4,14 @@
 #     . $HOME/github/scripts/mac/zshrc
 # fi
 
-# History size
-HISTFILESIZE=500000
-HISTSIZE=500000
+# History improvements
+# https://www.soberkoder.com/better-zsh-history/
+HISTFILESIZE=1000000000
+HISTSIZE=1000000000
+# Add commands immediately
+setopt INC_APPEND_HISTORY
+# Ignore duplicates
+setopt HIST_IGNORE_ALL_DUPS
 
 # Silent zsh warning
 export BASH_SILENCE_DEPRECATION_WARNING=1
