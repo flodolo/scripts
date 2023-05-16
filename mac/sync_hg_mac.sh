@@ -29,13 +29,11 @@ repositories=(
     "ssh://hg.mozilla.org/l10n-central/it/"
     "https://hg.mozilla.org/mozilla-unified"
     "https://hg.mozilla.org/l10n/gecko-strings-quarantine"
-    "https://hg.mozilla.org/l10n/fluent-migration"
 )
 folder_names=(
 	"l10n-central"
 	"mozilla-unified"
     "gecko-strings-quarantine"
-    "fluent-migration"
 )
 
 cd "${base_folder}"
@@ -68,12 +66,14 @@ done
 # Git repositories
 git_repositories=(
     "https://github.com/mozilla/compare-locales"
+    "https://github.com/mozilla/fluent-migrate"
     "https://github.com/projectfluent/python-fluent"
     "https://github.com/flodolo/firefox_l10n_checks"
     "https://github.com/flodolo/mozpm_stats"
 )
 git_folder_names=(
     "compare-locales"
+    "fluent-migrate"
     "python-fluent"
     "firefox_l10n_checks"
     "mozpm_stats"
