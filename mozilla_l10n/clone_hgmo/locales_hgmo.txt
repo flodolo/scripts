@@ -121,6 +121,7 @@ scn
 sco
 si
 sk
+skr
 sl
 son
 sq
@@ -133,6 +134,7 @@ szl
 ta
 ta-LK
 te
+tg
 th
 tl
 tn
