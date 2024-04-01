@@ -107,12 +107,11 @@ def main():
     else:
         # Get the latest changeset shipping in release
         url = "https://hg.mozilla.org/releases/mozilla-release/raw-file/default/browser/locales/l10n-changesets.json"
-        l10n_changesets = {}
         try:
             print("Reading l10n-changesets.json...")
             response = urlopen(url)
             json_data = json.load(response)
-            if not locale in json_data:
+            if locale not in json_data:
                 sys.exit(f"Locale {locale} not available in l10n-changesets.json")
             else:
                 starting_changeset = json_data[locale]["revision"]

@@ -13,7 +13,6 @@ from compare_locales.parser import getParser
 from compare_locales.serializer import serialize
 import argparse
 import os
-import subprocess
 import sys
 
 
