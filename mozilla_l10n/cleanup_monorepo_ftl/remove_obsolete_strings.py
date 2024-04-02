@@ -36,6 +36,7 @@ def main():
     )
     p.add_argument("--path", help="Path to repository", required=True)
     p.add_argument("--ref", help="Reference locale code (folder)", required=True)
+    p.add_argument("--delete", help="Delete extra files", action="store_true")
     p.add_argument(
         "--locale", help="Run on a specific locale", action="store", default=""
     )
@@ -67,7 +68,12 @@ def main():
         # Create list of target files
         target_file_list = extractFileList(locale_path)
 
-        # Ignore files in locale that are not available in the source
+        # If --delete is requested, remove extra files in locale folders.
+        if args.delete:
+            extra_files = [f for f in target_file_list if f not in source_file_list]
+            for f in extra_files:
+                os.remove(os.path.join(locale_path, f))
+
         target_file_list = [f for f in target_file_list if f in source_file_list]
 
         # Read source and target and write the output overwriting the existing
