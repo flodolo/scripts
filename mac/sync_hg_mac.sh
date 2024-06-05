@@ -26,11 +26,9 @@ function echogreen() {
 base_folder="/Users/flodolo/mozilla/mercurial/"
 
 repositories=(
-    "ssh://hg.mozilla.org/l10n-central/it/"
     "https://hg.mozilla.org/mozilla-unified"
 )
 folder_names=(
-	"l10n-central"
 	"mozilla-unified"
 )
 
@@ -64,6 +62,7 @@ done
 # Git repositories
 git_repositories=(
     "https://github.com/mozilla-l10n/firefox-l10n-source"
+    "https://github.com/mozilla-l10n/firefox-l10n"
     "https://github.com/mozilla/compare-locales"
     "https://github.com/mozilla/fluent-migrate"
     "https://github.com/projectfluent/python-fluent"
@@ -72,6 +71,7 @@ git_repositories=(
 )
 git_folder_names=(
     "firefox-quarantine"
+    "firefox-l10n"
     "compare-locales"
     "fluent-migrate"
     "python-fluent"
@@ -80,6 +80,7 @@ git_folder_names=(
 )
 git_branch=(
     "update"
+    "main"
     "release"
     "main"
     "main"
