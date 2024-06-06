@@ -41,6 +41,7 @@ alias hgd="hg diff|mate"
 alias hgup="~/github/scripts/mac/sync_hg_mac.sh"
 
 # Git commands
+alias gitc="git commit -a"
 alias gitd="git diff|mate"
 alias git_branch="~/github/scripts/git/git_branch.sh"
 alias git_clone="~/github/scripts/git/git_clone.sh"
