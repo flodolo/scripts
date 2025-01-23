@@ -49,7 +49,7 @@ def main():
     )
     try:
         print("Reading Pontoon stats...")
-        url = f"https://pontoon.mozilla.org/graphql?query={query}"
+        url = f"https://pontoon.mozilla.org/graphql?query={query}&raw"
         response = urlopen(url)
         json_data = json.load(response)
         for project, project_data in json_data["data"].items():
