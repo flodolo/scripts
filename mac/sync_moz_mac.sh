@@ -23,7 +23,7 @@ function echogreen() {
     echo -e "$GREEN$*$NORMAL"
 }
 
-base_folder="/Users/flodolo/mozilla/mercurial/"
+base_folder="/Users/flodolo/mozilla/git/"
 
 repositories=(
     "https://hg.mozilla.org/mozilla-unified"
@@ -61,6 +61,7 @@ done
 
 # Git repositories
 git_repositories=(
+    "https://github.com/mozilla-firefox/firefox"
     "https://github.com/mozilla-l10n/firefox-l10n-source"
     "https://github.com/mozilla-l10n/firefox-l10n"
     "https://github.com/mozilla/compare-locales"
@@ -70,6 +71,7 @@ git_repositories=(
     "https://github.com/flodolo/mozpm_stats"
 )
 git_folder_names=(
+    "mozilla-firefox"
     "firefox-quarantine"
     "firefox-l10n"
     "compare-locales"
@@ -79,6 +81,7 @@ git_folder_names=(
     "mozpm_stats"
 )
 git_branch=(
+    "main"
     "update"
     "main"
     "release"

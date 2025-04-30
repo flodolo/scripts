@@ -38,7 +38,6 @@ fi
 # 'mate' comes from the TextMate app
 alias hgc="hg commit"
 alias hgd="hg diff|mate"
-alias hgup="~/github/scripts/mac/sync_hg_mac.sh"
 
 # Git commands
 alias gitc="git commit -a"
@@ -50,8 +49,10 @@ alias git_updateall="~/github/scripts/git/git_updateall.sh"
 alias gitup="git_updateall ~/github/"
 
 # Mozilla l10n commands
-alias trunkst="cd ~/mozilla/mercurial/firefox-l10n/it"
-alias trunkstu="cd ~/mozilla/mercurial/firefox-l10n/it;git checkout main;git pull"
+alias trunkst="cd ~/mozilla/git/firefox-l10n/it"
+alias trunkstu="cd ~/mozilla/git/firefox-l10n/it;git checkout main;git pull"
 
-alias cmp_moz="compare-locales ~/mozilla/mercurial/mozilla-unified/browser/locales/l10n.toml ~/mozilla/mercurial/firefox-l10n it"
-alias cmp_mozx="compare-locales ~/mozilla/mercurial/firefox-quarantine/_configs/browser.toml ~/mozilla/mercurial/firefox-l10n it"
+alias cmp_moz="compare-locales ~/mozilla/git/mozilla-unified/browser/locales/l10n.toml ~/mozilla/git/firefox-l10n it"
+alias cmp_mozx="compare-locales ~/mozilla/git/firefox-quarantine/_configs/browser.toml ~/mozilla/git/firefox-l10n it"
+
+alias mozup="~/github/scripts/mac/sync_moz_mac.sh"
