@@ -25,41 +25,6 @@ function echogreen() {
 
 base_folder="/Users/flodolo/mozilla/git/"
 
-repositories=(
-    "https://hg.mozilla.org/mozilla-unified"
-)
-folder_names=(
-	"mozilla-unified"
-)
-
-cd "${base_folder}"
-for i in "${!folder_names[@]}"
-do
-    repository="${repositories[$i]}"
-    folder_name="${folder_names[$i]}"
-    if [ ! -d "${folder_name}" ]
-    then
-        echored "Repository ${folder_name} does not exist"
-        echogreen "Checking out the repo ${folder_name}..."
-        hg clone ${repository} ${folder_name}
-    else
-        echogreen "Updating ${folder_name}..."
-        if [ "${folder_name}" == "mozilla-unified" ]
-        then
-            # For mozilla-unified I need to update to central bookmark too
-            hg -R ${folder_name} update -C
-            # Remove bookmarks
-            hg -R ${folder_name} bookmarks -d central
-            hg -R ${folder_name} bookmarks -d central@default
-            hg -R ${folder_name} pull -u
-            hg -R ${folder_name} update central
-        else
-            hg -R ${folder_name} pull -r default -u
-        fi
-    fi
-done
-
-# Git repositories
 git_repositories=(
     "https://github.com/mozilla-firefox/firefox"
     "https://github.com/mozilla-l10n/firefox-l10n-source"

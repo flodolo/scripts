@@ -52,7 +52,7 @@ alias gitup="git_updateall ~/github/"
 alias trunkst="cd ~/mozilla/git/firefox-l10n/it"
 alias trunkstu="cd ~/mozilla/git/firefox-l10n/it;git checkout main;git pull"
 
-alias cmp_moz="compare-locales ~/mozilla/git/mozilla-unified/browser/locales/l10n.toml ~/mozilla/git/firefox-l10n it"
+alias cmp_moz="compare-locales ~/mozilla/git/mozilla-firefox/browser/locales/l10n.toml ~/mozilla/git/firefox-l10n it"
 alias cmp_mozx="compare-locales ~/mozilla/git/firefox-quarantine/_configs/browser.toml ~/mozilla/git/firefox-l10n it"
 
 alias mozup="~/github/scripts/mac/sync_moz_mac.sh"
