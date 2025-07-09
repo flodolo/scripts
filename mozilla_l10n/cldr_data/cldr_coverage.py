@@ -10,9 +10,8 @@ This script is used to read:
 Output data as CSV.
 """
 
-import json
-from urllib.parse import quote as urlquote
-from urllib.request import urlopen
+import requests
+import sys
 
 
 def main():
@@ -26,66 +25,55 @@ def main():
     }
 
     # Get the list of locales enabled in Pontoon.
-    query = urlquote(
-        """
-{
-  firefox: project(slug: "firefox") {
-    localizations {
-        locale {
-            code
-        }
-    }
-  }
-
-  android: project(slug: "firefox-for-android") {
-    localizations {
-        locale {
-            code
-        }
-    }
-  }
-}
-"""
-    )
+    url = "https://pontoon.mozilla.org/api/v2/projects"
+    page = 1
     try:
-        print("Reading Pontoon stats...")
-        url = f"https://pontoon.mozilla.org/graphql?query={query}&raw"
-        response = urlopen(url)
-        json_data = json.load(response)
-        for project, project_data in json_data["data"].items():
-            for element in project_data["localizations"]:
-                locale = element["locale"]["code"]
-                if project == "android":
-                    locales["firefox-for-android"].append(locale)
-                locales["pontoon"].append(locale)
-    except Exception as e:
-        print(e)
-    # Remove duplicates and sort
-    locales["pontoon"] = list(set(locales["pontoon"]))
-    locales["pontoon"].sort()
-    locales["firefox-for-android"].sort()
+        while url:
+            print(f"Reading projects (page {page})")
+            response = requests.get(url)
+            response.raise_for_status()
+            data = response.json()
+
+            for project in data.get("results", {}):
+                slug = project["slug"]
+                if slug in ["firefox-for-android", "firefox"]:
+                    if slug == "firefox-for-android":
+                        locales["firefox-for-android"] = sorted(project["locales"])
+                    locales["pontoon"].extend(project["locales"])
+
+            # Get the next page URL
+            url = data.get("next")
+            page += 1
+        # Remove duplicates and sort
+        locales["pontoon"] = list(set(locales["pontoon"]))
+        locales["pontoon"].sort()
+    except requests.RequestException as e:
+        print(f"Error fetching data: {e}")
+        sys.exit()
 
     # Get the list of locales enabled in Nightly
     try:
         print("Reading Nightly locales...")
-        url = "https://hg.mozilla.org/mozilla-central/raw-file/tip/browser/locales/all-locales"
-        with urlopen(url) as response:
-            for locale in response:
-                locales["nightly"].append(locale.rstrip().decode())
+        url = "https://raw.githubusercontent.com/mozilla-firefox/firefox/refs/heads/main/browser/locales/all-locales"
+        response = requests.get(url)
+        response.raise_for_status()
+        for locale in response.iter_lines():
+            locales["nightly"].append(locale.rstrip().decode())
         locales["nightly"].sort()
-    except Exception as e:
-        print(e)
+    except requests.RequestException as e:
+        print(f"Error fetching data: {e}")
 
     # Get the list of locales enabled in Release
     try:
         print("Reading Release locales...")
-        url = "https://hg.mozilla.org/mozilla-central/raw-file/tip/browser/locales/shipped-locales"
-        with urlopen(url) as response:
-            for locale in response:
-                locales["release"].append(locale.rstrip().decode())
+        url = "https://raw.githubusercontent.com/mozilla-firefox/firefox/refs/heads/main/browser/locales/shipped-locales"
+        response = requests.get(url)
+        response.raise_for_status()
+        for locale in response.iter_lines():
+            locales["release"].append(locale.rstrip().decode())
         locales["release"].sort()
-    except Exception as e:
-        print(e)
+    except requests.RequestException as e:
+        print(f"Error fetching data: {e}")
 
     # Create the superset of Mozilla locales
     mozilla_locales = []
@@ -98,21 +86,23 @@ def main():
     try:
         print("Reading CLDR version...")
         url = "https://api.github.com/repos/unicode-org/cldr-json/releases/latest"
-        response = urlopen(url)
-        json_data = json.load(response)
+        response = requests.get(url)
+        response.raise_for_status()
+        json_data = response.json()
         cldr_version = json_data["tag_name"]
-    except Exception as e:
-        print(e)
+    except requests.RequestException as e:
+        print(f"Error fetching data: {e}")
 
     # Get the list of CLDR locales in 'full'
     try:
         print("Reading CLDR data...")
         url = "https://raw.githubusercontent.com/unicode-org/cldr-json/main/cldr-json/cldr-core/availableLocales.json"
-        response = urlopen(url)
-        json_data = json.load(response)
+        response = requests.get(url)
+        response.raise_for_status()
+        json_data = response.json()
         locales["cldr"] = json_data["availableLocales"]["full"]
-    except Exception as e:
-        print(e)
+    except requests.RequestException as e:
+        print(f"Error fetching data: {e}")
 
     # Try to figure out the list of seed locales in CLDR
     # Get the list of locales available in common/main, remove locales that
@@ -120,8 +110,9 @@ def main():
     url = "https://api.github.com/repos/unicode-org/cldr/contents/common/main/"
     try:
         print("Reading list of all locales in CLDR...")
-        response = urlopen(url)
-        json_data = json.load(response)
+        response = requests.get(url)
+        response.raise_for_status()
+        json_data = response.json()
         all_locales = []
         for element in json_data:
             locale = element["name"].rstrip(".xml").replace("_", "-")
@@ -129,8 +120,8 @@ def main():
         # Remove locales available in supported, leaving out "seed" locales
         locales["seed"] = list(set(all_locales) - set(locales["cldr"]))
         locales["seed"].sort()
-    except Exception as e:
-        print(e)
+    except requests.RequestException as e:
+        print(f"Error fetching data: {e}")
 
     data = {}
     for locale in mozilla_locales:
