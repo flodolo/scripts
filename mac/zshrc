@@ -4,6 +4,10 @@
 #     . $HOME/github/scripts/mac/zshrc
 # fi
 
+if [ -f $HOME/github/scripts/mac/zsh_aliases ]; then
+    . $HOME/github/scripts/mac/zsh_aliases
+fi
+
 # History improvements
 # https://www.soberkoder.com/better-zsh-history/
 HISTFILESIZE=1000000000
@@ -34,5 +38,3 @@ zstyle ':vcs_info:git:*' formats '(%F{green}%b%f)'
 # Set up the prompt (with git branch name)
 setopt PROMPT_SUBST
 PROMPT='%n:%F{yellow}${PWD/#$HOME/~}%f ${vcs_info_msg_0_} '
-
-export GPG_TTY=$(tty)

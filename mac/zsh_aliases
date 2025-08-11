@@ -1,5 +1,4 @@
-# Make sure to add this to your ~/.zprofile
-# include additional .bash_profiles if it exists
+# Make sure to add this to your ~/.zshrc
 # if [ -f $HOME/github/scripts/mac/zsh_aliases ]; then
 #     . $HOME/github/scripts/mac/zsh_aliases
 # fi
@@ -7,14 +6,6 @@
 # History size
 HISTFILESIZE=500000
 HISTSIZE=500000
-
-# gpg-agent, see https://gist.github.com/bmhatfield/cc21ec0a3a2df963bffa3c1f884b676b#file-gpg-agent-conf
-if [ -f ~/.gnupg/.gpg-agent-info ] && [ -n "$(pgrep gpg-agent)" ]; then
-    source ~/.gnupg/.gpg-agent-info
-    export GPG_AGENT_INFO
-else
-    eval $(gpg-agent --daemon --write-env-file ~/.gnupg/.gpg-agent-info)
-fi
 
 # Mercurial commands
 # 'mate' comes from the TextMate app
