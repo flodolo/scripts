@@ -29,3 +29,8 @@ alias cmp_moz="compare-locales ~/mozilla/git/mozilla-firefox/browser/locales/l10
 alias cmp_mozx="compare-locales ~/mozilla/git/firefox-quarantine/_configs/browser.toml ~/mozilla/git/firefox-l10n it"
 
 alias mozup="~/github/scripts/mac/sync_moz_mac.sh"
+
+# Obsidian
+
+alias obup="cd ~/obsidian && git pull"
+alias obc='cd ~/obsidian && git add -A && git commit -m "Data update for $(date +"%Y-%m-%d") from $(hostname)" && git push'
