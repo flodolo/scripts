@@ -30,6 +30,8 @@ alias cmp_mozx="compare-locales ~/mozilla/git/firefox-quarantine/_configs/browse
 
 alias mozup="~/github/scripts/mac/sync_moz_mac.sh"
 
+alias ms="cd ~/github/pontoon && make shell"
+
 # Obsidian
 
 alias obup="cd ~/obsidian && git pull"
