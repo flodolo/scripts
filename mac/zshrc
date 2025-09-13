@@ -42,3 +42,6 @@ PROMPT='%n:%F{yellow}${PWD/#$HOME/~}%f ${vcs_info_msg_0_} '
 # Force plain path completion for all git commands
 compdef -d git
 compdef _files git
+
+SCRIPT_DIR=$(dirname ${(%):-%x})
+export PATH="$PATH:$SCRIPT_DIR/age"
