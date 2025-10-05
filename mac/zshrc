@@ -8,40 +8,84 @@ if [ -f $HOME/github/scripts/mac/zsh_aliases ]; then
     . $HOME/github/scripts/mac/zsh_aliases
 fi
 
-# History improvements
-# https://www.soberkoder.com/better-zsh-history/
+#### History
 HISTFILESIZE=1000000000
 HISTSIZE=1000000000
-# Add commands immediately
-setopt INC_APPEND_HISTORY
-# Ignore duplicates
-setopt HIST_IGNORE_ALL_DUPS
+setopt INC_APPEND_HISTORY         # write each command immediately
+setopt SHARE_HISTORY              # share across sessions
+setopt HIST_IGNORE_ALL_DUPS       # drop duplicate entries
+setopt HIST_IGNORE_SPACE          # ignore commands starting with space
+setopt HIST_REDUCE_BLANKS         # trim extra spaces in history
 
-# Silent zsh warning
+#### Silence macOS bash warning
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
-# Autocompletion
-autoload -Uz compinit && compinit
-
-# Colors in Terminal
+#### Colors in Terminal (ls)
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
-# Load version control information
-autoload -Uz vcs_info
-precmd() { vcs_info }
-
-# Format the vcs_info_msg_0_ variable
-zstyle ':vcs_info:*' enable git
-zstyle ':vcs_info:git:*' formats '(%F{green}%b%f)'
-
-# Set up the prompt (with git branch name)
+#### --- Prompt (fast, single vcs_info) ---
 setopt PROMPT_SUBST
+autoload -Uz vcs_info
+# lightweight git info (no dirty/changes check; just branch)
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:git:*' use-simple true
+zstyle ':vcs_info:git:*' check-for-changes false
+zstyle ':vcs_info:git:*' get-revision false
+zstyle ':vcs_info:git:*' formats '%F{blue}(%b)%f'
+zstyle ':vcs_info:git:*' actionformats '%F{blue}(%b|%a)%f'
+precmd() { vcs_info }
 PROMPT='%n:%F{yellow}${PWD/#$HOME/~}%f ${vcs_info_msg_0_} '
 
-# Force plain path completion for all git commands
-compdef -d git
-compdef _files git
+#### --- Completion (reset, cache, and per-subcommand rules) ---
+mkdir -p ~/.zsh/.zcompcache
+autoload -Uz compinit
+# Clean old cache once (keeps things honest if you previously used bash bridge)
+rm -f ~/.zcompdump(N) 2>/dev/null
+compinit -C
 
+# Cache speeds up big dir completions
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/.zcompcache
+
+# Quality-of-life matching: case-insensitive, partial, dashed vs. underscore
+zstyle ':completion:*' matcher-list \
+  'm:{a-z}={A-Z}' \
+  'r:|[._-]=* r:|=*' \
+  'l:|=* r:|=*'
+
+# Group and nice menus
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' menu select
+
+# Respect LS_COLORS for completion listings
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+
+# Make sure no bash-bridge is active
+zstyle -d ':completion:*:*:git:*' script
+
+# Subcommand-aware dispatcher: path-only for heavy ones, native _git for the rest
+_git_dispatch() {
+  local subcmd
+  # find the first word after 'git' that isn't an option
+  for w in "${words[@]}"; do
+    [[ $w == git ]] && continue
+    [[ $w == -* ]] && continue
+    subcmd=$w
+    break
+  done
+
+  case $subcmd in
+    diff|add|restore|reset)
+      _path_files        # super fast, no repo scans
+      ;;
+    *)
+      _git               # native git completion (branches, refs, etc.)
+      ;;
+  esac
+}
+compdef _git_dispatch git
+
+#### PATH tweaks
 SCRIPT_DIR=$(dirname ${(%):-%x})
 export PATH="$PATH:$SCRIPT_DIR/age"
