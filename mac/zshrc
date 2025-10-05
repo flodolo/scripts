@@ -43,5 +43,13 @@ PROMPT='%n:%F{yellow}${PWD/#$HOME/~}%f ${vcs_info_msg_0_} '
 compdef -d git
 compdef _files git
 
+# Git bash completion
+# Might need:
+# brew install git bash-completion
+# ln -s "$(brew --prefix)/share/git-core/contrib/completion/git-completion.zsh" ~/.zsh/git-completion.zsh
+
+autoload -Uz compinit && compinit
+zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.zsh
+
 SCRIPT_DIR=$(dirname ${(%):-%x})
 export PATH="$PATH:$SCRIPT_DIR/age"
