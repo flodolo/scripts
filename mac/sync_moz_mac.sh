@@ -31,6 +31,7 @@ git_repositories=(
     "https://github.com/mozilla-l10n/firefox-l10n"
     "https://github.com/flodolo/firefox_l10n_checks"
     "https://github.com/flodolo/mozpm_stats"
+    "https://github.com/mozilla-l10n/fluent-migrations"
 )
 git_folder_names=(
     "mozilla-firefox"
@@ -38,10 +39,12 @@ git_folder_names=(
     "firefox-l10n"
     "firefox_l10n_checks"
     "mozpm_stats"
+    "fluent-migrations"
 )
 git_branch=(
     "main"
     "update"
+    "main"
     "main"
     "main"
     "main"
@@ -80,4 +83,19 @@ then
     git add firefox_stats/cache.json
     git commit -a -m "Update data ($day)"
     git push
+fi
+
+# Run migrations
+cd "${base_folder}/fluent-migrations"
+git fetch
+if [ -n "$(git log HEAD..origin/main --oneline)" ]
+then
+    echored "Running pending migrations..."
+    git pull
+    if ls recipes/bug_*.py &>/dev/null
+    then
+        ./scripts/migration.sh it wet-run current-branch push
+    fi
+else
+    echogreen "Migrations are up to date, skipping"
 fi
