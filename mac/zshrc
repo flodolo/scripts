@@ -76,7 +76,7 @@ _git_dispatch() {
   done
 
   case $subcmd in
-    diff|add|restore|reset)
+    diff|add|restore)
       _path_files        # super fast, no repo scans
       ;;
     *)
