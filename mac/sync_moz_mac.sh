@@ -31,7 +31,6 @@ git_repositories=(
     "https://github.com/mozilla-l10n/firefox-l10n"
     "https://github.com/flodolo/firefox_l10n_checks"
     "https://github.com/flodolo/mozpm_stats"
-    "https://github.com/mozilla-l10n/fluent-migrations"
 )
 git_folder_names=(
     "mozilla-firefox"
@@ -39,12 +38,10 @@ git_folder_names=(
     "firefox-l10n"
     "firefox_l10n_checks"
     "mozpm_stats"
-    "fluent-migrations"
 )
 git_branch=(
     "main"
     "update"
-    "main"
     "main"
     "main"
     "main"
@@ -86,9 +83,16 @@ then
 fi
 
 # Run migrations
+just_cloned=false
+if [ ! -d "${base_folder}/fluent-migrations" ]
+then
+    echogreen "Checking out the repo fluent-migrations..."
+    git clone https://github.com/mozilla-l10n/fluent-migrations "${base_folder}/fluent-migrations"
+    just_cloned=true
+fi
 cd "${base_folder}/fluent-migrations"
 git fetch
-if [ -n "$(git log HEAD..origin/main --oneline)" ]
+if [ "${just_cloned}" = true ] || [ -n "$(git log HEAD..origin/main --oneline)" ]
 then
     echored "Running pending migrations..."
     git pull
