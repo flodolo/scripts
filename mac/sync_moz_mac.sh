@@ -98,7 +98,7 @@ then
     git pull
     if ls recipes/bug_*.py &>/dev/null
     then
-        ./scripts/migration.sh it wet-run current-branch push
+        ./scripts/migration.sh it wet-run current-branch push skip-confirm
     fi
 else
     echogreen "Migrations are up to date, skipping"
