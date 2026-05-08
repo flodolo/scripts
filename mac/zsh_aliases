@@ -36,5 +36,13 @@ alias psyncf="(cd ~/github/pontoon && docker compose exec -T server python manag
 
 # Obsidian
 
-alias obup="cd ~/obsidian && git pull"
-alias obc='cd ~/obsidian && git add -A && git commit -m "Data update for $(date +"%Y-%m-%d") from $(hostname)" && git push'
+_obsidian_dir() {
+    if [ -d ~/obsidian ]; then
+        echo ~/obsidian
+    else
+        echo ~/Documents/PERSONAL/obsidian
+    fi
+}
+
+alias obup='cd "$(_obsidian_dir)" && git pull'
+alias obc='cd "$(_obsidian_dir)" && git add -A && git commit -m "Data update for $(date +"%Y-%m-%d") from $(hostname)" && git push'
