@@ -13,6 +13,7 @@ alias hgc="hg commit"
 alias hgd="hg diff|mate"
 
 # Git commands
+alias git="LC_ALL=en_US.UTF-8 git"
 alias gitc="git commit -a"
 alias gitd="git diff|mate"
 alias git_branch="~/github/scripts/git/git_branch.sh"
