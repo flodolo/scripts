@@ -17,7 +17,7 @@ Usage:
 
 Options:
     --locale DIR   en-CA root      (default: <repo>/en-CA)
-    --ref DIR      en-US root      (default: ~/mozilla/git/firefox-quarantine)
+    --ref DIR      en-US root      (default: ~/mozilla-source/git/firefox-quarantine)
     --json FILE    write the report as JSON
 """
 
@@ -264,7 +264,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("paths", nargs="*", help="limit to these subpaths (relative to the locale root)")
     ap.add_argument("--locale", default=os.path.join(repo, "en-CA"))
-    ap.add_argument("--ref", default=os.path.expanduser("~/mozilla/git/firefox-quarantine"))
+    ap.add_argument("--ref", default=os.path.expanduser("~/mozilla-source/git/firefox-quarantine"))
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--report", action="store_true")
     ap.add_argument("--json")

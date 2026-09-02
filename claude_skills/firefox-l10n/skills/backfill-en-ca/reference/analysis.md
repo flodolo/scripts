@@ -1,7 +1,7 @@
 # How the en-CA rules were derived (2026-08-25)
 
 One-time analysis of `firefox-l10n/en-CA` against
-`~/mozilla/git/firefox-quarantine` (en-US), using `moz.l10n` to parse every
+`~/mozilla-source/git/firefox-quarantine` (en-US), using `moz.l10n` to parse every
 `.ftl`, `.properties` and `.ini` file into `(file, key, attribute, variant)`
 → text, including Fluent attributes and every select variant.
 

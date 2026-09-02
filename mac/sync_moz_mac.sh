@@ -23,7 +23,7 @@ function echogreen() {
     echo -e "$GREEN$*$NORMAL"
 }
 
-base_folder="/Users/flodolo/mozilla/git/"
+base_folder="/Users/flodolo/mozilla-source/git/"
 
 git_repositories=(
     "https://github.com/mozilla-firefox/firefox"

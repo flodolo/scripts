@@ -7,7 +7,7 @@ do not match the en-US source.
 
 Requires moz.l10n, so run it with the quarantine venv:
 
-    ~/mozilla/git/firefox-quarantine/.venv/bin/python check_style.py [paths...]
+    ~/mozilla-source/git/firefox-quarantine/.venv/bin/python check_style.py [paths...]
 
 Paths are files or directories, relative to the repo or absolute; with no
 paths the whole en-CA tree is checked.
@@ -152,7 +152,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("paths", nargs="*")
     ap.add_argument("--locale", default=os.path.join(repo, "en-CA"))
-    ap.add_argument("--ref", default=os.path.expanduser("~/mozilla/git/firefox-quarantine"))
+    ap.add_argument("--ref", default=os.path.expanduser("~/mozilla-source/git/firefox-quarantine"))
     ap.add_argument("--quotes", action="store_true",
                     help="also flag ‘…’ quotes that en-CA usually writes as “…”")
     args = ap.parse_args()

@@ -17,8 +17,8 @@ can be trusted.
 ## Paths
 
 - locale: `en-CA/` in this repo
-- source: `~/mozilla/git/firefox-quarantine` (same relative paths)
-- moz.l10n tooling: `~/mozilla/git/firefox-quarantine/.venv/bin/`
+- source: `~/mozilla-source/git/firefox-quarantine` (same relative paths)
+- moz.l10n tooling: `~/mozilla-source/git/firefox-quarantine/.venv/bin/`
   (`l10n-lint`, `l10n-compare`)
 
 Both are overridable with `--locale` / `--ref`.
@@ -64,7 +64,7 @@ Run from `.claude/skills/backfill-en-ca/scripts`.
 5. **Verify**:
 
    ```bash
-   Q=~/mozilla/git/firefox-quarantine
+   Q=~/mozilla-source/git/firefox-quarantine
    $Q/.venv/bin/python check_style.py                 # style rules + access keys + placeholders
    $Q/.venv/bin/l10n-compare --source $Q ../../../../en-CA   # nothing missing
    $Q/.venv/bin/l10n-lint ../../../../en-CA           # parses (ignore "unsupported <file>" lines)
