@@ -331,8 +331,14 @@ def canadianize_block(lines: list[str]) -> tuple[list[str], list[str], list[str]
 
 
 def process(ref_path: str, l10n_path: str, rel: str, dry_run: bool) -> dict:
-    ref_header, ref_blocks, _ = split_file(ref_path)
-    ca_header, ca_blocks, ca_footer = split_file(l10n_path)
+    ref_header, ref_blocks, ref_footer = split_file(ref_path)
+    new_file = not os.path.exists(l10n_path)
+    if new_file:
+        # en-CA has no file for this reference at all: start from the en-US
+        # header and footer, with no entries.
+        ca_header, ca_blocks, ca_footer = ref_header, [], ref_footer
+    else:
+        ca_header, ca_blocks, ca_footer = split_file(l10n_path)
 
     ref_keys = [b.key for b in ref_blocks]
     ca_keys = [b.key for b in ca_blocks]
@@ -348,6 +354,7 @@ def process(ref_path: str, l10n_path: str, rel: str, dry_run: bool) -> dict:
         "added": [],
         "applied": [],
         "flags": [],
+        "new_file": new_file,
     }
     if not missing:
         return result
@@ -366,10 +373,11 @@ def process(ref_path: str, l10n_path: str, rel: str, dry_run: bool) -> dict:
             merged.extend(ca_blocks[i1:i2])
             merged.extend(insert_ref(ref_blocks[j1:j2], result))
 
-    new_text = "".join(ca_header + [l for b in merged for l in b.lines] + ca_footer)
+    new_text = "".join(ca_header + [ln for b in merged for ln in b.lines] + ca_footer)
 
     if not dry_run:
         ET.fromstring(new_text)  # fail loudly rather than write broken XML
+        os.makedirs(os.path.dirname(l10n_path), exist_ok=True)
         with open(l10n_path, "w", encoding="utf-8") as fh:
             fh.write(new_text)
     return result
@@ -396,6 +404,8 @@ def self_check(repo: str) -> int:
     """Verify AUTO_RULES never contradict the existing en-CA corpus."""
     problems = 0
     for l10n, _ref, rel in locale_files(repo, None):
+        if not os.path.exists(l10n):
+            continue
         _, blocks, _ = split_file(l10n)
         for b in blocks:
             for line in b.lines:
@@ -411,15 +421,30 @@ def self_check(repo: str) -> int:
 
 
 def locale_files(repo: str, flt: str | None):
-    for dirpath, dirnames, filenames in os.walk(os.path.join(repo, "mozilla-mobile")):
-        if os.path.basename(dirpath) != "values-en-rCA":
+    """Yield (en-CA path, en-US path, relative en-CA path) for every reference.
+
+    Driven by the project l10n.toml files rather than by walking the existing
+    ``values-en-rCA`` directories: a reference file that en-CA has no file for
+    at all must still be reported, and it is invisible to a walk of the locale
+    directories.
+    """
+    from moz.l10n.paths import L10nConfigPaths, get_android_locale
+
+    seen = set()
+    for config in ("firefox.toml", "focus.toml"):
+        config_path = os.path.join(repo, config)
+        if not os.path.exists(config_path):
             continue
-        for fn in sorted(filenames):
-            if not fn.endswith(".xml"):
-                continue
-            l10n = os.path.join(dirpath, fn)
-            ref = os.path.join(dirpath.replace("values-en-rCA", "values"), fn)
+        paths = L10nConfigPaths(
+            config_path, locale_map={"android_locale": get_android_locale}
+        )
+        for (ref, tgt_template), _locales in paths.all().items():
+            l10n = os.path.abspath(paths.format_target_path(tgt_template, "en-CA"))
+            ref = os.path.abspath(ref)
             rel = os.path.relpath(l10n, repo)
+            if rel in seen:
+                continue
+            seen.add(rel)
             if flt and flt not in rel:
                 continue
             if not os.path.exists(ref):
@@ -450,7 +475,7 @@ def main() -> int:
         total_obsolete += len(r["obsolete"])
         if not r["added"] and not r["obsolete"]:
             continue
-        print(f"\n{r['file']}")
+        print(f"\n{r['file']}{'  (new file)' if r['new_file'] else ''}")
         for key, value in r["added"]:
             print(f"  + {key} = {value}")
             total_added += 1
@@ -462,7 +487,11 @@ def main() -> int:
             print(f"  ! review: {f}")
 
     verb = "would add" if args.dry_run else "added"
-    print(f"\n{verb} {total_added} string(s); {total_obsolete} obsolete entr(ies) kept")
+    total_new = sum(1 for r in results if r["new_file"] and r["added"])
+    print(
+        f"\n{verb} {total_added} string(s) in {total_new} new file(s); "
+        f"{total_obsolete} obsolete entr(ies) kept"
+    )
     return 0
 
 

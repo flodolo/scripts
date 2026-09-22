@@ -25,6 +25,9 @@ python3 .claude/skills/backfill-en-ca/scripts/backfill_en_ca.py --dry-run
 Add `--filter fenix` (or any path substring) to narrow the run. Report the
 counts to the user before writing anything.
 
+The file list comes from `firefox.toml` and `focus.toml`, so a reference file
+that en-CA has no file for at all is reported too, and counted as a new file.
+
 **2. Apply the backfill.**
 
 ```bash
@@ -34,7 +37,9 @@ python3 .claude/skills/backfill-en-ca/scripts/backfill_en_ca.py
 For each missing entry the script copies the en-US lines verbatim — comment
 block, attributes, indentation — into the position that matches en-US, then
 rewrites only the text inside `<string>` / `<item>` using the automatic rules.
-It validates the XML before writing, so a failure means nothing was written.
+A reference file with no en-CA counterpart is created from the en-US header and
+footer and filled the same way. It validates the XML before writing, so a
+failure means nothing was written.
 
 Obsolete entries (present in en-CA, absent from en-US) are reported with `·`
 and **kept**. Existing en-CA translations are never modified. If the user asks
